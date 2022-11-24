@@ -50,7 +50,7 @@ public class Robot {
         robotActions = new RobotActions(this);
         driveModule = new DriveModule();
         clawModule = new ClawModule();
-        susanModule = new SusanModule();
+        susanModule = new SusanModule(hardwareCollection);
         slideModule = new SlideModule(hardwareCollection);
 //        cvTasksModule = new CVTasksModule();
         breakoutModule = new BreakoutModule(this, 0);
@@ -71,7 +71,7 @@ public class Robot {
         robotActions = new RobotActions(this);
         driveModule = new DriveModule();
         clawModule = new ClawModule();
-        susanModule = new SusanModule();
+        susanModule = new SusanModule(hardwareCollection);
         slideModule = new SlideModule(hardwareCollection);
 //        cvTasksModule = new CVTasksModule();
         breakoutModule = new BreakoutModule(this, 0);
@@ -85,7 +85,7 @@ public class Robot {
         if (updateCount % MODULE_UPDATE_INTERVAL == 0) {
             driveModule.update(this, hardwareCollection);
             slideModule.update();
-            susanModule.update(hardwareCollection);
+            susanModule.update();
             clawModule.update(hardwareCollection);
 //            cvTasksModule.update(this, hardwareCollection);
         }

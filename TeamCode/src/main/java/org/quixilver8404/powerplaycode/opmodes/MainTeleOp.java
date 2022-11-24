@@ -70,8 +70,6 @@ public class MainTeleOp extends OpMode {
 
         robot = new Robot(new Vector3(), this);
         robot.startHardwareLoop();
-        robot.susanModule.setDesiredpos((robot.hardwareCollection.susanMotor1.getEncoderPosition() + robot.hardwareCollection.susanMotor2.getEncoderPosition())/2);
-//        robot.slideModule.setDesiredpos((robot.hardwareCollection.slidesMotor1.getEncoderPosition() + robot.hardwareCollection.slidesMotor2.getEncoderPosition())/2);
         robot.clawModule.setClose();
     }
 
@@ -91,8 +89,6 @@ public class MainTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        robot.susanModule.setDesiredpos((robot.hardwareCollection.susanMotor1.getEncoderPosition() + robot.hardwareCollection.susanMotor2.getEncoderPosition())/2);
-//        robot.slideModule.setDesiredpos((robot.hardwareCollection.slidesMotor1.getEncoderPosition() + robot.hardwareCollection.slidesMotor2.getEncoderPosition())/2);
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         System.out.println("loop");
         //add telemetry stuffs here
@@ -216,29 +212,21 @@ public class MainTeleOp extends OpMode {
 
         //left joystick: lift
         lift = gamepad2.left_stick_y;
-        if (robot.slideModule.desiredpos <= robot.slideModule.upperbound && robot.slideModule.desiredpos >= robot.slideModule.lowerbound) {
-            robot.hardwareCollection.slidesMotor1.setPower(-Math.signum(lift) * Math.pow(lift, 2));
-            robot.hardwareCollection.slidesMotor2.setPower(-Math.signum(lift) * Math.pow(lift, 2));
-        } else if (robot.slideModule.desiredpos > robot.slideModule.upperbound){
-//            robot.slideModule.setDesiredpos(robot.slideModule.upperbound);
-        } else {
-//            robot.slideModule.setDesiredpos(robot.slideModule.lowerbound);
-        }
+        robot.slideModule.powerMotor(lift);
+
 
         //right joystick: turret
         turret = gamepad2.right_stick_x;
 
-        robot.hardwareCollection.susanMotor1.setPower(Math.signum(turret) * Math.pow(turret, 2));
-        robot.hardwareCollection.susanMotor2.setPower(Math.signum(turret) * Math.pow(turret, 2));
-
+        robot.susanModule.powerMotor(turret);
 
         telemetry.addData("Slides1 Power", robot.hardwareCollection.slidesMotor1.getPower());
         telemetry.addData("Slides2 Power", robot.hardwareCollection.slidesMotor2.getPower());
-        telemetry.addData("Slides Position", (robot.hardwareCollection.slidesMotor1.getEncoderPosition() + robot.hardwareCollection.slidesMotor2.getEncoderPosition())/2);
+        telemetry.addData("Slides Position", robot.slideModule.position);
 
         telemetry.addData("Susan1 Power", robot.hardwareCollection.susanMotor1.getPower());
         telemetry.addData("Susan2 Power", robot.hardwareCollection.susanMotor2.getPower());
-        telemetry.addData("Susan Position", (robot.hardwareCollection.susanMotor1.getEncoderPosition() + robot.hardwareCollection.susanMotor2.getEncoderPosition())/2);
+        telemetry.addData("Susan Position", robot.susanModule.position);
 
         telemetry.addData("Robot Position", robot.poseModule.getPos());
 

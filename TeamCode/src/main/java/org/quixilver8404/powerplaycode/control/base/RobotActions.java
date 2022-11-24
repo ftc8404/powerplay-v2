@@ -18,7 +18,7 @@ public class RobotActions extends ArrayList<ActionEventListener> {
                 robot.breakoutModule.stop();
                 robot.autoPilotModule.setDesiredPosition(new Vector3(43.07*inToM, 74.97*inToM, -Math.PI/2));
 //                robot.slideModule.setDesiredpos(100);
-                robot.susanModule.setDesiredpos(578);
+//                robot.susanModule.setDesiredpos(578);
                 final Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
