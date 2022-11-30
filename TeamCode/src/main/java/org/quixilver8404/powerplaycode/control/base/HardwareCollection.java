@@ -93,14 +93,14 @@ public class HardwareCollection {
         revHub2.getBulkData();
 
         // drive motors
-        driveMotorFR = new EncoderlessMotor("driveMotorFL", DRIVE_MOTOR_FR_DIRECTION, hwMap);
-        driveMotorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveMotorFL = new EncoderlessMotor("driveMotorFR", DRIVE_MOTOR_FL_DIRECTION, hwMap);
+        driveMotorFL = new EncoderlessMotor("driveMotorFL", DRIVE_MOTOR_FR_DIRECTION, hwMap);
         driveMotorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveMotorBL = new EncoderlessMotor("driveMotorBR", DRIVE_MOTOR_BL_DIRECTION, hwMap);
-        driveMotorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        driveMotorBR = new EncoderlessMotor("driveMotorBL", DRIVE_MOTOR_BR_DIRECTION, hwMap);
+        driveMotorFR = new EncoderlessMotor("driveMotorFR", DRIVE_MOTOR_FL_DIRECTION, hwMap);
+        driveMotorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveMotorBR = new EncoderlessMotor("driveMotorBR", DRIVE_MOTOR_BL_DIRECTION, hwMap);
         driveMotorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        driveMotorBL = new EncoderlessMotor("driveMotorBL", DRIVE_MOTOR_BR_DIRECTION, hwMap);
+        driveMotorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 //        intakeMotor = new BaseMotor("intakeMotor", INTAKE_MOTOR_DIRECTION, hwMap);
 //        intakeMotor.setMaxPower(0.8);

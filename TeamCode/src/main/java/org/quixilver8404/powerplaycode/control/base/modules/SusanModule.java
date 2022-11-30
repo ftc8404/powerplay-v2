@@ -28,12 +28,12 @@ public class SusanModule {
     }
 
     public synchronized void powerMotor(double scalar){
-        if (position > leftbound && position < rightbound){
-            hardwareMap.slidesMotor1.setPower(scalar * power);
-            hardwareMap.slidesMotor2.setPower(scalar * power);
+        if (position < leftbound && position > rightbound){
+            hardwareMap.susanMotor1.setPower(scalar * power);
+            hardwareMap.susanMotor2.setPower(scalar * power);
         } else {
-            hardwareMap.slidesMotor1.setPower(0);
-            hardwareMap.slidesMotor2.setPower(0);
+            hardwareMap.susanMotor1.setPower(0);
+            hardwareMap.susanMotor2.setPower(0);
         }
     }
 }

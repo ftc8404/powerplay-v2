@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import org.quixilver8404.powerplaycode.control.base.HardwareCollection;
 import org.quixilver8404.powerplaycode.control.base.Robot;
 import org.quixilver8404.powerplaycode.control.base.modules.CVTasksModule;
- @Autonomous(name = "Blue_Test", group = "Main")
+ @Autonomous(name = "Test", group = "Main")
 public class Blue_Auton_Test extends LinearOpMode {
 
      static final int STREAM_WIDTH = 1920; // modify for your camera
@@ -45,59 +45,57 @@ public class Blue_Auton_Test extends LinearOpMode {
         telemetry.addData("status", "initializing Breakout...");
         telemetry.update();
 
-        final Robot robot = new Robot(new Vector3(4.32*inToM, 105.68*inToM,-Math.PI/2), this); //Starting position for both carousel autons
+        final Robot robot = new Robot(new Vector3(8.75*inToM, 104.5*inToM,-Math.PI/2), this);
 //        robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.ENABLE_ASYNC_UPDATES);
         robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.SWITCH_TO_ODOMETRY);
 
 
         final Resources resources = hardwareMap.appContext.getResources();
-//        try {
-////            robot.breakoutModule.init(resources.openRawResource(R.raw.killruhan));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         robot.breakoutModule.stop();
         robot.startHardwareLoop();
 
         while (!isStarted() && !isStopRequested()) {
             //CV sample while init not moving
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            WebcamName webcamName = null;
-            webcamName = hardwareMap.get(WebcamName.class, "webcam"); // put your camera's name here
-            webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-            pipeline = new CVTasksModule();
-            webcam.setPipeline(pipeline);
-            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-            {
-                @Override
-                public void onOpened()
-                {
-                    webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-                }
-
-                @Override
-                public void onError(int errorCode) {
-                    telemetry.addData("Camera Failed","");
-                    telemetry.update();
-                }
-            });
+//            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//            WebcamName webcamName = null;
+//            webcamName = hardwareMap.get(WebcamName.class, "webcam"); // put your camera's name here
+//            webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+//            pipeline = new CVTasksModule();
+//            webcam.setPipeline(pipeline);
+//            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+//            {
+//                @Override
+//                public void onOpened()
+//                {
+//                    webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
+//                }
+//
+//                @Override
+//                public void onError(int errorCode) {
+//                    telemetry.addData("Camera Failed","");
+//                    telemetry.update();
+//                }
+//            });
 
             telemetry.addLine("\n========== Autonomous ==========");
             telemetry.addData("status", "ready!");
             telemetry.addData("Color", "red");//color form cv
             telemetry.update();
         }
+        Log.d("hi", "hi");
+//        webcam.stopStreaming();
+        Log.d("bie", "bie");
         Log.d("HI","----------Before Resume");
         robot.breakoutModule.setVariant(0);
         robot.breakoutModule.resume();
         robot.breakoutModule.setVariant(0);
         Log.d("HI","----------After Resume");
         //hi
-        if (isStopRequested()) {
-            robot.stopHardwareLoop();
-            return;
-        }
-
 
         robot.driveModule.enableAuton();
 

@@ -1,0 +1,125 @@
+{
+  "rangeStart": 0,
+  "slowRadius": 25.0,
+  "anchors": [
+    {
+      "tangent": 0.0,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 6.774193548387103,
+      "y": 105.7741935483871,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 5.235987755982988,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 39.166666666666664,
+      "y": 129.25,
+      "dist1": -7.833333333333333,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 5.235987755982988,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 41.03225806451613,
+      "y": 77.90322580645162,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    }
+  ],
+  "robotInterval": 8,
+  "rangeEnd": 3,
+  "segments": [],
+  "minVel": 0.25,
+  "output": {
+    "0": {
+      "curves": [
+        {
+          "circle1Radius": 11.75,
+          "circle2Radius": 7.833333333333343,
+          "circle2X": 32.38280100368855,
+          "p1X": 17.33213496522437,
+          "p2Y": 128.7711862187277,
+          "circle1X": 6.774193548387103,
+          "circle2Y": 125.33333333333334,
+          "p2X": 25.344173392463695,
+          "circle1Y": 117.5241935483871,
+          "p1Y": 112.36741422029556,
+          "endTheta1": -0.4543460882318237,
+          "endTheta2": 2.6872465653579694
+        },
+        {
+          "circle1Radius": 11.750000000000002,
+          "circle2Radius": 11.750000000000002,
+          "circle2X": 51.20805655898329,
+          "p1X": 40.734585613990824,
+          "p2Y": 84.16241410321047,
+          "circle1X": 28.990868172199505,
+          "circle2Y": 83.77822580645162,
+          "p2X": 39.46433911719197,
+          "circle1Y": 123.375,
+          "p1Y": 122.99081170324115,
+          "endTheta1": -0.03270270508508921,
+          "endTheta2": -3.1742953586748826
+        }
+      ],
+      "anchors": [
+        {
+          "tangent": 0.0,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 6.774193548387103,
+          "y": 105.7741935483871,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 5.235987755982988,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 39.166666666666664,
+          "y": 129.25,
+          "dist1": -7.833333333333333,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 5.235987755982988,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 41.03225806451613,
+          "y": 77.90322580645162,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        }
+      ],
+      "segments": []
+    }
+  },
+  "maxVel": 1.0,
+  "displayPoints": false,
+  "robotSize": 9.0,
+  "generationInterval": 1.0,
+  "accelDist": 15.0,
+  "config": 0
+}

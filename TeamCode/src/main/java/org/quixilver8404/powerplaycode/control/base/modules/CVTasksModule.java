@@ -49,7 +49,7 @@ public class CVTasksModule extends OpenCvPipeline {
         int blueThreshold = 90;
         int redThreshold = 100;
         int greenThreshold = 100;
-        double[] red =new double[]{0.0, 0.0, 255.0};
+        double[] red =new double[]{0.0, 0.0, 255.0,0.0};
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 //        OpenCvCamera camera = OpenCvCameraFactory.getInstance().createWebcam(webcam, cameraMonitorViewId);
         for(int i = topCornerX;i<topCornerX+length;i++){
