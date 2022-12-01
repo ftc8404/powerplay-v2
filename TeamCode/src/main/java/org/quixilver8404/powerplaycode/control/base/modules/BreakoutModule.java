@@ -46,10 +46,8 @@ public class BreakoutModule {
         if (isStopped || breakout == null) {
             if (robot.driveModule.movementMode == DriveModule.MovementMode.AUTON) {
                 robot.driveModule.setPowerSettings(new double[]{0, 0, 0, 0});
-                return;
-            } else {
-                return;
             }
+            return;
         }
 
         if (breakout.isFinished()) {
@@ -66,7 +64,7 @@ public class BreakoutModule {
         final org.quixilver8404.breakout.util.Vector3 breakoutVel = new org.quixilver8404.breakout.util.Vector3(vel.x(), vel.y(), vel.theta());
 
         final double[] powerSettings = breakout.iterate(breakoutPos, breakoutVel, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
-        Log.d("HI","-------"+powerSettings.toString());
+        Log.d("HI","-------"+ Arrays.toString(powerSettings));
         robot.driveModule.setPowerSettings(powerSettings);
 
         Log.d("Breakout", "---------last known s: " + breakout.path.getLastKnownS());

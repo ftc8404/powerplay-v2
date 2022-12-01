@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ThreadPool;
 
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryInternal;
 
+import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -48,7 +49,7 @@ public abstract class LinearOpMode extends OpMode {
    * where the op mode needs to be terminated early.
    * @throws InterruptedException
    */
-  abstract public void runOpMode() throws InterruptedException;
+  abstract public void runOpMode() throws InterruptedException, IOException;
 
   /**
    * Pauses the Linear Op Mode until start has been pressed or until the current thread
@@ -306,6 +307,8 @@ public abstract class LinearOpMode extends OpMode {
           // exception gets a chance to be thrown on the event loop thread.
         } catch (NoClassDefFoundError e) {
           noClassDefFoundError = e;
+        } catch (IOException e) {
+          e.printStackTrace();
         } finally {
           // If the user has given us a telemetry.update() that hasn't get gone out, then
           // push it out now. However, any NEW device health warning should be suppressed while

@@ -12,6 +12,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 //import org.openftc.easyopencv.OpenCvCameraFactory;
 //import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.quixilver8404.powerplaycode.hardware.misc.Clock;
 import org.quixilver8404.powerplaycode.hardware.misc.IMU;
 import org.quixilver8404.powerplaycode.hardware.motors.BaseMotor;
@@ -69,7 +72,7 @@ public class HardwareCollection {
 
     public final BaseServo gearServo;
     public static final Servo.Direction GEAR_SERVO_DIRECTION = Servo.Direction.FORWARD;
-//    public final OpenCvCamera camera;
+    public final OpenCvCamera camera;
 
 //    public final ColorSensor colorSensor;
 
@@ -134,15 +137,15 @@ public class HardwareCollection {
 
 //        System.out.println("Started-t265: " + slamra.isStarted());
 
-//        final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//        camera.openCameraDevice();
-//        System.out.println("OPENED-CAMERA");
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera.openCameraDevice();
+        System.out.println("OPENED-CAMERA");
 
-//        camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-//        camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
-//        System.out.println("STARTED-STREAMING");
+        camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+        camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+        System.out.println("STARTED-STREAMING");
 
         odometryEncoder1.reset();
         odometryEncoder2.reset();

@@ -37,79 +37,49 @@ public class Blue_Auton_Test extends LinearOpMode {
      CVTasksModule pipeline;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() throws InterruptedException, IOException {
 
         final double inToM = 0.0254;
 
         telemetry.addLine("========== Autonomous ==========");
-        telemetry.addData("status", "initializing Breakout...");
+        telemetry.addData("Status", "initializing Breakout...");
         telemetry.update();
 
         final Robot robot = new Robot(new Vector3(8.75*inToM, 104.5*inToM,-Math.PI/2), this);
 //        robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.ENABLE_ASYNC_UPDATES);
         robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.SWITCH_TO_ODOMETRY);
 
-
         final Resources resources = hardwareMap.appContext.getResources();
-        try {
-            robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
         robot.breakoutModule.stop();
         robot.startHardwareLoop();
 
-        while (!isStarted() && !isStopRequested()) {
-            //CV sample while init not moving
-//            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//            WebcamName webcamName = null;
-//            webcamName = hardwareMap.get(WebcamName.class, "webcam"); // put your camera's name here
-//            webcam = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//            pipeline = new CVTasksModule();
-//            webcam.setPipeline(pipeline);
-//            webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-//            {
-//                @Override
-//                public void onOpened()
-//                {
-//                    webcam.startStreaming(STREAM_WIDTH, STREAM_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-//                }
-//
-//                @Override
-//                public void onError(int errorCode) {
-//                    telemetry.addData("Camera Failed","");
-//                    telemetry.update();
-//                }
-//            });
+        robot.hardwareCollection.camera.setPipeline(robot.cvTasksModule);
 
-            telemetry.addLine("\n========== Autonomous ==========");
-            telemetry.addData("status", "ready!");
-            telemetry.addData("Color", "red");//color form cv
+        while (!isStarted() && !isStopRequested()) {
+            robot.breakoutModule.setVariant(robot.cvTasksModule.getVariant());
+            telemetry.addLine("========== Autonomous ==========");
+            telemetry.addData("Variant", robot.cvTasksModule.getVariant());
+            telemetry.addData("Blue Counter", robot.cvTasksModule.blueCounter);
+            telemetry.addData("Green Counter", robot.cvTasksModule.greenCounter);
+            telemetry.addData("Red Counter", robot.cvTasksModule.redCounter);
+            telemetry.addData("Status", "ready!");
             telemetry.update();
         }
-        Log.d("hi", "hi");
-//        webcam.stopStreaming();
-        Log.d("bie", "bie");
-        Log.d("HI","----------Before Resume");
-        robot.breakoutModule.setVariant(0);
-        robot.breakoutModule.resume();
-        robot.breakoutModule.setVariant(0);
-        Log.d("HI","----------After Resume");
-        //hi
 
+        robot.breakoutModule.resume();
         robot.driveModule.enableAuton();
 
         while (opModeIsActive()) {
             Log.d("diff", "this is new");
             telemetry.addData("Movement mode", robot.driveModule.getMovementMode());
-            telemetry.addData("power settings", Arrays.toString(robot.driveModule.getPowerSettings()));
+            telemetry.addData("Power settings", Arrays.toString(robot.driveModule.getPowerSettings()));
             telemetry.update();
         }
         if (isStopRequested()) {
             robot.breakoutModule.stop();
             robot.breakoutModule.bytes = null;
             robot.stopHardwareLoop();
-            return;
         }
     }
 }

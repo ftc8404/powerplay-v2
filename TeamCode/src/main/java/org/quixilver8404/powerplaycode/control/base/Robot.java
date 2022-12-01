@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VoltageUnit;
 import org.quixilver8404.breakout.util.Config;
 import org.quixilver8404.powerplaycode.control.base.modules.AutoPilotModule;
 import org.quixilver8404.powerplaycode.control.base.modules.BreakoutModule;
-//import org.quixilver8404.powerplaycode.control.base.modules.CVTasksModule;
+import org.quixilver8404.powerplaycode.control.base.modules.CVTasksModule;
 import org.quixilver8404.powerplaycode.control.base.modules.DriveModule;
 import org.quixilver8404.powerplaycode.control.base.modules.ClawModule;
 import org.quixilver8404.powerplaycode.control.base.modules.PositionTrackingModule;
@@ -26,7 +26,7 @@ public class Robot {
     public final ClawModule clawModule;
     public final SusanModule susanModule;
     public final SlideModule slideModule;
-//    public final CVTasksModule cvTasksModule;
+    public final CVTasksModule cvTasksModule;
     public final PositionTrackingModule poseModule;
     public final HardwareCollection hardwareCollection;
     public final HardwareLoopThread hardwareLoopThread;
@@ -35,6 +35,8 @@ public class Robot {
 
     public static final int MODULE_UPDATE_INTERVAL = 2;
     protected long updateCount;
+
+    int autonVariant;
 
     public Robot(final Vector3 startPos, final LinearOpMode opMode){
         this.opMode = opMode;
@@ -52,7 +54,7 @@ public class Robot {
         clawModule = new ClawModule();
         susanModule = new SusanModule(hardwareCollection);
         slideModule = new SlideModule(hardwareCollection);
-//        cvTasksModule = new CVTasksModule();
+        cvTasksModule = new CVTasksModule(hardwareCollection);
         breakoutModule = new BreakoutModule(this, 0);
         autoPilotModule = new AutoPilotModule(this);
         updateCount = 0;
@@ -73,7 +75,7 @@ public class Robot {
         clawModule = new ClawModule();
         susanModule = new SusanModule(hardwareCollection);
         slideModule = new SlideModule(hardwareCollection);
-//        cvTasksModule = new CVTasksModule();
+        cvTasksModule = new CVTasksModule(hardwareCollection);
         breakoutModule = new BreakoutModule(this, 0);
         autoPilotModule = new AutoPilotModule(this);
         updateCount = 0;
@@ -87,9 +89,7 @@ public class Robot {
             slideModule.update();
             susanModule.update();
             clawModule.update(hardwareCollection);
-//            cvTasksModule.update(this, hardwareCollection);
         }
-
         updateCount++;
     }
     public void startHardwareLoop() {
@@ -99,11 +99,21 @@ public class Robot {
         }
     }
     public void stopHardwareLoop() throws InterruptedException {
+        hardwareCollection.camera.stopStreaming();
+        hardwareCollection.camera.closeCameraDevice();
+
         if (hardwareLoopThread.isAlive()) {
             hardwareLoopThread.interrupt();
             hardwareLoopThread.join();
         }
     }
 
+    public synchronized void setAutonVariant(final int autonVariant) {
+        this.autonVariant = autonVariant;
+        breakoutModule.setVariant(autonVariant);
+    }
 
+    public synchronized int getAutonVariant() {
+        return autonVariant;
+    }
 }
