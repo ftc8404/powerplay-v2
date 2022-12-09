@@ -60,9 +60,9 @@ public class Blue_Auton_Test extends LinearOpMode {
             robot.breakoutModule.setVariant(robot.cvTasksModule.getVariant());
             telemetry.addLine("========== Autonomous ==========");
             telemetry.addData("Variant", robot.cvTasksModule.getVariant());
-            telemetry.addData("Blue Counter", robot.cvTasksModule.blueCounter);
-            telemetry.addData("Green Counter", robot.cvTasksModule.greenCounter);
-            telemetry.addData("Red Counter", robot.cvTasksModule.redCounter);
+            telemetry.addData("Blue Counter", robot.cvTasksModule.finalBlueCounter);
+            telemetry.addData("Green Counter", robot.cvTasksModule.finalGreenCounter);
+            telemetry.addData("Red Counter", robot.cvTasksModule.finalRedCounter);
             telemetry.addData("Status", "ready!");
             telemetry.update();
         }

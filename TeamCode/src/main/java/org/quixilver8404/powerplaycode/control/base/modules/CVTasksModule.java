@@ -23,17 +23,22 @@ public class CVTasksModule extends OpenCvPipeline {
     // Reading the next video frame from the camera
     //variables
     double[] currentPixel;
-    int topCornerX = 10;
-    int topCornerY = 10;
-    int length = 300;
-    int height = 300;
+
+    int topCornerX = 520;
+    int topCornerY = 215;
+    int length = 50;
+    int height = 90;
+
     public int redCounter = 0;
     public int blueCounter = 0;
     public int greenCounter = 0;
+    public int finalRedCounter = 0;
+    public int finalBlueCounter = 0;
+    public int finalGreenCounter = 0;
     int blueThreshold = 90;
-    int redThreshold = 100;
-    int greenThreshold = 100;
-    double[] red = new double[] {0.0, 0.0, 255.0, 0.0};
+    int redThreshold = 110;
+    int greenThreshold = 20;
+    double[] border = new double[] {255.0, 0.0, 0.0, 0.0};
 
     HardwareCollection hardwareCollection;
 
@@ -42,12 +47,12 @@ public class CVTasksModule extends OpenCvPipeline {
     }
 
     public synchronized int getVariant() {
-        if (redCounter > blueCounter && redCounter > greenCounter) {
+        if (finalRedCounter > finalBlueCounter && finalRedCounter > finalGreenCounter && finalRedCounter >= 1000) {
             return 1;
-        } else if (greenCounter > redCounter && greenCounter > blueCounter) {
-            return 2;
-        } else {
+        } else if (finalBlueCounter > finalRedCounter && finalBlueCounter > finalGreenCounter && finalBlueCounter >= 1000) {
             return 3;
+        } else {
+            return 2;
         }
     }
 
@@ -57,17 +62,23 @@ public class CVTasksModule extends OpenCvPipeline {
         for (int i = topCornerX; i < topCornerX + length; i++){
 
             //showing which part of imgage cv is looking at by bordering it with red
-            input.put(topCornerY - 1, i - 1, red);
-            input.put(topCornerY + height + 1, i + 1, red);
+            input.put(topCornerY - 1, i - 1, border);
+            input.put(topCornerY + height + 1, i + 1, border);
 
             //looping through pixels to see what color each one is
             for (int j = topCornerY; j < topCornerY + height; j++){
                 currentPixel = input.get(j, i);
-                if (currentPixel[0] > blueThreshold && currentPixel[1] < currentPixel[0] * 0.8 && currentPixel[2] < currentPixel[0] * 0.8) { blueCounter++; }
-                else if (currentPixel[0] < currentPixel[2] * 0.5 && currentPixel[1] < currentPixel[2] * 0.5 && currentPixel[2] > redThreshold) { redCounter++; }
-                else if (currentPixel[0] < currentPixel[1] * 0.5 && currentPixel[1] > greenThreshold && currentPixel[2] < currentPixel[1] * 0.5) { greenCounter++; }
+                if (currentPixel[0] > redThreshold && currentPixel[1] < currentPixel[0] * 0.8 && currentPixel[2] < currentPixel[0] * 0.8) { redCounter++; }
+                else if (currentPixel[0] < currentPixel[2] * 0.5 && currentPixel[1] < currentPixel[2] * 0.5 && currentPixel[2] > blueThreshold) { blueCounter++; }
+                else if (currentPixel[0] < currentPixel[1] * 0.8 && currentPixel[1] > greenThreshold && currentPixel[2] < currentPixel[1] * 0.8) { greenCounter++; }
             }
         }
+        finalRedCounter = redCounter;
+        finalBlueCounter = blueCounter;
+        finalGreenCounter = greenCounter;
+        redCounter = 0;
+        blueCounter = 0;
+        greenCounter = 0;
         return input;
     }
 }

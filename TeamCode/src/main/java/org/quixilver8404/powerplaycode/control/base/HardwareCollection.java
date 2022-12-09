@@ -140,12 +140,21 @@ public class HardwareCollection {
         final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-        camera.openCameraDevice();
-        System.out.println("OPENED-CAMERA");
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                System.out.println("OPENED-CAMERA");
+                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+                System.out.println("STARTED-STREAMING");
+            }
 
-        camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-        camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
-        System.out.println("STARTED-STREAMING");
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
 
         odometryEncoder1.reset();
         odometryEncoder2.reset();

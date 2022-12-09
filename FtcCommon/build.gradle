@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
+
+    namespace 'com.qualcomm.ftccommon'
     compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 97
-        versionName "20.0"
     }
 }
 

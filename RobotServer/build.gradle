@@ -6,10 +6,9 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 73
-        versionName "16.0"
 
     }
+    namespace 'org.firstinspires.ftc.robotcore.internal.webserver'
 }
 
 dependencies {

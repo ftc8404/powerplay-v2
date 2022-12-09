@@ -6,9 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 97
-        versionName "20.0"
     }
+    namespace 'org.firstinspires.inspection'
 }
 
 dependencies {
