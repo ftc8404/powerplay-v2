@@ -217,6 +217,12 @@ public class MainTeleOp extends OpMode {
 
         robot.susanModule.powerMotor(turret);
 
+        if (gamepad2.a){
+            robot.susanModule.setInitialPosition();
+            robot.susanModule.desiredPos = 0;
+            robot.susanModule.autoMode = true;
+        }
+
         telemetry.addData("Slides1 Power", robot.hardwareCollection.slidesMotor1.getPower());
         telemetry.addData("Slides2 Power", robot.hardwareCollection.slidesMotor2.getPower());
         telemetry.addData("Slides Position", robot.slideModule.position);

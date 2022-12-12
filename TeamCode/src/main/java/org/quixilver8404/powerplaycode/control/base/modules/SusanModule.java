@@ -6,27 +6,30 @@ import org.quixilver8404.powerplaycode.control.base.Robot;
 public class SusanModule {
     public double power;
     public double position;
-    public double desiredpos;
+    public double desiredPos;
     public double initialPos;
     public double powerPos;
     public double leftbound;
     public double rightbound;
     public double tolerance;
+    public boolean autoMode;
     public HardwareCollection hardwareMap;
 
     public SusanModule(HardwareCollection hardwareCollection) {
         //power can only be between 0 and 1
         power = 0.7;
         position = 0;
-        desiredpos = 0;
+        desiredPos = 0;
         leftbound = 10000;
         rightbound = -10000;
         tolerance = 100;
+        autoMode = false;
         hardwareMap = hardwareCollection;
     }
 
     public synchronized void update() {
         position = hardwareMap.susanMotor1.getEncoderPosition();
+        setPosition();
     }
 
     public synchronized void powerMotor(double scalar){
@@ -43,19 +46,22 @@ public class SusanModule {
         initialPos = position;
     }
 
-    public synchronized void setPosition(double desiredPos){
-        if (position < leftbound && position > rightbound && Math.abs(position - desiredPos) > tolerance){
-            powerPos = Math.abs(desiredPos-position)/Math.abs(initialPos-desiredPos);
-            if (powerPos < 0.1) {
-                powerPos = 0.1;
-            } else if (powerPos > 0.8){
-                powerPos = 0.8;
+    public synchronized void setPosition(){
+        if(autoMode) {
+            if (position < leftbound && position > rightbound && Math.abs(position - desiredPos) > tolerance) {
+                powerPos = Math.abs(desiredPos - position) / Math.abs(initialPos - desiredPos);
+                if (powerPos < 0.1) {
+                    powerPos = 0.1;
+                } else if (powerPos > 0.8) {
+                    powerPos = 0.8;
+                }
+                hardwareMap.susanMotor1.setPower(powerPos);
+                hardwareMap.susanMotor2.setPower(powerPos);
+            } else {
+                hardwareMap.susanMotor1.setPower(0);
+                hardwareMap.susanMotor2.setPower(0);
+                autoMode = false;
             }
-            hardwareMap.susanMotor1.setPower(powerPos);
-            hardwareMap.susanMotor2.setPower(powerPos);
-        } else {
-            hardwareMap.susanMotor1.setPower(0);
-            hardwareMap.susanMotor2.setPower(0);
         }
     }
 }
