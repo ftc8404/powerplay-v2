@@ -209,27 +209,25 @@ public class MainTeleOp extends OpMode {
 
         //left joystick: lift
         lift = -gamepad2.left_stick_y;
-        robot.slideModule.powerMotor(lift);
+        robot.slideModule.setManualPower(lift);
 
 
         //right joystick: turret
         turret = gamepad2.right_stick_x;
 
-        robot.susanModule.powerMotor(turret);
-
-        if (gamepad2.a){
-            robot.susanModule.setInitialPosition();
-            robot.susanModule.desiredPos = 0;
-            robot.susanModule.autoMode = true;
-        }
+        robot.susanModule.setManualPower(turret);
 
         telemetry.addData("Slides1 Power", robot.hardwareCollection.slidesMotor1.getPower());
         telemetry.addData("Slides2 Power", robot.hardwareCollection.slidesMotor2.getPower());
         telemetry.addData("Slides Position", robot.slideModule.position);
+        telemetry.addData("Slide State", robot.slideModule.getSlideState());
+        telemetry.addData("Slide Action", robot.slideModule.getSlideAction());
 
         telemetry.addData("Susan1 Power", robot.hardwareCollection.susanMotor1.getPower());
         telemetry.addData("Susan2 Power", robot.hardwareCollection.susanMotor2.getPower());
         telemetry.addData("Susan Position", robot.susanModule.position);
+        telemetry.addData("Susan State", robot.susanModule.getSusanState());
+        telemetry.addData("Susan Action", robot.susanModule.getSusanAction());
 
         telemetry.addData("Robot Position", robot.poseModule.getPos());
 

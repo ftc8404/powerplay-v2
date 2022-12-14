@@ -37,7 +37,7 @@ public class Blue_Auton_Test extends LinearOpMode {
      CVTasksModule pipeline;
 
     @Override
-    public void runOpMode() throws InterruptedException, IOException {
+    public void runOpMode() throws InterruptedException {
 
         final double inToM = 0.0254;
 
@@ -50,7 +50,11 @@ public class Blue_Auton_Test extends LinearOpMode {
         robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.SWITCH_TO_ODOMETRY);
 
         final Resources resources = hardwareMap.appContext.getResources();
-        robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
+        try {
+            robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         robot.breakoutModule.stop();
         robot.startHardwareLoop();
 

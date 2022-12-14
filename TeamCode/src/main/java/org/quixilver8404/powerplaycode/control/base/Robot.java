@@ -38,27 +38,6 @@ public class Robot {
 
     int autonVariant;
 
-    public Robot(final Vector3 startPos, final LinearOpMode opMode){
-        this.opMode = opMode;
-        this.startPos = startPos;
-        poseModule = new PositionTrackingModule(startPos);
-        hardwareCollection = new HardwareCollection(opMode.hardwareMap);
-        hardwareLoopThread = new HardwareLoopThread(this, opMode);
-        config = new Config(
-                12, hardwareCollection.revHub1.getInputVoltage(VoltageUnit.VOLTS), 20.9345794393-10, -12,
-                1.1775,0.05, 2.1, 31.4, 10.7, 0.075/2, MecanumKinematics.FindMomentOfInertia(0.323, 0.445, 10.7),
-                ((0.323/2) - 0.0375), ((0.445/2) - 0.05031), 0.95, 0.95, Math.PI/2.5, 0.074418605, 0.06, 10.7/4, 10.7/4, 10.7/4, 10.7/4
-        );
-        robotActions = new RobotActions(this);
-        driveModule = new DriveModule();
-        clawModule = new ClawModule();
-        susanModule = new SusanModule(hardwareCollection);
-        slideModule = new SlideModule(hardwareCollection);
-        cvTasksModule = new CVTasksModule(hardwareCollection);
-        breakoutModule = new BreakoutModule(this, 0);
-        autoPilotModule = new AutoPilotModule(this);
-        updateCount = 0;
-    }
     public Robot(final Vector3 startPos, final OpMode opMode){
         this.opMode = opMode;
         this.startPos = startPos;
@@ -73,21 +52,22 @@ public class Robot {
         robotActions = new RobotActions(this);
         driveModule = new DriveModule();
         clawModule = new ClawModule();
-        susanModule = new SusanModule(hardwareCollection);
-        slideModule = new SlideModule(hardwareCollection);
+        susanModule = new SusanModule(this, hardwareCollection, SlideModule.SlideState.GROUND);
+        slideModule = new SlideModule(this, hardwareCollection);
         cvTasksModule = new CVTasksModule(hardwareCollection);
         breakoutModule = new BreakoutModule(this, 0);
         autoPilotModule = new AutoPilotModule(this);
         updateCount = 0;
     }
+
     public void update() {
         hardwareCollection.refreshBulkData();
         poseModule.update(this);
         breakoutModule.update(this);
         if (updateCount % MODULE_UPDATE_INTERVAL == 0) {
             driveModule.update(this, hardwareCollection);
-            slideModule.update();
-            susanModule.update();
+            slideModule.update(this);
+            susanModule.update(this);
             clawModule.update(hardwareCollection);
         }
         updateCount++;
