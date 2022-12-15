@@ -6,20 +6,22 @@ public class PIDController {
     protected double kI;
     protected double kD;
 
-    protected double last_error;
+    public double last_error;
     protected double integral_error;
+    public double ddt_error;
 
     public PIDController(final double kP, final double kI, final double kD) {
         this.kP = kP;
         this.kD = kD;
         this.kI = kI;
+        ddt_error = 0;
 
         last_error = Double.NaN;
         integral_error = 0;
     }
 
     public double update(final double error, final double dt) {
-        final double ddt_error;
+
         if (Double.isNaN(last_error)) {
             ddt_error = 0;
         } else {
@@ -36,7 +38,6 @@ public class PIDController {
     }
 
     public double update(final double error, final double feedForward, final double dt) {
-        final double ddt_error;
         if (Double.isNaN(last_error)) {
             ddt_error = 0;
         } else {

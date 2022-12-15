@@ -1,5 +1,7 @@
 package org.quixilver8404.powerplaycode.control.base.modules;
 
+import android.util.Log;
+
 import org.quixilver8404.powerplaycode.control.algorithms.PIDController;
 import org.quixilver8404.powerplaycode.control.base.HardwareCollection;
 import org.quixilver8404.powerplaycode.control.base.Robot;
@@ -8,8 +10,8 @@ import org.quixilver8404.powerplaycode.hardware.motors.EncoderMotor;
 public class SlideModule {
 
     public enum SlideState {
-        GROUND(10), ABOVE_DRIVE(660), JUNC_1(1000), JUNC_2(2070), JUNC_3(3000),
-        JUNC_4(4000), IN_BETWEEN_ABOVE_DRIVE(0), IN_BETWEEN_BELOW_DRIVE(0);
+        GROUND(-10), ABOVE_DRIVE(660), JUNC_1(1000), JUNC_2(2070), JUNC_3(3700),
+        JUNC_4(6000), IN_BETWEEN_ABOVE_DRIVE(0), IN_BETWEEN_BELOW_DRIVE(0);
 
         public final double height;
         SlideState(final double height) {
@@ -29,10 +31,12 @@ public class SlideModule {
     public static final double LOWER_BOUND = 100;
     public static final double TOLERANCE = 40;
 
-    public static final double KP = 1;
-    public static final double KI = 1;
-    public static final double KD = 1;
+    public static final double KP = 7.7;
+    public static final double KI = 0.01;
+    public static final double KD = 0.4;
     public static final double KF = 0;
+
+    public static final double ENCODER_PER_REV = 45 * 28; //you sukc
 
     protected SlideState slideState;
     protected SlideAction slideAction;
@@ -113,10 +117,14 @@ public class SlideModule {
                         desiredPos = SlideState.GROUND.height;
                     }
                     break;
+                case NOT_MOVING:
+                    break;
             }
             double autoPower;
-            if (desiredPos != Double.NaN){
-                autoPower = pidController.update(desiredPos-position, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
+            if (!Double.isNaN(desiredPos)){
+                autoPower = pidController.update(((desiredPos-position)/(ENCODER_PER_REV))*2.0*Math.PI*0.03, KF, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
+                Log.d("SlideModule", "Desired pow: " + autoPower + "  error: " + (desiredPos-position)/(ENCODER_PER_REV)*2.0*Math.PI*0.03 + "  error derivative: " + pidController.ddt_error + "  dt: " + robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
+
                 slideMotor1.setPower(autoPower);
                 slideMotor2.setPower(autoPower);
             } else {
@@ -131,34 +139,52 @@ public class SlideModule {
     public SlideAction getSlideAction() {
         return slideAction;
     }
+    public SlideControlState getSlideControl() {
+        return slideControlState;
+    }
     public void goToJunc4() {
         slideAction = SlideAction.GO_TO_JUNC_4;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
     }
     public void goToJunc3() {
         slideAction = SlideAction.GO_TO_JUNC_3;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
+
     }
     public void goToJunc2() {
         slideAction = SlideAction.GO_TO_JUNC_2;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
+
     }
     public void goToJunc1() {
         slideAction = SlideAction.GO_TO_JUNC_1;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
+
     }
     public void goToAboveDrive() {
         slideAction = SlideAction.GO_TO_ABOVE_DRIVE;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
+
     }
     public void goToGround() {
         // can only do if facing forwards (claw)
         slideAction = SlideAction.GO_TO_GROUND;
+        slideControlState = SlideControlState.AUTO;
+        pidController.reset();
+
     }
     public void setManualPower(double power) {
         this.power = power;
-    }
-    public void setAutoMode(){
-        slideControlState = SlideControlState.AUTO;
-    }
-    public void setManualMode(){
         slideControlState = SlideControlState.MANUAL;
+        pidController.reset();
+
     }
+
 
 //    public synchronized void powerMotor(double power){
 //        if (position > lowerbound && position < upperbound){

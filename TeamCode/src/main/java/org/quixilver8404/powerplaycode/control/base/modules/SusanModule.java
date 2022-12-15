@@ -1,5 +1,7 @@
 package org.quixilver8404.powerplaycode.control.base.modules;
 
+import android.util.Log;
+
 import org.quixilver8404.powerplaycode.control.algorithms.PIDController;
 import org.quixilver8404.powerplaycode.control.base.HardwareCollection;
 import org.quixilver8404.powerplaycode.control.base.Robot;
@@ -19,15 +21,17 @@ public class SusanModule {
     }
 
     public static final double SCALAR = 1.0;
-    public static final double RIGHT_BOUND = 2536;
-    public static final double LEFT_BOUND = -10000;
-    public static final double TOLERANCE = 40;
+    public static final double RIGHT_BOUND = 2300;
+    public static final double LEFT_BOUND = -2300;
+    public static final double TOLERANCE = 80;
     public static final double FRONT_POS = 0;
 
     public static final double KP = 1;
-    public static final double KI = 1;
-    public static final double KD = 1;
+    public static final double KI = 0;
+    public static final double KD = 0;
     public static final double KF = 0;
+
+    public static final double ENCODER_PER_REV = 20 * 28 * 99/10d;
 
     protected SusanState susanState;
     protected SusanAction susanAction;
@@ -67,13 +71,12 @@ public class SusanModule {
             susanState = SusanState.IN_MOTION;
         }
         slideState = robot.slideModule.getSlideState();
+        double desiredPow = 0;
         if (susanControlState == SusanControlState.MANUAL){
             if (slideState == SlideModule.SlideState.GROUND || slideState == SlideModule.SlideState.IN_BETWEEN_BELOW_DRIVE) {
-                susanMotor1.setPower(0);
-                susanMotor2.setPower(0);
+                desiredPow = 0;
             } else {
-                susanMotor1.setPower(Math.signum(power)*Math.pow(power,2));
-                susanMotor2.setPower(Math.signum(power)*Math.pow(power,2));
+                desiredPow = Math.signum(power)*Math.pow(power,2);
             }
         } else {
             double desiredPos = Double.NaN;
@@ -85,16 +88,20 @@ public class SusanModule {
                     desiredPos = customPos;
                     break;
             }
-            double autoPower;
-            if (desiredPos != Double.NaN){
-                autoPower = pidController.update(desiredPos-position, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
-                susanMotor1.setPower(autoPower);
-                susanMotor2.setPower(autoPower);
+            if (!Double.isNaN(desiredPos)){
+                desiredPow = pidController.update(((desiredPos-position)/ENCODER_PER_REV)*2*Math.PI, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
             } else {
-                susanMotor1.setPower(0);
-                susanMotor2.setPower(0);
+                desiredPow = 0;
             }
         }
+        if (position >= RIGHT_BOUND && desiredPow > 0){
+            desiredPow = 0;
+        }
+        if (position <= LEFT_BOUND && desiredPow < 0){
+            desiredPow = 0;
+        }
+        susanMotor1.setPower(desiredPow);
+        susanMotor2.setPower(desiredPow);
     }
 
     public SusanState getSusanState() {
@@ -103,21 +110,26 @@ public class SusanModule {
     public SusanAction getSusanAction() {
         return susanAction;
     }
+    public SusanControlState getSusanControl() {
+        return susanControlState;
+    }
     public void goToFront() {
         susanAction = SusanAction.GO_TO_FRONT;
+        susanControlState = SusanControlState.AUTO;
+        pidController.reset();
+
     }
     public void goToCustom(double customPos) {
         this.customPos = customPos;
         susanAction = SusanAction.GO_TO_CUSTOM;
+        susanControlState = SusanControlState.AUTO;
+        pidController.reset();
+
     }
     public void setManualPower(double power) {
         this.power = power;
-    }
-    public void setAutoMode(){
-        susanControlState = SusanControlState.AUTO;
-    }
-    public void setManualMode(){
         susanControlState = SusanControlState.MANUAL;
+        pidController.reset();
     }
 
 //    public synchronized void powerMotor(double scalar){

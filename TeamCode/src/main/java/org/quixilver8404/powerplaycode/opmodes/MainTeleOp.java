@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.quixilver8404.powerplaycode.control.base.Robot;
+import org.quixilver8404.powerplaycode.control.base.modules.SlideModule;
+import org.quixilver8404.powerplaycode.control.base.modules.SusanModule;
 import org.quixilver8404.powerplaycode.util.Angles;
 import org.quixilver8404.powerplaycode.util.Vector3;
 
@@ -209,25 +211,32 @@ public class MainTeleOp extends OpMode {
 
         //left joystick: lift
         lift = -gamepad2.left_stick_y;
-        robot.slideModule.setManualPower(lift);
+
+        if (robot.slideModule.getSlideControl() == SlideModule.SlideControlState.MANUAL || lift != 0) {
+            robot.slideModule.setManualPower(lift);
+        }
 
 
         //right joystick: turret
         turret = gamepad2.right_stick_x;
-
-        robot.susanModule.setManualPower(turret);
+        if (robot.susanModule.getSusanControl() == SusanModule.SusanControlState.MANUAL || turret != 0) {
+            robot.susanModule.setManualPower(turret);
+        }
 
         telemetry.addData("Slides1 Power", robot.hardwareCollection.slidesMotor1.getPower());
         telemetry.addData("Slides2 Power", robot.hardwareCollection.slidesMotor2.getPower());
         telemetry.addData("Slides Position", robot.slideModule.position);
         telemetry.addData("Slide State", robot.slideModule.getSlideState());
         telemetry.addData("Slide Action", robot.slideModule.getSlideAction());
+        telemetry.addData("Slide Control", robot.slideModule.getSlideControl());
+
 
         telemetry.addData("Susan1 Power", robot.hardwareCollection.susanMotor1.getPower());
         telemetry.addData("Susan2 Power", robot.hardwareCollection.susanMotor2.getPower());
         telemetry.addData("Susan Position", robot.susanModule.position);
         telemetry.addData("Susan State", robot.susanModule.getSusanState());
         telemetry.addData("Susan Action", robot.susanModule.getSusanAction());
+        telemetry.addData("Susan Control", robot.susanModule.getSusanControl());
 
         telemetry.addData("Robot Position", robot.poseModule.getPos());
 
@@ -244,17 +253,18 @@ public class MainTeleOp extends OpMode {
 
         ttp1 = gamepad2.x;
         if (ttp1){
-//            robot.susanModule.setDesiredpos(-50);
+//            robot.slideModule.goToJunc4();
+            robot.susanModule.goToFront();
         }
 
         ttp2 = gamepad2.y;
         if (ttp2){
-//            robot.susanModule.setDesiredpos(0);
+            robot.slideModule.goToJunc3();
         }
 
         ttp3 = gamepad2.b;
         if (ttp3){
-//            robot.susanModule.setDesiredpos(50);
+            robot.slideModule.goToJunc2();
         }
 
         ttp4 = gamepad2.a;

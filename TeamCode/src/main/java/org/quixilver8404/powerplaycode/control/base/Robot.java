@@ -79,8 +79,8 @@ public class Robot {
         }
     }
     public void stopHardwareLoop() throws InterruptedException {
-        hardwareCollection.camera.stopStreaming();
-        hardwareCollection.camera.closeCameraDevice();
+//        hardwareCollection.camera.stopStreaming();
+//        hardwareCollection.camera.closeCameraDevice();
 
         if (hardwareLoopThread.isAlive()) {
             hardwareLoopThread.interrupt();
