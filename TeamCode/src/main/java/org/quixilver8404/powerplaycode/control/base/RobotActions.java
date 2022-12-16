@@ -16,7 +16,7 @@ public class RobotActions extends ArrayList<ActionEventListener> {
             @Override
             public void run() {
                 robot.breakoutModule.stop();
-                robot.autoPilotModule.setDesiredPosition(new Vector3(43.07*inToM, 74.97*inToM, -Math.PI/2));
+                robot.autoPilotModule.setDesiredPosition(new Vector3(66.58*inToM, 94.00*inToM, -Math.PI/2));
 //                robot.slideModule.setDesiredpos(100);
 //                robot.susanModule.setDesiredpos(578);
                 final Timer timer = new Timer();
@@ -27,9 +27,15 @@ public class RobotActions extends ArrayList<ActionEventListener> {
                             robot.autoPilotModule.disable();
 //                            robot.slideModule.setDesiredpos(1030);
                             Thread.sleep(500);
+                            robot.slideModule.goToJunc4();
+                            Thread.sleep(500);
+                            robot.susanModule.goToCustom(2000);
+                            Thread.sleep(500);
                             robot.clawModule.setOpen();
                             Thread.sleep(200);
                             robot.clawModule.setClose();
+                            robot.susanModule.goToFront();
+                            robot.slideModule.goToGround();
 //                            robot.slideModule.setDesiredpos(100);
                             Thread.sleep(500);
                             robot.breakoutModule.resume();
@@ -64,20 +70,34 @@ public class RobotActions extends ArrayList<ActionEventListener> {
             @Override
             public void run() {
                 robot.breakoutModule.stop();
-                robot.clawModule.setClose();
+                robot.autoPilotModule.setDesiredPosition(new Vector3(74.42*inToM, 94.00*inToM, -Math.PI/2));
+//                robot.slideModule.setDesiredpos(100);
+//                robot.susanModule.setDesiredpos(578);
                 final Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-//                            robot.slideModule.setDesiredpos(100);
                         try {
-                            Thread.sleep(100);
+                            robot.autoPilotModule.disable();
+//                            robot.slideModule.setDesiredpos(1030);
+                            Thread.sleep(500);
+                            robot.slideModule.goToJunc4();
+                            Thread.sleep(500);
+                            robot.susanModule.goToCustom(-2000);
+                            Thread.sleep(500);
+                            robot.clawModule.setOpen();
+                            Thread.sleep(200);
+                            robot.clawModule.setClose();
+                            robot.susanModule.goToFront();
+                            robot.slideModule.goToGround();
+//                            robot.slideModule.setDesiredpos(100);
+                            Thread.sleep(500);
+                            robot.breakoutModule.resume();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        robot.breakoutModule.resume();
-                        }
-                }, 300);
+                    }
+                }, 700);
             }
         }));
     }
