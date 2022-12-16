@@ -10,7 +10,7 @@ import org.quixilver8404.powerplaycode.hardware.motors.EncoderMotor;
 public class SlideModule {
 
     public enum SlideState {
-        GROUND(-10), ABOVE_DRIVE(660), JUNC_1(1000), JUNC_2(2070), JUNC_3(3700),
+        GROUND(-30), ABOVE_DRIVE(450), JUNC_1(1000), JUNC_2(2070), JUNC_3(2300),
         JUNC_4(6000), IN_BETWEEN_ABOVE_DRIVE(0), IN_BETWEEN_BELOW_DRIVE(0);
 
         public final double height;
@@ -31,12 +31,12 @@ public class SlideModule {
     public static final double LOWER_BOUND = 100;
     public static final double TOLERANCE = 40;
 
-    public static final double KP = 9.2;
-    public static final double KI = 0.03;
-    public static final double KD = 0.7;
+    public static final double KP = 4.2;
+    public static final double KI = 0.02;
+    public static final double KD = 0.36;
     public static final double KF = 0;
 
-    public static final double ENCODER_PER_REV = 45 * 28; //you sukc
+    public static final double ENCODER_PER_REV = 25 * 28; //you sukc
 
     protected SlideState slideState;
     protected SlideAction slideAction;
@@ -86,13 +86,12 @@ public class SlideModule {
             slideState = SlideState.IN_BETWEEN_BELOW_DRIVE;
         }
         susanState = robot.susanModule.getSusanState();
+        double desiredPow = 0;
         if (slideControlState == SlideControlState.MANUAL) {
             if (power >= 0 || position >= SlideState.ABOVE_DRIVE.height + TOLERANCE) {
-                slideMotor2.setPower(Math.signum(power)*Math.pow(power,2));
-                slideMotor1.setPower(Math.signum(power)*Math.pow(power,2));
-            } else if (slideState == SlideState.ABOVE_DRIVE && susanState == SusanModule.SusanState.FRONT) {
-                slideMotor2.setPower(Math.signum(power)*Math.pow(power,2));
-                slideMotor1.setPower(Math.signum(power)*Math.pow(power,2));
+                desiredPow = Math.signum(power)*Math.pow(power,2);
+            } else if (susanState == SusanModule.SusanState.FRONT) {
+                desiredPow = Math.signum(power)*Math.pow(power,2);
             }
         } else {
             double desiredPos = Double.NaN;
@@ -120,18 +119,21 @@ public class SlideModule {
                 case NOT_MOVING:
                     break;
             }
-            double autoPower;
             if (!Double.isNaN(desiredPos)){
-                autoPower = pidController.update(((desiredPos-position)/(ENCODER_PER_REV))*2.0*Math.PI*0.03, KF, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
-                Log.d("SlideModule", "Desired pow: " + autoPower + "  error: " + (desiredPos-position)/(ENCODER_PER_REV)*2.0*Math.PI*0.03 + "  error derivative: " + pidController.ddt_error + "  dt: " + robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
-
-                slideMotor1.setPower(autoPower);
-                slideMotor2.setPower(autoPower);
+                desiredPow = pidController.update(((desiredPos-position)/(ENCODER_PER_REV))*2.0*Math.PI*0.03, KF, robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
+                Log.d("SlideModule", "Desired pow: " + desiredPow + "  error: " + (desiredPos-position)/(ENCODER_PER_REV)*2.0*Math.PI*0.03 + "  error derivative: " + pidController.ddt_error + "  dt: " + robot.hardwareCollection.clock.getDeltaTimeMS()/1000d);
             } else {
-                slideMotor1.setPower(0);
-                slideMotor2.setPower(0);
+                desiredPow = 0;
             }
         }
+        if (position >= UPPER_BOUND && desiredPow > 0){
+            desiredPow = 0;
+        }
+        if (position <= LOWER_BOUND && desiredPow < 0){
+            desiredPow = 0;
+        }
+        slideMotor2.setPower(desiredPow);
+        slideMotor1.setPower(desiredPow);
     }
     public SlideState getSlideState() {
         return slideState;
