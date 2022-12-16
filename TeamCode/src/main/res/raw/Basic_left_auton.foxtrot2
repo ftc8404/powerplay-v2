@@ -1,0 +1,171 @@
+{
+  "rangeStart": 0,
+  "slowRadius": 25.0,
+  "anchors": [
+    {
+      "tangent": 0.0,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 3.9166666666666665,
+      "y": 105.75,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 5.497787143782138,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 56.78706624605678,
+      "y": 102.6955835962145,
+      "dist1": -15.666666666666666,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": -1.7033478590915696,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 61.56,
+      "y": 94.05,
+      "dist1": 0.0,
+      "actions": [
+        0
+      ],
+      "config": 0,
+      "dist2": 4.5111813637692055
+    },
+    {
+      "tangent": 4.85428603498885,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 58.28,
+      "y": 83.02,
+      "dist1": -2.1079366189946054,
+      "actions": [
+        1
+      ],
+      "config": 0,
+      "dist2": 11.75
+    }
+  ],
+  "robotInterval": 8,
+  "rangeEnd": 4,
+  "segments": [],
+  "minVel": 0.25,
+  "output": {
+    "0": {
+      "curves": [
+        {
+          "circle1Radius": 11.75,
+          "circle2Radius": 15.666666666666659,
+          "circle2X": 45.70906000746754,
+          "p1X": 4.3530419651523236,
+          "p2Y": 107.27343613169286,
+          "circle1X": 3.9166666666666665,
+          "circle2Y": 91.61757735762527,
+          "p2X": 45.12722627615334,
+          "circle1Y": 117.5,
+          "p1Y": 105.7581059194493,
+          "endTheta1": -1.5336494610130695,
+          "endTheta2": 1.6079431925767236
+        },
+        {
+          "circle1Radius": 11.749999999999995,
+          "circle2Radius": 0.0,
+          "circle2X": 61.56,
+          "p1X": 59.15885713576447,
+          "p2Y": 94.05,
+          "circle1X": 48.47856156711485,
+          "circle2Y": 94.05,
+          "p2X": 61.56,
+          "circle1Y": 94.38707891727258,
+          "p1Y": 99.28542420586577,
+          "endTheta1": 0.43001061391731465,
+          "endTheta2": 0.43001061391731465
+        },
+        {
+          "circle1Radius": 4.5111813637692055,
+          "circle2Radius": 2.1079366189946054,
+          "circle2X": 60.36675078864354,
+          "p1X": 61.37868888957611,
+          "p2Y": 83.96962592984792,
+          "circle1X": 57.08839116719243,
+          "circle2Y": 83.31810725552049,
+          "p2X": 58.362026317126066,
+          "circle1Y": 94.646214511041,
+          "p1Y": 93.25190365971409,
+          "endTheta1": -0.31422432897033814,
+          "endTheta2": -3.4558169825601315
+        }
+      ],
+      "anchors": [
+        {
+          "tangent": 0.0,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 3.9166666666666665,
+          "y": 105.75,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 5.497787143782138,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 56.78706624605678,
+          "y": 102.6955835962145,
+          "dist1": -15.666666666666666,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": -1.7033478590915696,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 61.56,
+          "y": 94.05,
+          "dist1": 0.0,
+          "actions": [
+            0
+          ],
+          "config": 0,
+          "dist2": 4.5111813637692055
+        },
+        {
+          "tangent": 4.85428603498885,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 58.28,
+          "y": 83.02,
+          "dist1": -2.1079366189946054,
+          "actions": [
+            1
+          ],
+          "config": 0,
+          "dist2": 11.75
+        }
+      ],
+      "segments": []
+    }
+  },
+  "maxVel": 1.0,
+  "displayPoints": false,
+  "robotSize": 9.0,
+  "generationInterval": 1.0,
+  "accelDist": 15.0,
+  "config": 0
+}

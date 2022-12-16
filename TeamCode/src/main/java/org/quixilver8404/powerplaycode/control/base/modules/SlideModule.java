@@ -31,9 +31,9 @@ public class SlideModule {
     public static final double LOWER_BOUND = 100;
     public static final double TOLERANCE = 40;
 
-    public static final double KP = 7.7;
-    public static final double KI = 0.01;
-    public static final double KD = 0.4;
+    public static final double KP = 9.2;
+    public static final double KI = 0.03;
+    public static final double KD = 0.7;
     public static final double KF = 0;
 
     public static final double ENCODER_PER_REV = 45 * 28; //you sukc
