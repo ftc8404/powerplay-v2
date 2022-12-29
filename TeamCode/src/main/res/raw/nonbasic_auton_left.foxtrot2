@@ -1,0 +1,240 @@
+{
+  "alex": "WASHERE",
+  "rangeStart": 0,
+  "slowRadius": 25.0,
+  "anchors": [
+    {
+      "tangent": 0.0,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 7.833333333333333,
+      "y": 105.75,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 0.2617993877991494,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "CUSTOM",
+      "x": 35.25,
+      "y": 113.58,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 0.0
+    },
+    {
+      "tangent": 0.2617993877991494,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "CUSTOM",
+      "x": 35.25,
+      "y": 101.83333333333333,
+      "dist1": 0.0,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 1.5707963267948966,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 58.75,
+      "y": 109.66666666666666,
+      "dist1": -7.833333333333333,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 1.5707963267948966,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 58.75,
+      "y": 129.25,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    },
+    {
+      "tangent": 5.235987755982988,
+      "velP": 1.0,
+      "heading": 0.0,
+      "headingState": "FRONT",
+      "x": 62.666666666666664,
+      "y": 101.83333333333333,
+      "dist1": -11.75,
+      "actions": [],
+      "config": 0,
+      "dist2": 11.75
+    }
+  ],
+  "robotInterval": 8,
+  "rangeEnd": 6,
+  "segments": [],
+  "minVel": 0.25,
+  "output": {
+    "0": {
+      "curves": [
+        {
+          "circle1Radius": 11.75,
+          "circle2Radius": 11.750000000000002,
+          "circle2X": 38.29112377995462,
+          "p1X": 11.265323076378642,
+          "p2Y": 113.46798456183127,
+          "circle1X": 7.833333333333333,
+          "circle2Y": 102.23037154110344,
+          "p2X": 34.8591340369093,
+          "circle1Y": 117.5,
+          "p1Y": 106.26238697927216,
+          "endTheta1": -1.2743909464875391,
+          "endTheta2": 1.8672017071022542
+        },
+        {
+          "circle1Radius": 0.0,
+          "circle2Radius": 0.0,
+          "circle2X": 35.25,
+          "p1X": 35.25,
+          "p2Y": 101.83333333333333,
+          "circle1X": 35.25,
+          "circle2Y": 101.83333333333333,
+          "p2X": 35.25,
+          "circle1Y": 113.58,
+          "p1Y": 113.58,
+          "endTheta1": 0.0,
+          "endTheta2": 0.0
+        },
+        {
+          "circle1Radius": 11.750000000000002,
+          "circle2Radius": 7.833333333333329,
+          "circle2X": 50.91666666666667,
+          "p1X": 38.673170184920004,
+          "p2Y": 101.8374751220703,
+          "circle1X": 38.29112377995462,
+          "circle2Y": 109.66666666666666,
+          "p2X": 50.661969063356416,
+          "circle1Y": 90.48370487443677,
+          "p1Y": 102.22749219133131,
+          "endTheta1": 1.5382760073492803,
+          "endTheta2": -1.6033166462405126
+        },
+        {
+          "circle1Radius": 11.75,
+          "circle2Radius": 11.75,
+          "circle2X": 70.5,
+          "p1X": 58.75,
+          "p2Y": 129.25,
+          "circle1X": 70.5,
+          "circle2Y": 129.25,
+          "p2X": 58.75,
+          "circle1Y": 109.66666666666666,
+          "p1Y": 109.66666666666666,
+          "endTheta1": 3.141592653589793,
+          "endTheta2": 3.141592653589793
+        },
+        {
+          "circle1Radius": 11.75,
+          "circle2Radius": 11.750000000000002,
+          "circle2X": 52.490868172199505,
+          "p1X": 40.01253262939224,
+          "p2Y": 105.40490941912716,
+          "circle1X": 47.0,
+          "circle2Y": 95.95833333333334,
+          "p2X": 59.47833554280727,
+          "circle1Y": 129.25,
+          "p1Y": 119.80342391420618,
+          "endTheta1": -2.207661492843475,
+          "endTheta2": 0.9339311607463181
+        }
+      ],
+      "anchors": [
+        {
+          "tangent": 0.0,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 7.833333333333333,
+          "y": 105.75,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 0.2617993877991494,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "CUSTOM",
+          "x": 35.25,
+          "y": 113.58,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 0.0
+        },
+        {
+          "tangent": 0.2617993877991494,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "CUSTOM",
+          "x": 35.25,
+          "y": 101.83333333333333,
+          "dist1": 0.0,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 1.5707963267948966,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 58.75,
+          "y": 109.66666666666666,
+          "dist1": -7.833333333333333,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 1.5707963267948966,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 58.75,
+          "y": 129.25,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        },
+        {
+          "tangent": 5.235987755982988,
+          "velP": 1.0,
+          "heading": 0.0,
+          "headingState": "FRONT",
+          "x": 62.666666666666664,
+          "y": 101.83333333333333,
+          "dist1": -11.75,
+          "actions": [],
+          "config": 0,
+          "dist2": 11.75
+        }
+      ],
+      "segments": []
+    }
+  },
+  "maxVel": 1.0,
+  "displayPoints": false,
+  "robotSize": 9.0,
+  "generationInterval": 1.0,
+  "accelDist": 15.0,
+  "config": 0
+}

@@ -12,24 +12,12 @@ import org.quixilver8404.powerplaycode.control.base.modules.PositionTrackingModu
 import org.quixilver8404.powerplaycode.util.Vector3;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
-import org.quixilver8404.powerplaycode.control.base.HardwareCollection;
-import org.quixilver8404.powerplaycode.control.base.Robot;
 import org.quixilver8404.powerplaycode.control.base.modules.CVTasksModule;
- @Autonomous(name = "Test", group = "Main")
-public class Blue_Auton_Test extends LinearOpMode {
+ @Autonomous(name = "Basic Left Auton", group = "Main")
+public class Basic_Left_Auton extends LinearOpMode {
 
      static final int STREAM_WIDTH = 1920; // modify for your camera
      static final int STREAM_HEIGHT = 1080; // modify for your camera

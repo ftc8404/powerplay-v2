@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.quixilver8404.powerplaycode.hardware.HardwareDevice;
 
-public class BaseMotor extends HardwareDevice{
+public class BaseMotor extends HardwareDevice {
 
     protected final DcMotorEx motor;
     protected boolean isPowered;

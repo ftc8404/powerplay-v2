@@ -1,12 +1,16 @@
 package org.quixilver8404.powerplaycode.control.base;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.lynx.LynxI2cDeviceSynchV2;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.commands.standard.LynxSetModuleLEDColorCommand;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 //import org.openftc.easyopencv.OpenCvCamera;
 //import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -23,6 +27,7 @@ import org.quixilver8404.powerplaycode.hardware.motors.EncoderPositionMotor;
 import org.quixilver8404.powerplaycode.hardware.motors.EncoderlessMotor;
 import org.quixilver8404.powerplaycode.hardware.sensors.Encoder;
 import org.quixilver8404.powerplaycode.hardware.servos.BaseServo;
+import org.quixilver8404.powerplaycode.hardware.sensors.UltrasonicI2cRangeSensor;
 
 public class HardwareCollection {
 
@@ -54,6 +59,9 @@ public class HardwareCollection {
     public static final DcMotorSimple.Direction DRIVE_MOTOR_FL_DIRECTION = DcMotorSimple.Direction.FORWARD;
     public static final DcMotorSimple.Direction DRIVE_MOTOR_BL_DIRECTION = DcMotorSimple.Direction.FORWARD;
     public static final DcMotorSimple.Direction DRIVE_MOTOR_BR_DIRECTION = DcMotorSimple.Direction.REVERSE;
+
+    // ultrasonic sensors
+//    public final UltrasonicI2cRangeSensor ultraSonic1;
 
     // odometry encoders also called odometers
     public final Encoder odometryEncoder1;
@@ -104,6 +112,10 @@ public class HardwareCollection {
         driveMotorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         driveMotorBL = new EncoderlessMotor("driveMotorBL", DRIVE_MOTOR_BR_DIRECTION, hwMap);
         driveMotorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+//        ultraSonic1 = new UltrasonicI2cRangeSensor(hwMap.get(I2cDeviceSynch.class,"ultraSonic"));
+
+//        ultraSonic2 = hwMap.ultrasonicSensor.get("ultraSonic2");
 
 //        intakeMotor = new BaseMotor("intakeMotor", INTAKE_MOTOR_DIRECTION, hwMap);
 //        intakeMotor.setMaxPower(0.8);

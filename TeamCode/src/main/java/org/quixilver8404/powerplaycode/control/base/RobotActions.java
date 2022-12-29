@@ -100,5 +100,72 @@ public class RobotActions extends ArrayList<ActionEventListener> {
                 }, 700);
             }
         }));
+        add(new ActionEventListener(3, new RobotActionFunction(robot) {
+            @Override
+            public void run() {
+                robot.breakoutModule.stop();
+
+                robot.clawModule.setOpen();
+                robot.autoPilotModule.setDesiredPosition(new Vector3(58.75*inToM,129.25*inToM,0));
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }));
+        //drops initial cone, left side auton
+        add(new ActionEventListener(4, new RobotActionFunction(robot) {
+            @Override
+            public void run() {
+                robot.breakoutModule.stop();
+                robot.autoPilotModule.setDesiredPosition(new Vector3(62.67*inToM,94*inToM,0));
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.slideModule.goToJunc4();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.susanModule.goToCustom(1533);
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.clawModule.setOpen();
+
+
+            }
+        }));
+        //drops initial cone, right side auton
+        add(new ActionEventListener(5, new RobotActionFunction(robot) {
+            @Override
+            public void run() {
+                robot.breakoutModule.stop();
+                robot.autoPilotModule.setDesiredPosition(new Vector3(62.67,94,0)); //change
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.slideModule.goToJunc4();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                robot.susanModule.goToCustom(-1533);
+                robot.clawModule.setOpen();
+
+
+            }
+        }));
     }
 }

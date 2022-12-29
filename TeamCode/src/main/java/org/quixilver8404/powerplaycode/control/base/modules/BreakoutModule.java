@@ -18,6 +18,7 @@ import java.io.*;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class BreakoutModule {
 
@@ -80,9 +81,11 @@ public class BreakoutModule {
         Log.d("Breakout", "--------- false");
     }
 
-    public synchronized void init(final InputStream foxtrotFile) throws InterruptedException, IOException {
+    public synchronized void init(final InputStream foxtrotFile) throws IOException {
         bytes = null;
         bytes = IOUtils.toByteArray(foxtrotFile);
+        Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(bytes)));
+        while(s.hasNext()) System.out.println(s.nextLine());
         Log.d("bytes", Arrays.toString(bytes));
         System.out.println("length: " + breakoutVariants.length);
         if (breakoutVariants.length == 1) {

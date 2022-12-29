@@ -19,7 +19,7 @@ public class SlideModule {
         }
     }
     public enum SlideAction {
-        GO_TO_GROUND, GO_TO_ABOVE_DRIVE, GO_TO_JUNC_1, GO_TO_JUNC_2, GO_TO_JUNC_3, GO_TO_JUNC_4, NOT_MOVING;
+        GO_TO_GROUND, GO_TO_ABOVE_DRIVE, GO_TO_JUNC_1, GO_TO_JUNC_2, GO_TO_JUNC_3, GO_TO_JUNC_4, NOT_MOVING, GO_TO_AUTON_HEIGHT_1, GO_TO_AUTON_HEIGHT_2, GO_TO_AUTON_HEIGHT_3, GO_TO_AUTON_HEIGHT_4
     }
 
     public enum SlideControlState {
@@ -117,6 +117,14 @@ public class SlideModule {
                     }
                     break;
                 case NOT_MOVING:
+                    break;
+                case GO_TO_AUTON_HEIGHT_1:
+                    break;
+                case GO_TO_AUTON_HEIGHT_2:
+                    break;
+                case GO_TO_AUTON_HEIGHT_3:
+                    break;
+                case GO_TO_AUTON_HEIGHT_4:
                     break;
             }
             if (!Double.isNaN(desiredPos)){
