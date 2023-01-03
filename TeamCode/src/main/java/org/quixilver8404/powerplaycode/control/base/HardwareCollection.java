@@ -61,7 +61,7 @@ public class HardwareCollection {
     public static final DcMotorSimple.Direction DRIVE_MOTOR_BR_DIRECTION = DcMotorSimple.Direction.REVERSE;
 
     // ultrasonic sensors
-//    public final UltrasonicI2cRangeSensor ultraSonic1;
+    public final UltrasonicI2cRangeSensor ultraSonic1;
 
     // odometry encoders also called odometers
     public final Encoder odometryEncoder1;
@@ -113,7 +113,7 @@ public class HardwareCollection {
         driveMotorBL = new EncoderlessMotor("driveMotorBL", DRIVE_MOTOR_BR_DIRECTION, hwMap);
         driveMotorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//        ultraSonic1 = new UltrasonicI2cRangeSensor(hwMap.get(I2cDeviceSynch.class,"ultraSonic"));
+        ultraSonic1 = new UltrasonicI2cRangeSensor(hwMap.get(I2cDeviceSynch.class,"ultraSonic"));
 
 //        ultraSonic2 = hwMap.ultrasonicSensor.get("ultraSonic2");
 

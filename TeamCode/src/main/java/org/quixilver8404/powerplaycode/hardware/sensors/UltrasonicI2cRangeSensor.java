@@ -6,13 +6,16 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.configuration.I2cSensor;
+import com.qualcomm.robotcore.hardware.configuration.annotations.DeviceProperties;
+import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 
 import java.util.ArrayList;
 
 /**
  * Created by Ryan Whiting on 10/3/2017.
  */
-@I2cSensor(name = "MB1242 Ultrasonic Sensor", description = "Range Sensor from Maxbotics", xmlTag = "MB1242-0")
+@I2cDeviceType
+@DeviceProperties(name = "UltrasonicI2cRangeSensor", description = "Range Sensor from Maxbotics", xmlTag = "MB1242-0")
 public class UltrasonicI2cRangeSensor extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
     private final ArrayList<Integer> data = new ArrayList<>(2);
