@@ -81,20 +81,20 @@ public class BreakoutModule {
         Log.d("Breakout", "--------- false");
     }
 
-    public synchronized void init(final InputStream foxtrotFile) throws IOException {
-        bytes = null;
-        bytes = IOUtils.toByteArray(foxtrotFile);
-        Scanner s = new Scanner(new InputStreamReader(new ByteArrayInputStream(bytes)));
-        while(s.hasNext()) System.out.println(s.nextLine());
-        Log.d("bytes", Arrays.toString(bytes));
+    public synchronized void init(final InputStream foxtrotFile) {
+        byte[] bytes = null;
+        try {
+            bytes = IOUtils.toByteArray(foxtrotFile);
+        } catch (final Exception e) {
+            System.out.println("Meh");
+            e.printStackTrace();
+        }
         System.out.println("length: " + breakoutVariants.length);
         if (breakoutVariants.length == 1) {
             breakoutVariants[0] = new Breakout(bytes, 0, actionEventListeners, config);
-            Log.d("Breakout", "--------Variants length = 1");
             return;
         }
         for (int i = 0; i < breakoutVariants.length; i++) {
-            Log.d("Breakout", "--------Variants length more than 1");
             breakoutVariants[i] = new Breakout(bytes, i + 1, actionEventListeners, config);
         }
     }

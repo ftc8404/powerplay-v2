@@ -38,12 +38,7 @@ public class Basic_Left_Auton extends LinearOpMode {
         robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.SWITCH_TO_ODOMETRY);
 
         final Resources resources = hardwareMap.appContext.getResources();
-        try {
-            robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        robot.breakoutModule.stop();
+        robot.breakoutModule.init(resources.openRawResource(R.raw.left_auton));
         robot.startHardwareLoop();
 
         robot.hardwareCollection.camera.setPipeline(robot.cvTasksModule);
@@ -58,6 +53,7 @@ public class Basic_Left_Auton extends LinearOpMode {
             telemetry.addData("Status", "ready!");
             telemetry.update();
         }
+        robot.hardwareCollection.camera.closeCameraDevice();
 
         robot.breakoutModule.resume();
         robot.driveModule.enableAuton();
