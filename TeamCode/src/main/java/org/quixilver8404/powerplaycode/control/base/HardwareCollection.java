@@ -7,6 +7,7 @@ import com.qualcomm.hardware.lynx.commands.standard.LynxSetModuleLEDColorCommand
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchDevice;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -62,6 +63,7 @@ public class HardwareCollection {
 
     // ultrasonic sensors
     public final UltrasonicI2cRangeSensor ultraSonic1;
+    public I2cDevice i2cDevice1;
 
     // odometry encoders also called odometers
     public final Encoder odometryEncoder1;
@@ -113,7 +115,9 @@ public class HardwareCollection {
         driveMotorBL = new EncoderlessMotor("driveMotorBL", DRIVE_MOTOR_BR_DIRECTION, hwMap);
         driveMotorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        ultraSonic1 = new UltrasonicI2cRangeSensor(hwMap.get(I2cDeviceSynch.class,"ultraSonic"));
+//        i2cDevice1 = hwMap.i2cDevice.get("ultraSonic");
+//        ultraSonic1 = hwMap.get(UltrasonicI2cRangeSensor::class.java,"ultraSonic");
+        ultraSonic1 = new UltrasonicI2cRangeSensor((I2cDeviceSynch) hwMap.get(I2cDeviceSynchDevice.class,"ultraSonic").getDeviceClient());
 
 //        ultraSonic2 = hwMap.ultrasonicSensor.get("ultraSonic2");
 
