@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.quixilver8404.powerplaycode.control.base.Robot;
 import org.quixilver8404.powerplaycode.control.base.modules.SlideModule;
 import org.quixilver8404.powerplaycode.control.base.modules.SusanModule;
@@ -74,13 +75,12 @@ public class MainTeleOp extends OpMode {
         robot = new Robot(new Vector3(), this);
         robot.startHardwareLoop();
         robot.clawModule.setClose();
-//        robot.hardwareCollection.ultraSonic1.startRanging();
     }
 
     @Override
     public void init_loop() {
         System.out.println("init loop beep boop");
-//        telemetry.addData("ultraSonic1 distance", robot.hardwareCollection.ultraSonic1.getRange());
+        telemetry.addData("ultraSonic distance", robot.hardwareCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
     }
 
     @Override

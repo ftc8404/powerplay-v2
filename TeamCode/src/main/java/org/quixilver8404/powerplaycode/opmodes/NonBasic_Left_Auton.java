@@ -38,13 +38,8 @@ public class NonBasic_Left_Auton extends LinearOpMode {
         robot.poseModule.setAction(PositionTrackingModule.PositionTrackingAction.SWITCH_TO_ODOMETRY);
 
         final Resources resources = hardwareMap.appContext.getResources();
-        try {
-            robot.breakoutModule.init(resources.openRawResource(R.raw.nonbasic_auton_left));
-            Log.d("Breakout Status","Work'd");
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("Breakout Status","Failed");
-        }
+        robot.breakoutModule.init(resources.openRawResource(R.raw.nonbasic_auton_left));
+        Log.d("Breakout Status","Work'd");
         robot.breakoutModule.stop();
         robot.startHardwareLoop();
 

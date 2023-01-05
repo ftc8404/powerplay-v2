@@ -89,9 +89,13 @@ public class SlideModule {
         double desiredPow = 0;
         if (slideControlState == SlideControlState.MANUAL) {
             if (power >= 0 || position >= SlideState.ABOVE_DRIVE.height + TOLERANCE) {
-                desiredPow = Math.signum(power)*Math.pow(power,2);
+                 //desiredPow = power / Math.sqrt(Math.abs(power));
+                //desiredPow = Math.signum(power)*Math.pow(power,2);
+                 desiredPow = Math.sin(power/2*Math.PI);
             } else if (susanState == SusanModule.SusanState.FRONT) {
-                desiredPow = Math.signum(power)*Math.pow(power,2);
+                //desiredPow = Math.signum(power)*Math.pow(power,2);
+                 //desiredPow = power / Math.sqrt(Math.abs(power));
+                desiredPow = Math.sin(power/2*Math.PI);
             }
         } else {
             double desiredPos = Double.NaN;
