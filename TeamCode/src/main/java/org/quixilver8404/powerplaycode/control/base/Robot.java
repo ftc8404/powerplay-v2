@@ -10,6 +10,7 @@ import org.quixilver8404.powerplaycode.control.base.modules.BreakoutModule;
 import org.quixilver8404.powerplaycode.control.base.modules.CVTasksModule;
 import org.quixilver8404.powerplaycode.control.base.modules.DriveModule;
 import org.quixilver8404.powerplaycode.control.base.modules.ClawModule;
+import org.quixilver8404.powerplaycode.control.base.modules.MSonicModule;
 import org.quixilver8404.powerplaycode.control.base.modules.PositionTrackingModule;
 import org.quixilver8404.powerplaycode.control.base.modules.SlideModule;
 import org.quixilver8404.powerplaycode.control.base.modules.SusanModule;
@@ -27,6 +28,7 @@ public class Robot {
     public final SusanModule susanModule;
     public final SlideModule slideModule;
     public final CVTasksModule cvTasksModule;
+    public final MSonicModule mSonicModule;
     public final PositionTrackingModule poseModule;
     public final HardwareCollection hardwareCollection;
     public final HardwareLoopThread hardwareLoopThread;
@@ -55,6 +57,7 @@ public class Robot {
         susanModule = new SusanModule(this, hardwareCollection, SlideModule.SlideState.GROUND);
         slideModule = new SlideModule(this, hardwareCollection);
         cvTasksModule = new CVTasksModule(hardwareCollection);
+        mSonicModule = new MSonicModule();
         breakoutModule = new BreakoutModule(this, 0);
         autoPilotModule = new AutoPilotModule(this);
         updateCount = 0;

@@ -64,59 +64,59 @@ public class Odometry {
             return new double[]{0,0,0};
         }
     }
-    public void update(final double[] ds, double v, final double dtime) {
-
-        // calculate the change of [x, y, theta]
-        final double dt = (ds[2]-ds[1])/(2*ODO_RB);
-        final double dy = ds[0] - ODO_RA * dt;
-        final double dx = (ds[2]+ds[1])/2;
-
-        // translate the coordinate to the field's
-        final double ang = pos.theta() + dt/2;
-        d_pos.setX(  dx * Math.cos(ang) - dy * Math.sin(ang) );
-        d_pos.setY(  dx * Math.sin(ang) + dy * Math.cos(ang) );
-        d_pos.setTheta( dt );
-
-        vel = Vector3.ScalarMultiply(d_pos, 1/dtime);
-
-        pos.addVector(d_pos);
-    }
-
-//    public void update(final double[] deltaCount, final double dt, final double alpha) {
+//    public void update(final double[] ds, double v, final double dtime) {
 //
-////        System.out.println("Beginning odometry update");
-////        System.out.println("odo-dt: " + dt);
-////        System.out.println("deltaCount: " + Arrays.toString(deltaCount));
-////        System.out.println("alpha: " + alpha);
+//        // calculate the change of [x, y, theta]
+//        final double dt = (ds[2]-ds[1])/(2*ODO_RB);
+//        final double dy = ds[0] - ODO_RA * dt;
+//        final double dx = (ds[2]+ds[1])/2;
 //
-//        final double[][] A = makeA(alpha);
-//        final RealMatrix matrixA = MatrixUtils.createRealMatrix(A);
-//        final double[] x = solve(matrixA, deltaCount);
-//        final double dAlpha = x[2];
+//        // translate the coordinate to the field's
+//        final double ang = pos.theta() + dt/2;
+//        d_pos.setX(  dx * Math.cos(ang) - dy * Math.sin(ang) );
+//        d_pos.setY(  dx * Math.sin(ang) + dy * Math.cos(ang) );
+//        d_pos.setTheta( dt );
 //
-//        final double[][] A2;
-//        if (Math.abs(dAlpha) < 1e-10d ) { //TODO: Figure out if this is actually necessary. I sincerely doubt it
-//            A2 = makeA(alpha + dAlpha/2);
-//        } else {
-//            A2 = makeA2(alpha, dAlpha);
-//        }
-//        final RealMatrix matrixA2 = MatrixUtils.createRealMatrix(A2);
-//        final double[] x2 = solve(matrixA2, deltaCount);
+//        vel = Vector3.ScalarMultiply(d_pos, 1/dtime);
 //
-////        System.out.println("x2: " + Arrays.toString(x2));
-//
-//        pos = Vector3.AddVector(pos, new Vector3(x2[0], x2[1], x2[2]));
-//
-//        d_pos.setX(x2[0]/* *ema.getMhat().x()*/);
-//        d_pos.setY(x2[1]/* *ema.getMhat().y()*/);
-//        d_pos.setTheta(x2[2]/* *ema.getMhat().theta()*/);
-//
-//        d_pos_raw.setX(x2[0]);
-//        d_pos_raw.setY(x2[1]);
-//        d_pos_raw.setTheta(x2[2]);
-//
-//        vel = Vector3.ScalarMultiply(d_pos, 1/dt);
+//        pos.addVector(d_pos);
 //    }
+
+    public void update(final double[] deltaCount, final double dt, final double alpha) {
+
+//        System.out.println("Beginning odometry update");
+//        System.out.println("odo-dt: " + dt);
+//        System.out.println("deltaCount: " + Arrays.toString(deltaCount));
+//        System.out.println("alpha: " + alpha);
+
+        final double[][] A = makeA(alpha);
+        final RealMatrix matrixA = MatrixUtils.createRealMatrix(A);
+        final double[] x = solve(matrixA, deltaCount);
+        final double dAlpha = x[2];
+
+        final double[][] A2;
+        if (Math.abs(dAlpha) < 1e-10d ) { //TODO: Figure out if this is actually necessary. I sincerely doubt it
+            A2 = makeA(alpha + dAlpha/2);
+        } else {
+            A2 = makeA2(alpha, dAlpha);
+        }
+        final RealMatrix matrixA2 = MatrixUtils.createRealMatrix(A2);
+        final double[] x2 = solve(matrixA2, deltaCount);
+
+//        System.out.println("x2: " + Arrays.toString(x2));
+
+        pos = Vector3.AddVector(pos, new Vector3(x2[0], x2[1], x2[2]));
+
+        d_pos.setX(x2[0]/* *ema.getMhat().x()*/);
+        d_pos.setY(x2[1]/* *ema.getMhat().y()*/);
+        d_pos.setTheta(x2[2]/* *ema.getMhat().theta()*/);
+
+        d_pos_raw.setX(x2[0]);
+        d_pos_raw.setY(x2[1]);
+        d_pos_raw.setTheta(x2[2]);
+
+        vel = Vector3.ScalarMultiply(d_pos, 1/dt);
+    }
 
     public Vector3 getVelocity() {
         return vel;

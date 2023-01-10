@@ -2,6 +2,7 @@ package org.quixilver8404.powerplaycode.opmodes;
 
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -299,6 +300,9 @@ public class MainTeleOp extends OpMode {
                 robot.clawModule.setClose();
             }
         }
+
+        // MSonic
+        telemetry.addData("ultraSonic calculated position", Arrays.toString(robot.mSonicModule.calcPos(robot.poseModule.getPos().x(),robot.poseModule.getPos().y(),robot.poseModule.getPos().theta(),robot.hardwareCollection.ultraSonic1.getDistance(DistanceUnit.INCH),15/2-2.0,17.5/2 -2.625,-Math.PI/2)));
     }
 
     @Override
