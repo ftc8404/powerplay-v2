@@ -28,6 +28,9 @@ public abstract class BaseRobot {
     public final DiagnosticModule diagnosticModule;
     public final NavModule navModule;
     public final DriveModule driveModule;
+    public final SlidesModule slidesModule;
+    public final SusanModule susanModule;
+    public final ClawModule clawModule;
 
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
@@ -46,6 +49,9 @@ public abstract class BaseRobot {
         headingLockModule = new HeadingLockModule(startPose.heading);
         navModule = new NavModule(startPose, hwCollection);
         driveModule = new DriveModule();
+        slidesModule = new SlidesModule();
+        susanModule = new SusanModule();
+        clawModule = new ClawModule();
 
         this.prioritizeOdometry = prioritizeOdometry;
     }
@@ -70,18 +76,36 @@ public abstract class BaseRobot {
         hwCollection.refreshExpansionHubBulkData(); // refresh odometry readings
         hwCollection.clock.update();
 
+        criticalUpdate();
+
+        if (prioritizeOdometry) {
+            // then make other modules update less often
+            if (updateCount % 3 == 0) {
+                nonCriticalUpdate1();
+            } else if (updateCount % 3 == 1) {
+                nonCriticalUpdate2();
+            }
+        } else {
+            nonCriticalUpdate1();
+            nonCriticalUpdate2();
+        }
+    }
+
+    private void criticalUpdate() {
         diagnosticModule.update(this, hwCollection);
-
         taskModule.update(this, hwCollection);
-
         pathFollowModule.update(this);
         headingLockModule.update(this);
         navModule.update(this, hwCollection);
-        if (!prioritizeOdometry || updateCount % 3 == 0) {
-            driveModule.update(this, hwCollection);
-        }
-        if (!prioritizeOdometry || updateCount % 3 == 1) {
-        }
+    }
+
+    private void nonCriticalUpdate1() {
+        driveModule.update(this, hwCollection);
+    }
+
+    private void nonCriticalUpdate2() {
+        slidesModule.update(hwCollection);
+        susanModule.update(slidesModule,hwCollection);
     }
 
     public void waitForUpdate() {

@@ -3,10 +3,13 @@ package org.quixilver8404.skystone.control;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.quixilver8404.skystone.hardware.misc.Clock;
+import org.quixilver8404.skystone.hardware.motor.EncoderMotor;
 import org.quixilver8404.skystone.hardware.motor.EncoderlessMotor;
 import org.quixilver8404.skystone.hardware.sensor.DeltaEncoder;
+import org.quixilver8404.skystone.hardware.servo.PositionServo;
 import org.quixilver8404.skystone.util.Tunable;
 
 /**
@@ -50,6 +53,23 @@ public class HardwareCollection {
     @Tunable
     public static final DcMotorSimple.Direction DRIVE_ENCODER_CENTER_DIRECTION = DcMotorSimple.Direction.REVERSE;
 
+    //lazy susan motors
+    public final EncoderMotor susanMotor1;
+    public final EncoderlessMotor susanMotor2;
+
+    public static final DcMotorSimple.Direction SUSAN_MOTOR_1_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final DcMotorSimple.Direction SUSAN_MOTOR_2_DIRECTION = DcMotorSimple.Direction.FORWARD;
+
+    public final EncoderMotor slidesMotor1;
+    public final EncoderlessMotor slidesMotor2;
+
+    public static final DcMotorSimple.Direction SLIDES_MOTOR_1_DIRECTION = DcMotorSimple.Direction.REVERSE;
+    public static final DcMotorSimple.Direction SLIDES_MOTOR_2_DIRECTION = DcMotorSimple.Direction.FORWARD;
+
+    public final PositionServo gearServo;
+    public static final Servo.Direction GEAR_SERVO_DIRECTION = Servo.Direction.FORWARD;
+
+
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
      * default positions
@@ -76,6 +96,14 @@ public class HardwareCollection {
         driveEncoderLeft = new DeltaEncoder(driveMotorBR, DRIVE_ENCODER_LEFT_DIRECTION);
         driveEncoderRight = new DeltaEncoder(driveMotorBL, DRIVE_ENCODER_RIGHT_DIRECTION);
         driveEncoderCenter = new DeltaEncoder(driveMotorFL, DRIVE_ENCODER_CENTER_DIRECTION);
+
+        susanMotor1 = new EncoderMotor("susanMotor1", SUSAN_MOTOR_1_DIRECTION, hwMap);
+        susanMotor2 = new EncoderlessMotor("susanMotor2", SUSAN_MOTOR_2_DIRECTION, hwMap);
+
+        slidesMotor1 = new EncoderMotor("slidesMotor1", SLIDES_MOTOR_1_DIRECTION, hwMap);
+        slidesMotor2 = new EncoderlessMotor("slidesMotor2", SLIDES_MOTOR_2_DIRECTION, hwMap);
+
+        gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
     }
 
     /**
