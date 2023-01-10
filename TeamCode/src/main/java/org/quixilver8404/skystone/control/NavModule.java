@@ -13,11 +13,11 @@ import org.quixilver8404.skystone.util.measurement.Position2D;
 public class NavModule {
 
     @Tunable
-    public static final double DRIVE_ENCODER_MM_PER_COUNT = 35 * Math.PI / 4000.0 * (2540.0 / 2550.0); // TODO tune
+    public static final double DRIVE_ENCODER_MM_PER_COUNT = 2343.0 / 175164.0; // TODO tune
     @Tunable
-    public static final double LEFT_RIGHT_DRIVE_ENCODER_FROM_CENTER_MM = 181.0 * (3610.0 / 3600.0); //TODO tune
+    public static final double LEFT_RIGHT_DRIVE_ENCODER_FROM_CENTER_MM = 77.225; //TODO tune
     @Tunable
-    public static final double CENTER_DRIVE_ENCODER_FROM_CENTER_MM = 181.0; // TODO tune
+    public static final double CENTER_DRIVE_ENCODER_FROM_CENTER_MM = -160.0; // TODO tune
 
     // the center of rotation for the robot is the reference point
     // the heading is relative to the driver's point of view, straight ahead is 90 degrees

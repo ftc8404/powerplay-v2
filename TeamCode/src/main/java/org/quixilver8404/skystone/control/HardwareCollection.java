@@ -48,7 +48,7 @@ public class HardwareCollection {
     @Tunable
     public static final DcMotorSimple.Direction DRIVE_ENCODER_RIGHT_DIRECTION = DcMotorSimple.Direction.REVERSE;
     @Tunable
-    public static final DcMotorSimple.Direction DRIVE_ENCODER_CENTER_DIRECTION = DcMotorSimple.Direction.FORWARD;
+    public static final DcMotorSimple.Direction DRIVE_ENCODER_CENTER_DIRECTION = DcMotorSimple.Direction.REVERSE;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -60,10 +60,10 @@ public class HardwareCollection {
 
         // for bulk reading
         controlHub = hwMap.get(LynxModule.class, "Control Hub");
-        controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+//        controlHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         refreshControlHubBulkData();
         expansionHub = hwMap.get(LynxModule.class, "Expansion Hub");
-        expansionHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+//        expansionHub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         refreshExpansionHubBulkData();
 
         // drive motors
@@ -82,13 +82,13 @@ public class HardwareCollection {
      * Reads bulk data from expansion hub 1
      */
     public void refreshControlHubBulkData() {
-        controlHub.getBulkData();
+//        controlHub.getBulkData();
     }
 
     /**
      * Reads bulk data from expansion hub 2
      */
     public void refreshExpansionHubBulkData() {
-        expansionHub.getBulkData();
+//        expansionHub.getBulkData();
     }
 }
