@@ -6,7 +6,7 @@ import org.quixilver8404.skystone.util.measurement.Angle;
 public class HeadingLockModule {
 
     @Tunable
-    private final PIDController rotationPID = new PIDController(1.4 / 90.0, 0, 2.0, 0);
+    private final PIDController rotationPID = new PIDController(6.65 / 90.0, 0, 2.0, 0);
     private double targetHeadingDeg;
     private boolean enabledPID = true;
 
