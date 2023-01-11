@@ -28,6 +28,7 @@ public abstract class BaseRobot {
     public final DiagnosticModule diagnosticModule;
     public final NavModule navModule;
     public final DriveModule driveModule;
+    public final MSonicModule mSonicModule;
 
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
@@ -46,6 +47,7 @@ public abstract class BaseRobot {
         headingLockModule = new HeadingLockModule(startPose.heading);
         navModule = new NavModule(startPose, hwCollection);
         driveModule = new DriveModule();
+        mSonicModule = new MSonicModule();
 
         this.prioritizeOdometry = prioritizeOdometry;
     }

@@ -3,6 +3,7 @@ package org.quixilver8404.skystone.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.quixilver8404.skystone.control.AutonRobot;
 import org.quixilver8404.skystone.util.measurement.Angle;
 import org.quixilver8404.skystone.util.measurement.Distance;
@@ -41,6 +42,13 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
             telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
             telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
+            telemetry.addData("ultrasonic pos",robot.mSonicModule.calcPos(
+                    robot.navModule.getPose().x.getValue(Distance.Unit.INCHES),
+                    robot.navModule.getPose().y.getValue(Distance.Unit.INCHES),
+                    robot.navModule.getHeading().getStandard(Angle.Unit.RADIANS),
+                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+                    15/2-2.0,17.5/2 -2.625,-Math.PI/2
+            ) );
             telemetry.update();
         }
         robot.stopHardwareLoop();

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.quixilver8404.skystone.hardware.misc.Clock;
 import org.quixilver8404.skystone.hardware.motor.EncoderlessMotor;
 import org.quixilver8404.skystone.hardware.sensor.DeltaEncoder;
+import org.quixilver8404.skystone.hardware.sensor.MaxbotixMB1242;
 import org.quixilver8404.skystone.util.Tunable;
 
 /**
@@ -50,6 +51,8 @@ public class HardwareCollection {
     @Tunable
     public static final DcMotorSimple.Direction DRIVE_ENCODER_CENTER_DIRECTION = DcMotorSimple.Direction.REVERSE;
 
+    public final MaxbotixMB1242 ultraSonic1;
+
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
      * default positions
@@ -76,6 +79,7 @@ public class HardwareCollection {
         driveEncoderLeft = new DeltaEncoder(driveMotorBR, DRIVE_ENCODER_LEFT_DIRECTION);
         driveEncoderRight = new DeltaEncoder(driveMotorBL, DRIVE_ENCODER_RIGHT_DIRECTION);
         driveEncoderCenter = new DeltaEncoder(driveMotorFL, DRIVE_ENCODER_CENTER_DIRECTION);
+        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic");
     }
 
     /**
