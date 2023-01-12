@@ -23,21 +23,38 @@ public class MSonicModule {
 //    double PosSX=r * Math.cos(theta + phi)+x;
 //    double PosSY=r * Math.sin(theta + phi)+y;
 //    double XendLasor= PosSX +\
-        double field1 = 141;
-        double lenght1 = (field1 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j));
-        double field2 = 0;
-        double lenght2 = (field2 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j));
-        double lenght3 = (field1 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j));
-        double lenght4 = (field2 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j));
-        double finallenght = Math.min(Math.min(Math.pow(lenght1 - ideal, 2), Math.pow(lenght2 - ideal, 2)), Math.min(Math.pow(lenght3 - ideal, 2), Math.pow(lenght4 - ideal, 2)));
-//        System.out.println("Final Lenght: " + finallenght);
-        if (finallenght == Math.pow(lenght1 - ideal, 2)) {
+//        double field1 = 141;
+//        double lenght1 = (field1 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j));
+//        double field2 = 0;
+//        double lenght2 = (field2 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j));
+//        double lenght3 = (field1 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j));
+//        double lenght4 = (field2 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j));
+//        double finallenght = Math.min(Math.min(Math.pow(lenght1 - ideal, 2), Math.pow(lenght2 - ideal, 2)), Math.min(Math.pow(lenght3 - ideal, 2), Math.pow(lenght4 - ideal, 2)));
+////        System.out.println("Final Lenght: " + finallenght);
+//        if (finallenght == Math.pow(lenght1 - ideal, 2)) {
+//            return 1;
+//        } else if (finallenght == Math.pow(lenght2 - ideal, 2)) {
+//            return 2;
+//        } else if (finallenght == Math.pow(lenght3 - ideal, 2)) {
+//            return 3;
+//        } else if (finallenght == Math.pow(lenght4 - ideal, 2)) {
+//            return 4;
+//        } else {
+//            return 0;
+//        }
+        double length1 = Math.pow((((141 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j))-ideal)),2);
+        double length2 = Math.pow((((0 - x - sens_x * Math.cos(phi) - sens_y * Math.sin(phi)) / (Math.cos(phi + sens_j))-ideal)),2);
+        double length3 = Math.pow((((141 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j)))-ideal),2);
+        double length4 = Math.pow((((0 - y - sens_x * Math.sin(phi) - sens_y * Math.cos(phi)) / (Math.sin(phi + sens_j)))-ideal),2);
+        double finalLength = Math.min(Math.min(length1,length2),Math.min(length3,length4));
+        System.out.println("finalLength: " + finalLength);
+        if (finalLength == length1) {
             return 1;
-        } else if (finallenght == Math.pow(lenght2 - ideal, 2)) {
+        } else if (finalLength == length2) {
             return 2;
-        } else if (finallenght == Math.pow(lenght3 - ideal, 2)) {
+        } else if (finalLength == length3) {
             return 3;
-        } else if (finallenght == Math.pow(lenght4 - ideal, 2)) {
+        } else if (finalLength == length4) {
             return 4;
         } else {
             return 0;
@@ -57,8 +74,8 @@ public class MSonicModule {
                             new InitialGuess(new double[]{x, phi}),
                             new NelderMeadSimplex(new double[]{1, 1}));
 
-//            System.out.println(Arrays.toString(optimum.getPoint()) + " : "
-//                    + optimum.getValue());
+            System.out.println("x" + Arrays.toString(optimum.getPoint()) + " : "
+                    + optimum.getValue());
             return optimum.getPoint();
         } else if (equation == 2) {
             selectedEquation = new EquationTwo(ideal, sens_x, sens_y, sens_j);
@@ -70,8 +87,8 @@ public class MSonicModule {
                             new InitialGuess(new double[]{x, phi}),
                             new NelderMeadSimplex(new double[]{1, 1}));
 
-//            System.out.println(Arrays.toString(optimum.getPoint()) + " : "
-//                    + optimum.getValue());
+            System.out.println("x" + Arrays.toString(optimum.getPoint()) + " : "
+                    + optimum.getValue());
             return optimum.getPoint();
         } else if (equation == 3) {
             selectedEquation = new EquationThree(ideal, sens_x, sens_y, sens_j);
@@ -83,8 +100,8 @@ public class MSonicModule {
                             new InitialGuess(new double[]{y, phi}),
                             new NelderMeadSimplex(new double[]{1, 1}));
 
-//            System.out.println(Arrays.toString(optimum.getPoint()) + " : "
-//                    + optimum.getValue());
+            System.out.println("y" + Arrays.toString(optimum.getPoint()) + " : "
+                    + optimum.getValue());
             return optimum.getPoint();
         } else if (equation == 4) {
             selectedEquation = new EquationFour(ideal, sens_x, sens_y, sens_j);
@@ -96,8 +113,8 @@ public class MSonicModule {
                             new InitialGuess(new double[]{y, phi}),
                             new NelderMeadSimplex(new double[]{1, 1}));
 
-//            System.out.println(Arrays.toString(optimum.getPoint()) + " : "
-//                    + optimum.getValue());
+            System.out.println("y" + Arrays.toString(optimum.getPoint()) + " : "
+                    + optimum.getValue());
             return optimum.getPoint();
         }
         return null;
