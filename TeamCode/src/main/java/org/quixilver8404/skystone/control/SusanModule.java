@@ -5,24 +5,24 @@ import org.quixilver8404.skystone.util.Tunable;
 public class SusanModule {
 
     public enum SusanControlState {
-        GO_TO_FRONT, GO_TO_CUSTOM, MANUAL;
+        GO_TO_FRONT, GO_TO_CUSTOM, MANUAL
     }
 
     @Tunable
-    public static final double RIGHT_BOUND = 2300;
+    public static final double RIGHT_BOUND = 2300; // TODO tune these
     @Tunable
-    public static final double LEFT_BOUND = -2300;
+    public static final double LEFT_BOUND = -2300; // TODO tune these
     @Tunable
-    public static final double TOLERANCE = 80;
+    public static final double GO_TO_TOLERANCE = 80; // TODO tune these
     @Tunable
     public static final double FRONT_POS = 0;
 
     @Tunable
     public static final double KP = 1; // TODO tune these
     @Tunable
-    public static final double KI = 0;
+    public static final double KI = 0; // TODO tune these
     @Tunable
-    public static final double KD = 0;
+    public static final double KD = 0; // TODO tune these
 
 
     protected SusanControlState susanControlState;
@@ -73,7 +73,7 @@ public class SusanModule {
         if (susanControlState != SusanControlState.GO_TO_FRONT) {
             return false;
         }
-        return Math.abs(curPosition - FRONT_POS) <= TOLERANCE;
+        return Math.abs(curPosition - FRONT_POS) <= GO_TO_TOLERANCE;
     }
 
     public synchronized SusanControlState getSusanControlState() {

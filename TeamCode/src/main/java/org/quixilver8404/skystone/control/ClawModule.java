@@ -4,9 +4,9 @@ import org.quixilver8404.skystone.util.Tunable;
 
 public class ClawModule {
     @Tunable
-    private static final double OPEN_GEAR = 0.00;
+    private static final double OPEN_GEAR = 0.00; // TODO tune
     @Tunable
-    private static final double CLOSE_GEAR = 1.00;
+    private static final double CLOSE_GEAR = 1.00; // TODO tune
 
     protected ClawState clawState;
 

@@ -106,8 +106,8 @@ public abstract class BaseRobot {
     }
 
     private void nonCriticalUpdate2() {
-        slidesModule.update(hwCollection);
-        susanModule.update(slidesModule,hwCollection);
+        slidesModule.update(susanModule, hwCollection);
+        susanModule.update(slidesModule, hwCollection);
     }
 
     public void waitForUpdate() {

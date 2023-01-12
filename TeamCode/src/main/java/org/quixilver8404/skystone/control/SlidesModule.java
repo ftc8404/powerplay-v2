@@ -6,43 +6,38 @@ import org.quixilver8404.skystone.util.measurement.Distance;
 public class SlidesModule {
 
     public enum SlidePositionPreset {
-        GROUND(0),
-        ABOVE_DRIVE(450),
-        JUNC_1(1000),
-        JUNC_2(2070),
-        JUNC_3(2300),
-        JUNC_4(6000);
+        GROUND(0), // TODO tune
+        ABOVE_DRIVE(3), // TODO tune
+        JUNC_1(5), // TODO tune
+        JUNC_2(10), // TODO tune
+        JUNC_3(15), // TODO tune
+        JUNC_4(20); // TODO tune
 
         public final double HEIGHT_INCHES;
 
-        SlidePositionPreset(final double height) {
-            this.HEIGHT_INCHES = height;
+        SlidePositionPreset(final double heightInches) {
+            this.HEIGHT_INCHES = heightInches;
         }
     }
 
     // should be slightly lower than ABOVE_DRIVE height
     @Tunable
-    public final static double CLEAR_DRIVE_HEIGHT = 350;
-
-    @Tunable
-    public final static Distance START_POSITION = Distance.ZERO;
-
-    @Tunable
-    public static final double WINCH_DIAMETER_INCH = 60.0 / 25.4; // TODO tune
-    @Tunable
-    public static final int LIFT_MOTOR_COUNTS_PER_REV = 560;
+    public final static double CLEAR_DRIVE_HEIGHT_INCHES = 2.5; // TODO tune
 
     @Tunable
     public static final double STALL_POWER = 0.09; // TODO tune
-    @Tunable
+
     public static final double MAX_UPWARD_POWER_INCREMENT = 1.0 - STALL_POWER;
-    @Tunable
-    public static final double MAX_DOWNWARD_POWER_INCREMENT = 1.0; // TODO tune
+    public static final double MAX_DOWNWARD_POWER_INCREMENT = 1.0 + STALL_POWER;
+
     @Tunable
     public static final double DOWNWARD_POWER_IN_DEAD_ZONE = 0.45; // TODO tune
     @Tunable
-    public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000;
+    public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000; // TODO tune
 
+    @Tunable
+    // buffer around min/max height constraint to avoid unstable oscillating behavior
+    public static final double HEIGHT_CONSTRAINT_BUFFER_INCHES = 0.5; // TODO tune
     @Tunable
     public static final double MAX_HEIGHT_INCHES = 44.0; // TODO tune
     // the zone where the lift should not actively hold itself up or go down at a power
@@ -52,8 +47,13 @@ public class SlidesModule {
     @Tunable
     public static final double SLACK_INCHES = 0.12; // TODO tune
 
-    // accounts for a 90:60 gear ratio
-    private final double countsPerInch = (double) LIFT_MOTOR_COUNTS_PER_REV / (Math.PI * WINCH_DIAMETER_INCH) * (90.0 / 60.0);
+    @Tunable
+    public static final double WINCH_DIAMETER_INCH = 60.0 / 25.4;
+    @Tunable
+    // bare motor counts/rev * gearbox reduction
+    public static final int LIFT_MOTOR_COUNTS_PER_REV = 28 * 25;
+
+    public final double COUNTS_PER_INCH = (double) LIFT_MOTOR_COUNTS_PER_REV / (Math.PI * WINCH_DIAMETER_INCH);
 
     private long powerDownInDeadZoneStartTimeMillis = -1;
 
@@ -75,25 +75,16 @@ public class SlidesModule {
 
     private int zeroPowerStartTimeMillis; // for tracking when to switch from power to PID
 
-    private boolean atMaxHeight = false;
-    private boolean atMinHeight = false;
-
     public SlidesModule() {
         targetPower = 0;
-        targetPosition = START_POSITION;
+        targetPosition = Distance.ZERO;
         curPosition = targetPosition;
         rawEncoderReading = 0;
-        bottomEncoderReading = (int) (-curPosition.getValue(Distance.Unit.INCHES) * countsPerInch);
+        bottomEncoderReading = 0;
         zeroPowerStartTimeMillis = -1000000;
     }
 
-    public synchronized void update(HardwareCollection hwCollection) {
-        // TODO add logic using susanModule.isSafetoLowerSlides
-        // - if taking manual power input, ignore downward power
-        // that would smash slides into base
-        // - if using PID to move to set position, ignore target
-        // positions that are lower than SlidePositionPreset.ABOVE_DRIVE
-
+    public synchronized void update(SusanModule susanModule, HardwareCollection hwCollection) {
         int currentTimeMillis = hwCollection.clock.getRunningTimeMillis();
 
         curPosition = readCurPosition(hwCollection);
@@ -113,18 +104,25 @@ public class SlidesModule {
             }
         }
 
+        double minHeightInches = susanModule.isSafeToLowerSlides()
+                ? SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES : 0;
+
         if (runAtPower) {
-            if (curPosition.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES && targetPower >= 0 || atMaxHeight) {
-                atMaxHeight = true;
+            if (curPosition.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES - HEIGHT_CONSTRAINT_BUFFER_INCHES && targetPower >= 0) {
                 moveToPosition(new Distance(MAX_HEIGHT_INCHES, Distance.Unit.INCHES), hwCollection);
-            } else if (curPosition.getValue(Distance.Unit.INCHES) <= 0 && targetPower <= 0 || atMinHeight) {
-                atMinHeight = true;
-                moveToPosition(Distance.ZERO, hwCollection);
+            } else if (curPosition.getValue(Distance.Unit.INCHES) <= minHeightInches + HEIGHT_CONSTRAINT_BUFFER_INCHES && targetPower <= 0) {
+                moveToPosition(new Distance(minHeightInches, Distance.Unit.INCHES), hwCollection);
             } else {
                 runAtPower(targetPower, hwCollection);
             }
         } else {
-            moveToPosition(targetPosition, hwCollection);
+            if (targetPosition.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES - HEIGHT_CONSTRAINT_BUFFER_INCHES) {
+                moveToPosition(new Distance(MAX_HEIGHT_INCHES, Distance.Unit.INCHES), hwCollection);
+            } else if (targetPosition.getValue(Distance.Unit.INCHES) <= minHeightInches + HEIGHT_CONSTRAINT_BUFFER_INCHES) {
+                moveToPosition(new Distance(minHeightInches, Distance.Unit.INCHES), hwCollection);
+            } else {
+                moveToPosition(targetPosition, hwCollection);
+            }
         }
 
     }
@@ -133,32 +131,22 @@ public class SlidesModule {
      * Adjusts the reference encoder position for when the lift is at the bottom so the lift
      * now reads that it is at the bottom.
      */
-    public synchronized void setCurPositionToBottom() {
+    private synchronized void setCurPositionToBottom() {
         bottomEncoderReading = rawEncoderReading;
     }
 
     /**
      * Runs the lift to reach a specified position
      */
-    private void moveToPosition(Distance position, HardwareCollection hwCollection) {
+    private void moveToPosition(Distance targetPosition, HardwareCollection hwCollection) {
         if (powerDownInDeadZoneStartTimeMillis == -1) {
             powerDownInDeadZoneStartTimeMillis = hwCollection.clock.getRunningTimeMillis();
         }
-        Distance newTargetPos = position;
-        if (newTargetPos.getValue(Distance.Unit.METERS) < 0) {
-            newTargetPos = Distance.ZERO;
-        } else if (newTargetPos.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES || atMaxHeight) {
-            atMaxHeight = true;
-            newTargetPos = new Distance(MAX_HEIGHT_INCHES, Distance.Unit.INCHES);
-        } else if (newTargetPos.getValue(Distance.Unit.INCHES) <= 0 || atMinHeight) {
-            atMinHeight = true;
-            newTargetPos = new Distance(0, Distance.Unit.INCHES);
-        }
 
-        double newPosInches = newTargetPos.getValue(Distance.Unit.INCHES);
+        double targetPosInches = targetPosition.getValue(Distance.Unit.INCHES);
         double curPosInches = curPosition.getValue(Distance.Unit.INCHES);
 
-        if (newPosInches < BOTTOM_DEAD_ZONE_INCHES && curPosInches < BOTTOM_DEAD_ZONE_INCHES) {
+        if (targetPosInches < BOTTOM_DEAD_ZONE_INCHES && curPosInches < BOTTOM_DEAD_ZONE_INCHES) {
             if (hwCollection.clock.getRunningTimeMillis() - powerDownInDeadZoneStartTimeMillis < MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS) {
                 setRawPower(-DOWNWARD_POWER_IN_DEAD_ZONE, hwCollection);
                 setCurPositionToBottom();
@@ -168,7 +156,7 @@ public class SlidesModule {
             positionPID.reset();
         } else {
             powerDownInDeadZoneStartTimeMillis = hwCollection.clock.getRunningTimeMillis();
-            Distance offset = Distance.subtractDistances(curPosition, newTargetPos);
+            Distance offset = Distance.subtractDistances(curPosition, targetPosition);
             double offsetInches = offset.getValue(Distance.Unit.INCHES);
             double outputPower = positionPID.loop(offsetInches, hwCollection.clock.getRunningTimeMillis());
             if (Math.abs(outputPower) > 1) {
@@ -211,11 +199,11 @@ public class SlidesModule {
     }
 
     /**
-     * Only the left lift motor's encoder is used
+     * Only one motor's encoder is used
      */
     private Distance readCurPosition(HardwareCollection hwCollection) {
         rawEncoderReading = hwCollection.slidesMotor1.getEncoder().getEncoderPosition();
-        double inches = (rawEncoderReading - bottomEncoderReading) / countsPerInch;
+        double inches = (rawEncoderReading - bottomEncoderReading) / COUNTS_PER_INCH;
         inches -= SLACK_INCHES;
         if (inches < 0) {
             inches = 0;
@@ -224,7 +212,7 @@ public class SlidesModule {
     }
 
     public synchronized boolean areSlidesLowered() {
-        return curPosition.getValue(Distance.Unit.INCHES) > CLEAR_DRIVE_HEIGHT;
+        return curPosition.getValue(Distance.Unit.INCHES) > CLEAR_DRIVE_HEIGHT_INCHES;
     }
 
     /**
@@ -235,12 +223,6 @@ public class SlidesModule {
         this.targetPosition = targetPosition;
         targetPower = 0;
         runAtPower = false;
-        if (targetPosition.getValue(Distance.Unit.INCHES) < MAX_HEIGHT_INCHES) {
-            atMaxHeight = false;
-        }
-        if (targetPosition.getValue(Distance.Unit.INCHES) > 0) {
-            atMinHeight = false;
-        }
     }
 
     public synchronized void setTargetPositionPreset(SlidePositionPreset targetPositionPreset) {
@@ -258,12 +240,6 @@ public class SlidesModule {
         }
         if (targetPower != 0) {
             runAtPower = true;
-        }
-        if (targetPower < 0) {
-            atMaxHeight = false;
-        }
-        if (targetPower > 0) {
-            atMinHeight = false;
         }
     }
 }
