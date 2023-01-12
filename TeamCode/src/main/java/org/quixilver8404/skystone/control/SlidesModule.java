@@ -1,5 +1,7 @@
 package org.quixilver8404.skystone.control;
 
+import android.util.Log;
+
 import org.quixilver8404.skystone.util.Tunable;
 import org.quixilver8404.skystone.util.measurement.Distance;
 
@@ -7,11 +9,11 @@ public class SlidesModule {
 
     public enum SlidePositionPreset {
         GROUND(0), // TODO tune
-        ABOVE_DRIVE(3), // TODO tune
-        JUNC_1(5), // TODO tune
-        JUNC_2(10), // TODO tune
-        JUNC_3(15), // TODO tune
-        JUNC_4(20); // TODO tune
+        ABOVE_DRIVE(12.0), // TODO tune
+        JUNC_1(5.0), // TODO tune
+        JUNC_2(10.0), // TODO tune
+        JUNC_3(15.0), // TODO tune
+        JUNC_4(20.0); // TODO tune
 
         public final double HEIGHT_INCHES;
 
@@ -20,40 +22,40 @@ public class SlidesModule {
         }
     }
 
+    @Tunable
+    // buffer around min/max height constraint to avoid unstable oscillating behavior
+    public static final double HEIGHT_CONSTRAINT_BUFFER_INCHES = 0.5; // TODO tune
+
     // should be slightly lower than ABOVE_DRIVE height
     @Tunable
-    public final static double CLEAR_DRIVE_HEIGHT_INCHES = 2.5; // TODO tune
+    public final static double CLEAR_DRIVE_HEIGHT_INCHES = 10.0;
 
     @Tunable
-    public static final double STALL_POWER = 0.09; // TODO tune
+    public static final double STALL_POWER = 0.09;
 
     public static final double MAX_UPWARD_POWER_INCREMENT = 1.0 - STALL_POWER;
     public static final double MAX_DOWNWARD_POWER_INCREMENT = 1.0 + STALL_POWER;
 
     @Tunable
-    public static final double DOWNWARD_POWER_IN_DEAD_ZONE = 0.45; // TODO tune
+    public static final double DOWNWARD_POWER_IN_DEAD_ZONE = 0.45;
     @Tunable
-    public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000; // TODO tune
-
+    public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000;
     @Tunable
-    // buffer around min/max height constraint to avoid unstable oscillating behavior
-    public static final double HEIGHT_CONSTRAINT_BUFFER_INCHES = 0.5; // TODO tune
-    @Tunable
-    public static final double MAX_HEIGHT_INCHES = 44.0; // TODO tune
+    public static final double MAX_HEIGHT_INCHES = 37.0; // TODO tune
     // the zone where the lift should not actively hold itself up or go down at a power
     @Tunable
-    public static final double BOTTOM_DEAD_ZONE_INCHES = 1.0;  // TODO tune
+    public static final double BOTTOM_DEAD_ZONE_INCHES = 1.0;
     // the amount of wiggle room with the string
     @Tunable
-    public static final double SLACK_INCHES = 0.12; // TODO tune
+    public static final double SLACK_INCHES = 0.12;
 
     @Tunable
     public static final double WINCH_DIAMETER_INCH = 60.0 / 25.4;
     @Tunable
     // bare motor counts/rev * gearbox reduction
-    public static final int LIFT_MOTOR_COUNTS_PER_REV = 28 * 25;
+    public static final int SLIDE_MOTOR_COUNTS_PER_REV = 28 * 25;
 
-    public final double COUNTS_PER_INCH = (double) LIFT_MOTOR_COUNTS_PER_REV / (Math.PI * WINCH_DIAMETER_INCH);
+    public static final double COUNTS_PER_INCH = (double) SLIDE_MOTOR_COUNTS_PER_REV / (Math.PI * WINCH_DIAMETER_INCH);
 
     private long powerDownInDeadZoneStartTimeMillis = -1;
 
@@ -105,13 +107,15 @@ public class SlidesModule {
         }
 
         double minHeightInches = susanModule.isSafeToLowerSlides()
-                ? SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES : 0;
+                ? 0 : SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES;
 
+        double curPosInches = curPosition.getValue(Distance.Unit.INCHES);
+        
         if (runAtPower) {
-            if (curPosition.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES - HEIGHT_CONSTRAINT_BUFFER_INCHES && targetPower >= 0) {
-                moveToPosition(new Distance(MAX_HEIGHT_INCHES, Distance.Unit.INCHES), hwCollection);
-            } else if (curPosition.getValue(Distance.Unit.INCHES) <= minHeightInches + HEIGHT_CONSTRAINT_BUFFER_INCHES && targetPower <= 0) {
-                moveToPosition(new Distance(minHeightInches, Distance.Unit.INCHES), hwCollection);
+            if (curPosInches > MAX_HEIGHT_INCHES && targetPower > 0) {
+                runAtPower(0, hwCollection);
+            } else if (curPosInches < minHeightInches && targetPower < 0) {
+                runAtPower(0, hwCollection);
             } else {
                 runAtPower(targetPower, hwCollection);
             }
@@ -212,7 +216,7 @@ public class SlidesModule {
     }
 
     public synchronized boolean areSlidesLowered() {
-        return curPosition.getValue(Distance.Unit.INCHES) > CLEAR_DRIVE_HEIGHT_INCHES;
+        return curPosition.getValue(Distance.Unit.INCHES) < CLEAR_DRIVE_HEIGHT_INCHES;
     }
 
     /**
@@ -241,6 +245,10 @@ public class SlidesModule {
         if (targetPower != 0) {
             runAtPower = true;
         }
+    }
+
+    public synchronized Distance getCurPosition() {
+        return curPosition;
     }
 }
 

@@ -9,11 +9,11 @@ public class SusanModule {
     }
 
     @Tunable
-    public static final double RIGHT_BOUND = 2300; // TODO tune these
+    public static final double RIGHT_BOUND = 2700;
     @Tunable
-    public static final double LEFT_BOUND = -2300; // TODO tune these
+    public static final double LEFT_BOUND = -2700;
     @Tunable
-    public static final double GO_TO_TOLERANCE = 80; // TODO tune these
+    public static final double GO_TO_TOLERANCE = 80;
     @Tunable
     public static final double FRONT_POS = 0;
 
@@ -70,9 +70,13 @@ public class SusanModule {
     }
 
     public synchronized boolean isSafeToLowerSlides() {
-        if (susanControlState != SusanControlState.GO_TO_FRONT) {
-            return false;
-        }
+        // uncomment below if we want to only let slides be lowered when using GO_TO_FRONT state
+        // (i.e., don't allow slides to be lowered when manually controlling power, even if centered)
+
+//        if (susanControlState != SusanControlState.GO_TO_FRONT) {
+//            return false;
+//        }
+
         return Math.abs(curPosition - FRONT_POS) <= GO_TO_TOLERANCE;
     }
 
