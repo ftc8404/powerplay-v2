@@ -8,7 +8,7 @@ public class ClawModule {
     @Tunable
     private static final double CLOSE_GEAR = 1.00; // TODO tune
 
-    protected ClawState clawState;
+    private ClawState clawState;
 
     public enum ClawState {
         OPEN, CLOSE

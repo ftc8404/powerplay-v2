@@ -1,6 +1,7 @@
 package org.quixilver8404.skystone.control;
 
 import org.quixilver8404.skystone.util.Tunable;
+import org.quixilver8404.skystone.util.measurement.Angle;
 
 public class SusanModule {
 
@@ -9,54 +10,57 @@ public class SusanModule {
     }
 
     @Tunable
-    public static final double RIGHT_BOUND = 2700;
+    public static final double RIGHT_BOUND_DEG = 90;
     @Tunable
-    public static final double LEFT_BOUND = -2700;
+    public static final double LEFT_BOUND_DEG = -90;
     @Tunable
-    public static final double GO_TO_TOLERANCE = 80;
-    @Tunable
-    public static final double FRONT_POS = 0;
+    public static final double GO_TO_TOLERANCE_DEG = 5;
 
     @Tunable
-    public static final double KP = 1; // TODO tune these
+    // counts-per-rev / 360 deg-per-rev
+    public static final double COUNTS_PER_DEG = 5544 / 360.0;
+
+    @Tunable
+    public static final double KP = 0.2; // TODO tune these
     @Tunable
     public static final double KI = 0; // TODO tune these
     @Tunable
     public static final double KD = 0; // TODO tune these
 
 
-    protected SusanControlState susanControlState;
+    private SusanControlState susanControlState;
 
-    protected final PIDController pidController;
+    private final PIDController pidController;
 
-    public double curPosition;
-    public double targetPower;
-    public double targetPosition;
+    private double curPosDeg;
+    private double targetPower;
+    private double targetPosDeg;
 
     public SusanModule() {
         susanControlState = SusanControlState.MANUAL;
-        curPosition = 0;
+        curPosDeg = 0;
         pidController = new PIDController(KP, KI, KD, 0);
     }
 
     public synchronized void update(final SlidesModule slideModule, HardwareCollection hwCollection) {
-        curPosition = hwCollection.susanMotor1.getEncoder().getEncoderPosition();
+        double counts = hwCollection.susanMotor1.getEncoder().getEncoderPosition();
+        curPosDeg = counts / COUNTS_PER_DEG;
 
         double desiredPow;
 
         if (susanControlState == SusanControlState.MANUAL) {
-            desiredPow = Math.signum(targetPower) * Math.pow(targetPower, 2);
+            desiredPow = targetPower;
             pidController.reset();
         } else {
             double desiredPos = susanControlState == SusanControlState.GO_TO_FRONT
-                    ? FRONT_POS : targetPosition;
+                    ? 0 : targetPosDeg;
 
-            desiredPow = pidController.loop(curPosition - desiredPos, hwCollection.clock.getDeltaTimeMillis());
+            desiredPow = pidController.loop(curPosDeg - desiredPos, hwCollection.clock.getDeltaTimeMillis());
         }
 
         if ((slideModule.areSlidesLowered() && susanControlState != SusanControlState.GO_TO_FRONT)
-                || (curPosition >= RIGHT_BOUND && desiredPow > 0)
-                || (curPosition <= LEFT_BOUND && desiredPow < 0)) {
+                || (curPosDeg >= RIGHT_BOUND_DEG && desiredPow > 0)
+                || (curPosDeg <= LEFT_BOUND_DEG && desiredPow < 0)) {
             desiredPow = 0;
             pidController.reset();
         }
@@ -70,14 +74,11 @@ public class SusanModule {
     }
 
     public synchronized boolean isSafeToLowerSlides() {
-        // uncomment below if we want to only let slides be lowered when using GO_TO_FRONT state
-        // (i.e., don't allow slides to be lowered when manually controlling power, even if centered)
-
 //        if (susanControlState != SusanControlState.GO_TO_FRONT) {
 //            return false;
 //        }
 
-        return Math.abs(curPosition - FRONT_POS) <= GO_TO_TOLERANCE;
+        return Math.abs(curPosDeg) <= GO_TO_TOLERANCE_DEG;
     }
 
     public synchronized SusanControlState getSusanControlState() {
@@ -88,8 +89,8 @@ public class SusanModule {
         susanControlState = SusanControlState.GO_TO_FRONT;
     }
 
-    public synchronized void goToCustom(double customPos) {
-        this.targetPosition = customPos;
+    public synchronized void goToCustomDeg(double customPosDeg) {
+        this.targetPosDeg = customPosDeg;
         susanControlState = SusanControlState.GO_TO_CUSTOM;
     }
 

@@ -42,7 +42,12 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             robot.slidesModule.setTargetPower(-gamepad2.left_stick_y);
-            robot.susanModule.setManualPower(gamepad2.right_stick_x);
+
+            if (gamepad2.x) {
+                robot.susanModule.goToFront();
+            } else {
+                robot.susanModule.setManualPower(gamepad2.right_stick_x);
+            }
 
             // ==================== TELEMETRY ====================
             // TODO remove after testing
@@ -61,7 +66,7 @@ public class MainTeleOp extends LinearOpMode {
                     robot.navModule.getPose().y.getValue(Distance.Unit.INCHES),
                     robot.navModule.getHeading().getStandard(Angle.Unit.RADIANS),
                     robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-                    (15 / 2 - 2.0), (17.5 / 2 - 2.625), -Math.PI / 2)));
+                    (15.0 / 2 - 2.0), (17.5 / 2 - 2.625), -Math.PI / 2)));
             telemetry.update();
         }
         robot.stopHardwareLoop();

@@ -8,7 +8,7 @@ import org.quixilver8404.skystone.util.measurement.Distance;
 public class SlidesModule {
 
     public enum SlidePositionPreset {
-        GROUND(0), // TODO tune
+        GROUND(0),
         ABOVE_DRIVE(12.0), // TODO tune
         JUNC_1(5.0), // TODO tune
         JUNC_2(10.0), // TODO tune
@@ -41,7 +41,7 @@ public class SlidesModule {
     @Tunable
     public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000;
     @Tunable
-    public static final double MAX_HEIGHT_INCHES = 37.0; // TODO tune
+    public static final double MAX_HEIGHT_INCHES = 36.5; // TODO tune
     // the zone where the lift should not actively hold itself up or go down at a power
     @Tunable
     public static final double BOTTOM_DEAD_ZONE_INCHES = 1.0;
@@ -119,6 +119,7 @@ public class SlidesModule {
             } else {
                 runAtPower(targetPower, hwCollection);
             }
+            positionPID.reset();
         } else {
             if (targetPosition.getValue(Distance.Unit.INCHES) >= MAX_HEIGHT_INCHES - HEIGHT_CONSTRAINT_BUFFER_INCHES) {
                 moveToPosition(new Distance(MAX_HEIGHT_INCHES, Distance.Unit.INCHES), hwCollection);
@@ -190,7 +191,6 @@ public class SlidesModule {
                 adjustedPower += power * MAX_DOWNWARD_POWER_INCREMENT;
             }
             setRawPower(adjustedPower, hwCollection);
-            positionPID.reset();
         }
     }
 
