@@ -1,14 +1,14 @@
-package org.quixilver8404.skystone.opmode.auton;
+package org.quixilver8404.energize.opmode.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.R;
 import org.quixilver8404.foxtrot.FoxtrotPath;
-import org.quixilver8404.skystone.control.ActionSet;
-import org.quixilver8404.skystone.control.AutonRobot;
-import org.quixilver8404.skystone.util.measurement.Angle;
-import org.quixilver8404.skystone.util.measurement.Distance;
+import org.quixilver8404.energize.control.ActionSet;
+import org.quixilver8404.energize.control.AutonRobot;
+import org.quixilver8404.energize.util.measurement.Angle;
+import org.quixilver8404.energize.util.measurement.Distance;
 
 import java.io.IOException;
 

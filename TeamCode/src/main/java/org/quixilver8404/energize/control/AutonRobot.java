@@ -1,8 +1,8 @@
-package org.quixilver8404.skystone.control;
+package org.quixilver8404.energize.control;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.quixilver8404.skystone.util.measurement.Pose2D;
+import org.quixilver8404.energize.util.measurement.Pose2D;
 
 public class AutonRobot extends BaseRobot {
 

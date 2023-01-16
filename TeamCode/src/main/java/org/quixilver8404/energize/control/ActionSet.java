@@ -1,4 +1,4 @@
-package org.quixilver8404.skystone.control;
+package org.quixilver8404.energize.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
