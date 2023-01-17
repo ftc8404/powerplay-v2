@@ -66,7 +66,6 @@ public class MainTeleOp extends LinearOpMode {
                     robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
                     robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
                     robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
-                    (15.0 / 2 - 2.0), (17.5 / 2 - 2.625), -Math.PI / 2)));
             telemetry.update();
         }
         robot.stopHardwareLoop();
