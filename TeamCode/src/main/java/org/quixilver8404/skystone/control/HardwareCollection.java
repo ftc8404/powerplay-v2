@@ -72,6 +72,8 @@ public class HardwareCollection {
 
 
     public final MaxbotixMB1242 ultraSonic1;
+    public final MaxbotixMB1242 ultraSonic2;
+    public final MaxbotixMB1242 ultraSonic3;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -107,7 +109,9 @@ public class HardwareCollection {
         slidesMotor2 = new EncoderlessMotor("slidesMotor2", SLIDES_MOTOR_2_DIRECTION, hwMap);
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
-        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic");
+        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic1");
+        ultraSonic2 = hwMap.get(MaxbotixMB1242.class, "ultraSonic2");
+        ultraSonic3 = hwMap.get(MaxbotixMB1242.class, "ultraSonic3");
     }
 
     /**
