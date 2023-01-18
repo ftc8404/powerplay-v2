@@ -41,7 +41,44 @@ public class AutonActions {
      * 100: to be run throughout 5-stone auton
      */
     public static void runAction(int actionID, BaseRobot baseRobot) {
+        double height = 8;
         switch (actionID) {
+            case 0:
+                baseRobot.taskModule.addTask(new TaskModule.Task() {
+                    @Override
+                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+                        if (runningTimeMillis < 1000) {
+                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
+                            baseRobot.susanModule.goToCustomDeg(90);
+                        } else if (runningTimeMillis < 1200){
+                            baseRobot.clawModule.setOpen();
+                        } else {
+                            baseRobot.susanModule.goToFront();
+                            baseRobot.clawModule.setClose();
+                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
+                        }
+                        return true;
+                    }
+                });
+                break;
+            case 1:
+                double finalHeight = height;
+                baseRobot.taskModule.addTask(new TaskModule.Task() {
+                    @Override
+                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+                        if (runningTimeMillis < 500) {
+                            baseRobot.slidesModule.setTargetPosition(new Distance(finalHeight, Distance.Unit.INCHES));
+                            baseRobot.clawModule.setOpen();
+                        } else if (runningTimeMillis < 700){
+                            baseRobot.clawModule.setClose();
+                        } else {
+                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_1);
+                        }
+                        return true;
+                    }
+                });
+                height -= 1.5;
+                break;
 //            case 1:
 //                baseRobot.intakeModule.setTargetPowers(INTAKE_POWER, INTAKE_POWER);
 //                break;
