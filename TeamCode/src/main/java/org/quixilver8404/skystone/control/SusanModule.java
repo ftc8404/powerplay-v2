@@ -10,9 +10,9 @@ public class SusanModule {
     }
 
     @Tunable
-    public static final double RIGHT_BOUND_DEG = 90;
+    public static final double RIGHT_BOUND_DEG = 200;
     @Tunable
-    public static final double LEFT_BOUND_DEG = -90;
+    public static final double LEFT_BOUND_DEG = -200;
     @Tunable
     public static final double GO_TO_TOLERANCE_DEG = 5;
 
@@ -21,7 +21,7 @@ public class SusanModule {
     public static final double COUNTS_PER_DEG = 5544 / 360.0;
 
     @Tunable
-    public static final double KP = 0.2; // TODO tune these
+    public static final double KP = 0.1; // TODO tune these
     @Tunable
     public static final double KI = 0; // TODO tune these
     @Tunable
@@ -96,6 +96,8 @@ public class SusanModule {
 
     public synchronized void setManualPower(double power) {
         this.targetPower = power;
-        susanControlState = SusanControlState.MANUAL;
+        if (power != 0){
+            susanControlState = SusanControlState.MANUAL;
+        }
     }
 }

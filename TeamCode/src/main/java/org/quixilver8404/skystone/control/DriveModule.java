@@ -91,7 +91,7 @@ public class DriveModule {
     }
 
     public synchronized void setIntrinsicTargetPower(double targetPower, Angle direction) {
-        setExtrinsicTargetPower(targetPowerX, direction);
+        setExtrinsicTargetPower(targetPower, direction);
         isPowerIntrinsic = true;
     }
 

@@ -11,9 +11,9 @@ public class SlidesModule {
         GROUND(0),
         ABOVE_DRIVE(12.0), // TODO tune
         JUNC_1(5.0), // TODO tune
-        JUNC_2(10.0), // TODO tune
-        JUNC_3(15.0), // TODO tune
-        JUNC_4(20.0); // TODO tune
+        JUNC_2(15.0), // TODO tune
+        JUNC_3(25.0), // TODO tune
+        JUNC_4(32.0); // TODO tune
 
         public final double HEIGHT_INCHES;
 
@@ -41,7 +41,7 @@ public class SlidesModule {
     @Tunable
     public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000;
     @Tunable
-    public static final double MAX_HEIGHT_INCHES = 36.5; // TODO tune
+    public static final double MAX_HEIGHT_INCHES = 33; // TODO tune
     // the zone where the lift should not actively hold itself up or go down at a power
     @Tunable
     public static final double BOTTOM_DEAD_ZONE_INCHES = 1.0;
@@ -53,7 +53,7 @@ public class SlidesModule {
     public static final double WINCH_DIAMETER_INCH = 60.0 / 25.4;
     @Tunable
     // bare motor counts/rev * gearbox reduction
-    public static final int SLIDE_MOTOR_COUNTS_PER_REV = 28 * 25;
+    public static final int SLIDE_MOTOR_COUNTS_PER_REV = 28 * 20;
 
     public static final double COUNTS_PER_INCH = (double) SLIDE_MOTOR_COUNTS_PER_REV / (Math.PI * WINCH_DIAMETER_INCH);
 
@@ -70,7 +70,7 @@ public class SlidesModule {
     private int bottomEncoderReading; // reading when the lift is all the way down
 
     @Tunable
-    private final PIDController positionPID = new PIDController(0.6, 0, 1200, 300); // TODO tune
+    private final PIDController positionPID = new PIDController(0.3, 0, 1, 300); // TODO tune
 
     @Tunable
     public static final int PID_DELAY_MILLIS = 500; // the time before switching from power of zero to PID

@@ -32,6 +32,9 @@ public class TestAuton extends LinearOpMode {
         robot.headingLockModule.disablePID();
         robot.startHardwareLoop();
 
+        robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
+
+        telemetry.addData("Auton Var", robot.cvTasksModule.getVariant());
         telemetry.addData("status", "ready!");
         telemetry.update();
 

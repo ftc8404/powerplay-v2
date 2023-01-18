@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.quixilver8404.skystone.hardware.misc.Clock;
 import org.quixilver8404.skystone.hardware.motor.EncoderMotor;
 import org.quixilver8404.skystone.hardware.motor.EncoderlessMotor;
@@ -70,8 +75,9 @@ public class HardwareCollection {
     public final PositionServo gearServo;
     public static final Servo.Direction GEAR_SERVO_DIRECTION = Servo.Direction.FORWARD;
 
+    public final OpenCvCamera camera;
 
-    public final MaxbotixMB1242 ultraSonic1;
+//    public final MaxbotixMB1242 ultraSonic1;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -107,7 +113,25 @@ public class HardwareCollection {
         slidesMotor2 = new EncoderlessMotor("slidesMotor2", SLIDES_MOTOR_2_DIRECTION, hwMap);
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
-        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic");
+//        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic");
+
+        final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                System.out.println("OPENED-CAMERA");
+                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+                System.out.println("STARTED-STREAMING");
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
     }
 
     /**

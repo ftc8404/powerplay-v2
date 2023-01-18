@@ -1,6 +1,7 @@
 package org.quixilver8404.skystone.control;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.quixilver8404.skystone.util.measurement.Pose2D;
@@ -32,6 +33,7 @@ public abstract class BaseRobot {
     public final SusanModule susanModule;
     public final ClawModule clawModule;
     public final MSonicModule mSonicModule;
+    public final CVTasksModule cvTasksModule;
 
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
@@ -54,6 +56,7 @@ public abstract class BaseRobot {
         susanModule = new SusanModule();
         clawModule = new ClawModule();
         mSonicModule = new MSonicModule();
+        cvTasksModule = new CVTasksModule(hwCollection);
 
         this.prioritizeOdometry = prioritizeOdometry;
     }
@@ -103,6 +106,7 @@ public abstract class BaseRobot {
 
     private void nonCriticalUpdate1() {
         driveModule.update(this, hwCollection);
+        clawModule.update(hwCollection);
     }
 
     private void nonCriticalUpdate2() {

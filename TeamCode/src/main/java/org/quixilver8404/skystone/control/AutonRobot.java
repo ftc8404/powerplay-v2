@@ -8,6 +8,7 @@ public class AutonRobot extends BaseRobot {
 
     public AutonRobot(LinearOpMode opMode) {
         super(Pose2D.ZERO, true, opMode);
+
     }
 
     @Override
