@@ -18,7 +18,7 @@ public class TestAuton extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         FoxtrotPath foxtrotPath;
         try {
-            foxtrotPath = new FoxtrotPath(hardwareMap.appContext.getResources().openRawResource(R.raw.test_auton), 0);
+            foxtrotPath = new FoxtrotPath(hardwareMap.appContext.getResources().openRawResource(R.raw.left_auton), 0);
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -34,11 +34,15 @@ public class TestAuton extends LinearOpMode {
 
         robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
 
-        telemetry.addData("Auton Var", robot.cvTasksModule.getVariant());
-        telemetry.addData("status", "ready!");
-        telemetry.update();
+        int variant;
 
-        waitForStart();
+        while (opModeInInit()) {
+            variant = robot.cvTasksModule.getVariant();
+            telemetry.addData("Auton Var", variant);
+            telemetry.addData("status", "ready!");
+            telemetry.update();
+        }
+
         if (isStopRequested()) {
             robot.stopHardwareLoop();
             return;

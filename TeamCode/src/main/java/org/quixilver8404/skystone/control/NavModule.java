@@ -28,7 +28,6 @@ public class NavModule {
     protected Pose2D deltaPos;
 
     public NavModule(Pose2D curPose, HardwareCollection hwCollection) {
-
         setCurHeading(curPose.heading);
         setCurPosition(curPose);
     }

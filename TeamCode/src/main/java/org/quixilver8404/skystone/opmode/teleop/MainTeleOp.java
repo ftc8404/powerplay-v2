@@ -176,16 +176,16 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
             telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
             telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
-            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
-            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
-            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
-            telemetry.addData("ultrasonic pos", Arrays.toString(robot.mSonicModule.tripleThreat(
-                    robot.navModule.getPose().x.getValue(Distance.Unit.INCHES),
-                    robot.navModule.getPose().y.getValue(Distance.Unit.INCHES),
-                    robot.navModule.getHeading().getStandard(Angle.Unit.RADIANS),
-                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
+//            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic pos", Arrays.toString(robot.mSonicModule.tripleThreat(
+//                    robot.navModule.getPose().x.getValue(Distance.Unit.INCHES),
+//                    robot.navModule.getPose().y.getValue(Distance.Unit.INCHES),
+//                    robot.navModule.getHeading().getStandard(Angle.Unit.RADIANS),
+////                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+////                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+////                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
             telemetry.update();
         }
         robot.stopHardwareLoop();

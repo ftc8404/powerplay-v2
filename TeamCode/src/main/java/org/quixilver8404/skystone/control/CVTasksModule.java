@@ -35,10 +35,12 @@ public class CVTasksModule extends OpenCvPipeline {
     public int finalRedCounter = 0;
     public int finalBlueCounter = 0;
     public int finalGreenCounter = 0;
-    int blueThreshold = 90;
-    int redThreshold = 110;
-    int greenThreshold = 20;
+    protected final int blueThreshold = 90;
+    protected final int redThreshold = 110;
+    protected final int greenThreshold = 20;
     double[] border = new double[] {255.0, 0.0, 0.0, 0.0};
+
+    public int variant;
 
     HardwareCollection hardwareCollection;
 
@@ -48,10 +50,13 @@ public class CVTasksModule extends OpenCvPipeline {
 
     public synchronized int getVariant() {
         if (finalRedCounter > finalBlueCounter && finalRedCounter > finalGreenCounter && finalRedCounter >= 1000) {
+            variant = 1;
             return 1;
         } else if (finalBlueCounter > finalRedCounter && finalBlueCounter > finalGreenCounter && finalBlueCounter >= 1000) {
+            variant = 3;
             return 3;
         } else {
+            variant = 2;
             return 2;
         }
     }
