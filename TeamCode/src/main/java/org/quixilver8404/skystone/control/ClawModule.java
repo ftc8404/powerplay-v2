@@ -4,7 +4,7 @@ import org.quixilver8404.skystone.util.Tunable;
 
 public class ClawModule {
     @Tunable
-    private static final double OPEN_GEAR = 0.6; // TODO tune
+    private static final double OPEN_GEAR = 0.55; // TODO tune
     @Tunable
     private static final double CLOSE_GEAR = 0.725; // TODO tune
 
@@ -15,7 +15,7 @@ public class ClawModule {
     }
 
     public ClawModule() {
-        clawState = ClawState.CLOSE;
+        clawState = ClawState.MOVING;
     }
 
     public synchronized void update(HardwareCollection hardwareCollection) {

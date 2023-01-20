@@ -7,23 +7,23 @@ import org.quixilver8404.skystone.util.measurement.Pose2D;
 public class PathFollowModule {
 
     // every unspecified unit for distance will be in inches
-    public static final double LOOKAHEAD_MIN_INCHES = 1.5; // TODO tune
-    public static final double LOOKAHEAD_MAX_INCHES = 4.0; // TODO tune
+    public static final double LOOKAHEAD_MIN_INCHES = 1.5;
+    public static final double LOOKAHEAD_MAX_INCHES = 4.0;
     public static final double STOP_THRESHOLD_INCHES = 1.5;
 
     // only for constructing paths at runtime
-    public static final double FULL_ACCELERATION_DIST_INCHES = 8.0; // TODO tune
-    public static final double FULL_DECELERATION_DIST_INCHES = 20.0; // TODO tune
+    public static final double FULL_ACCELERATION_DIST_INCHES = 8.0;
+    public static final double FULL_DECELERATION_DIST_INCHES = 20.0;
     public static final double MAX_ACCELERATION_POWER_PER_INCH = 1.0 / (2 * FULL_ACCELERATION_DIST_INCHES);
     public static final double MAX_DECELERATION_POWER_PER_INCH = 1.0 / (2 * FULL_DECELERATION_DIST_INCHES);
     public static final double POWER_PER_INCH_RADIUS = 1.0 / 25.0; // TODO tune
 
     // windows relative to the last lookahead distance
-    public static final double LOOKAHEAD_WINDOW_AHEAD_INCHES = 4.0; // TODO tune
-    public static final double LOOKAHEAD_WINDOW_BEHIND_INCHES = 1.0; // TODO tune
+    public static final double LOOKAHEAD_WINDOW_AHEAD_INCHES = 4.0;
+    public static final double LOOKAHEAD_WINDOW_BEHIND_INCHES = 1.0;
     public static final double LOOKAHEAD_WINDOW_SIZE_INCHES = LOOKAHEAD_WINDOW_BEHIND_INCHES + LOOKAHEAD_WINDOW_AHEAD_INCHES;
 
-    private boolean isBusy;
+    public boolean isBusy;
     private PurePursuitPath curPath;
     private double curLookaheadWindowStartInches;
     private double lastPower;

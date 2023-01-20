@@ -3,10 +3,14 @@ package org.quixilver8404.skystone.opmode.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.R;
 import org.quixilver8404.foxtrot.FoxtrotPath;
 import org.quixilver8404.skystone.control.ActionSet;
 import org.quixilver8404.skystone.control.AutonRobot;
+import org.quixilver8404.skystone.control.BaseRobot;
+import org.quixilver8404.skystone.control.SlidesModule;
+import org.quixilver8404.skystone.control.TaskModule;
 import org.quixilver8404.skystone.util.measurement.Angle;
 import org.quixilver8404.skystone.util.measurement.Distance;
 
@@ -40,8 +44,13 @@ public class TestAuton extends LinearOpMode {
             variant = robot.cvTasksModule.getVariant();
             telemetry.addData("Auton Var", variant);
             telemetry.addData("status", "ready!");
+            telemetry.addData("left ultrasonic sensor", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.MM));
+            telemetry.addData("right ultrasonic sensor", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
+
+        // robot claw starts closed
+        robot.clawModule.setClose();
 
         if (isStopRequested()) {
             robot.stopHardwareLoop();
@@ -49,10 +58,22 @@ public class TestAuton extends LinearOpMode {
         }
 
         robot.navModule.setPosAndHeadingToPathStart(foxtrotPath, robot);
-        robot.pathFollowModule.follow(foxtrotPath.getPPPath(), actionSet, robot);
-        while (opModeIsActive() && robot.pathFollowModule.isBusy()) {
-            idle();
-
+        robot.taskModule.addTask(new TaskModule.Task() {
+            @Override
+            public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+                if (runningTimeMillis < 1500) {
+                    baseRobot.clawModule.setClose();
+                    return false;
+                } else if (runningTimeMillis < 2000) {
+                    baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_1);
+                    return false;
+                } else {
+                    robot.pathFollowModule.follow(foxtrotPath.getPPPath(), actionSet, robot);
+                    return true;
+                }
+            }
+        });
+        while (opModeIsActive()) {
             telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
             telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
             telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());

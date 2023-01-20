@@ -135,4 +135,12 @@ public abstract class BaseRobot {
             }
         }
     }
+
+    public void stopDriveMotors() {
+        // TODO fix because this doesn't stop the robot when auton doesn't have enough time
+        hwCollection.driveMotorFL.setPower(0);
+        hwCollection.driveMotorFR.setPower(0);
+        hwCollection.driveMotorBL.setPower(0);
+        hwCollection.driveMotorBR.setPower(0);
+    }
 }

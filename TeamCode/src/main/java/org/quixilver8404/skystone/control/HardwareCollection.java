@@ -1,9 +1,11 @@
 package org.quixilver8404.skystone.control;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.lynx.LynxVoltageSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -27,8 +29,8 @@ public class HardwareCollection {
     public final Clock clock;
 
     // control and expansion hub
-    LynxModule controlHub;
-    LynxModule expansionHub;
+    public LynxModule controlHub;
+    public LynxModule expansionHub;
 
     // drive motors
     public final EncoderlessMotor driveMotorFL;
@@ -77,8 +79,8 @@ public class HardwareCollection {
 
     public final OpenCvCamera camera;
 
-//    public final MaxbotixMB1242 ultraSonic1;
-//    public final MaxbotixMB1242 ultraSonic2;
+    public final MaxbotixMB1242 ultraSonic1;
+    public final MaxbotixMB1242 ultraSonic2;
 //    public final MaxbotixMB1242 ultraSonic3;
 
     /**
@@ -115,8 +117,8 @@ public class HardwareCollection {
         slidesMotor2 = new EncoderlessMotor("slidesMotor2", SLIDES_MOTOR_2_DIRECTION, hwMap);
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
-//        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic1");
-//        ultraSonic2 = hwMap.get(MaxbotixMB1242.class, "ultraSonic2");
+        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic1");
+        ultraSonic2 = hwMap.get(MaxbotixMB1242.class, "ultraSonic2");
 //        ultraSonic3 = hwMap.get(MaxbotixMB1242.class, "ultraSonic3");
 
         final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());

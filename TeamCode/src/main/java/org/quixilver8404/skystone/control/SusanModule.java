@@ -21,7 +21,7 @@ public class SusanModule {
     public static final double COUNTS_PER_DEG = 5544 / 360.0;
 
     @Tunable
-    public static final double KP = 0.1; // TODO tune these
+    public static final double KP = 0.05; // TODO tune these
     @Tunable
     public static final double KI = 0; // TODO tune these
     @Tunable
