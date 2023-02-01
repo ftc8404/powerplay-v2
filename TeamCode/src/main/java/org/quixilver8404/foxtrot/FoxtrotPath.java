@@ -2,9 +2,9 @@ package org.quixilver8404.foxtrot;
 
 import com.google.gson.Gson;
 
-import org.quixilver8404.skystone.control.ActionSet;
-import org.quixilver8404.skystone.control.PurePursuitPath;
-import org.quixilver8404.skystone.control.WaypointPPPath;
+import org.quixilver8404.powerplay.control.ActionSet;
+import org.quixilver8404.powerplay.control.PurePursuitPath;
+import org.quixilver8404.powerplay.control.WaypointPPPath;
 
 import java.io.IOException;
 import java.io.InputStream;
