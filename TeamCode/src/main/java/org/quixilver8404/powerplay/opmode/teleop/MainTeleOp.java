@@ -5,9 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
+import org.quixilver8404.powerplay.util.ImageOutput;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
+
+import java.util.Random;
 
 @TeleOp(name = "Main Tele-Op", group = "Main")
 public class MainTeleOp extends LinearOpMode {
@@ -137,7 +140,7 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad2.right_bumper) {
                 robot.clawModule.setOpen();
             }
-            if (gamepad2.y) {
+            if (gamepad2.b) {
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
                 robot.susanModule.goToCustomDeg(90);
             }
@@ -145,7 +148,7 @@ public class MainTeleOp extends LinearOpMode {
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
                 robot.susanModule.goToCustomDeg(-90);
             }
-            if (gamepad2.b) {
+            if (gamepad2.y) {
                 robot.susanModule.goToFront();
             } else {
                 robot.susanModule.setManualPower(gamepad2.right_stick_x);
@@ -165,17 +168,21 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // ==================== TELEMETRY ====================
-            // TODO remove after testing
-            telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
-            telemetry.addData("susan position", robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
-            telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
-            telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
-            telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
-            telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
-            telemetry.addData("Position", robot.poseModule.getPos());
-            telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
-            telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
-            telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
+            if (Math.random() * 100 < 0.0001) {
+                telemetry.addData(ImageOutput.bryant,"");
+            } else if (Math.random() * 100 < 0.0002) {
+                telemetry.addData(ImageOutput.isaac,"");
+            } else {
+                telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
+                telemetry.addData("susan position", robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
+                telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
+                telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
+                telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
+                telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
+                telemetry.addData("Position", robot.poseModule.getPos());
+                telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
+                telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
+                telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
 //            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
@@ -186,6 +193,7 @@ public class MainTeleOp extends LinearOpMode {
 ////                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
 ////                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
 ////                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
+            }
             telemetry.update();
         }
         robot.stopHardwareLoop();
