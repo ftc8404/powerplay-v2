@@ -3,7 +3,7 @@ package org.quixilver8404.powerplay.control;
 import org.quixilver8404.powerplay.util.Tunable;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 
-public class AutonActions {
+public class Actions {
 
     // sets default velocities for intake or outtake powers
     @Tunable
@@ -17,9 +17,65 @@ public class AutonActions {
     @Tunable
     public static final double LIFT_RAISE_HEIGHT_INCHES = 7.5;
     static double height = 4.5;
+    boolean pickUpPreload = false;
+    int stage = 0;
 
+    static BaseRobot robot;
 
-    /**
+    public Actions(BaseRobot robot) {
+        Actions.robot = robot;
+    }
+
+    public synchronized void update() {
+        if (pickUpPreload) {
+            System.out.println("Pick up");
+            if (stage == 1) {
+                System.out.println("Stage1");
+                robot.clawModule.setClose();
+                robot.slidesModule.setTargetPosition(new Distance(10, Distance.Unit.INCHES));
+                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 9) {
+                    stage++;
+                }
+            } else if (stage == 2) {
+                System.out.println("Stage2");
+                robot.clawModule.setOpen();
+                robot.susanModule.goToPreloadedCone();
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1900) {
+                    stage++;
+                }
+            } else if (stage == 3) {
+                System.out.println("Stage3");
+                robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.ABOVE_DRIVE);
+                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) < SlidesModule.SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES) {
+                    stage++;
+                }
+            } else if (stage == 4) {
+                System.out.println("Stage4");
+                robot.clawModule.setClose();
+                if (robot.clawModule.getClawState().equals("Close")) {
+                    stage++;
+                }
+            } else if (stage == 5) {
+                System.out.println("Stage5");
+                robot.slidesModule.setTargetPosition(new Distance(20, Distance.Unit.INCHES));
+                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) == 19) {
+                    stage++;
+                }
+            } else {
+                System.out.println("Final Stage");
+                pickUpPreload = false;
+                stage = 0;
+            }
+        }
+
+    }
+
+    public synchronized void pickUpPreload() {
+        pickUpPreload = true;
+        stage = 1;
+    }
+
+    /*
      * 01: starts intaking
      * 02: starts outtaking (reverses intake)
      * 03: stops all intake actions
@@ -42,84 +98,85 @@ public class AutonActions {
      * 41: sets the output to the IN_DOWN_CLOSED_AUTON state
      * 100: to be run throughout 5-stone auton
      */
-    public static void runAction(int actionID, BaseRobot baseRobot) {
-        switch (actionID) {
-            case 0:
-                baseRobot.pathFollowModule.isBusy = false;
-                baseRobot.taskModule.addTask(new TaskModule.Task() {
-                    @Override
-                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
-                        baseRobot.stopDriveMotors();
-                        if (runningTimeMillis < 1500) {
-                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
-                            return false;
-                        } else if (runningTimeMillis < 2500) {
-                            baseRobot.susanModule.goToCustomDeg(90);
-                            return false;
-                        } else if (runningTimeMillis < 3500) {
-                            baseRobot.clawModule.setOpen();
-                            return false;
-                        } else if (runningTimeMillis < 4000) {
-                            baseRobot.susanModule.goToFront();
-                            return false;
-                        } else if (runningTimeMillis < 4500) {
-                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_2);
-                            return false;
-                        } else {
-                            baseRobot.pathFollowModule.isBusy = true;
-                            return true;
-                        }
-                    }
-                });
-                break;
-            case 1:
-                baseRobot.pathFollowModule.isBusy = false;
-                baseRobot.taskModule.addTask(new TaskModule.Task() {
-                    @Override
-                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
-                        baseRobot.stopDriveMotors();
-                        if (runningTimeMillis < 1500) {
-                            baseRobot.slidesModule.setTargetPosition(new Distance(4.5, Distance.Unit.INCHES));
-                            return false;
-                        } else if (runningTimeMillis < 2500) {
-                            baseRobot.clawModule.setClose();
-                            return false;
-                        } else if (runningTimeMillis < 3500) {
-                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_3);
-                            return false;
-                        } else {
-                            baseRobot.pathFollowModule.isBusy = true;
-                            return true;
-                        }
-                    }
-                });
-                break;
-            case 2:
-                System.out.println("Brotato");
-                baseRobot.pathFollowModule.isBusy = false;
-                baseRobot.taskModule.addTask(new TaskModule.Task() {
-                    @Override
-                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
-                        baseRobot.stopDriveMotors();
-                        if (runningTimeMillis < 1500) {
-                            baseRobot.clawModule.setClose();
-                            return false;
-                        } else if (runningTimeMillis < 2000) {
-                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_1);
-                            return false;
-                        } else {
-                            baseRobot.pathFollowModule.isBusy = true;
-                            return true;
-                        }
-                    }
-                });
-                System.out.println("Brotato2");
-                break;
+
+//    public static void runAction(int actionID, BaseRobot baseRobot) {
+//        switch (actionID) {
+//            case 0:
+//                baseRobot.pathFollowModule.isBusy = false;
+//                baseRobot.taskModule.addTask(new TaskModule.Task() {
+//                    @Override
+//                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+//                        baseRobot.stopDriveMotors();
+//                        if (runningTimeMillis < 1500) {
+//                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
+//                            return false;
+//                        } else if (runningTimeMillis < 2500) {
+//                            baseRobot.susanModule.goToCustomDeg(90);
+//                            return false;
+//                        } else if (runningTimeMillis < 3500) {
+//                            baseRobot.clawModule.setOpen();
+//                            return false;
+//                        } else if (runningTimeMillis < 4000) {
+//                            baseRobot.susanModule.goToFront();
+//                            return false;
+//                        } else if (runningTimeMillis < 4500) {
+//                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_2);
+//                            return false;
+//                        } else {
+//                            baseRobot.pathFollowModule.isBusy = true;
+//                            return true;
+//                        }
+//                    }
+//                });
+//                break;
 //            case 1:
-//                baseRobot.intakeModule.setTargetPowers(INTAKE_POWER, INTAKE_POWER);
+//                baseRobot.pathFollowModule.isBusy = false;
+//                baseRobot.taskModule.addTask(new TaskModule.Task() {
+//                    @Override
+//                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+//                        baseRobot.stopDriveMotors();
+//                        if (runningTimeMillis < 1500) {
+//                            baseRobot.slidesModule.setTargetPosition(new Distance(4.5, Distance.Unit.INCHES));
+//                            return false;
+//                        } else if (runningTimeMillis < 2500) {
+//                            baseRobot.clawModule.setClose();
+//                            return false;
+//                        } else if (runningTimeMillis < 3500) {
+//                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_3);
+//                            return false;
+//                        } else {
+//                            baseRobot.pathFollowModule.isBusy = true;
+//                            return true;
+//                        }
+//                    }
+//                });
 //                break;
 //            case 2:
-//                baseRobot.intakeModule.setTargetPowers(OUTTAKE_POWER, OUTTAKE_POWER);
+//                System.out.println("Brotato");
+//                baseRobot.pathFollowModule.isBusy = false;
+//                baseRobot.taskModule.addTask(new TaskModule.Task() {
+//                    @Override
+//                    public boolean loop(int runningTimeMillis, BaseRobot baseRobot) {
+//                        baseRobot.stopDriveMotors();
+//                        if (runningTimeMillis < 1500) {
+//                            baseRobot.clawModule.setClose();
+//                            return false;
+//                        } else if (runningTimeMillis < 2000) {
+//                            baseRobot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_1);
+//                            return false;
+//                        } else {
+//                            baseRobot.pathFollowModule.isBusy = true;
+//                            return true;
+//                        }
+//                    }
+//                });
+//                System.out.println("Brotato2");
+//                break;
+////            case 1:
+////                baseRobot.intakeModule.setTargetPowers(INTAKE_POWER, INTAKE_POWER);
+////                break;
+////            case 2:
+////                baseRobot.intakeModule.setTargetPowers(OUTTAKE_POWER, OUTTAKE_POWER);
 //                break;
 //            case 3:
 //                baseRobot.intakeModule.setTargetPowers(0, 0);
@@ -258,6 +315,5 @@ public class AutonActions {
 //                    }
 //                });
 //                break;
-        }
-    }
+//        }
 }

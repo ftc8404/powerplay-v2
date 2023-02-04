@@ -12,9 +12,9 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 
 public class MSonicModule {
     public static double[] tripleThreat(double x, double y, double phi, double dist1, double dist2, double dist3) {
-        Sensor s1 = new Sensor(-7.5 + 2, 17.5 / 2 - 2.625, -Math.PI / 2);
-        Sensor s2 = new Sensor(7.5 - 1.75, 17.5 / 2 - 2.75, 0);
-        Sensor s3 = new Sensor(7.5 - 2.375, 17.5 / 2 - 3.25, Math.PI / 2);
+        Sensor s1 = new Sensor(-7.5 + 2, 17.5/2-2.7, -Math.PI/2);
+        Sensor s2 = new Sensor(17.5/2 - 2.6, 7.5 - 2, Math.PI / 2);
+        Sensor s3 = new Sensor(17.5/2 + 0.6, 7.5 - 0.5, 0);
         s1.setEquation(initial(x, y, phi, dist1, s1));
         s2.setEquation(initial(x, y, phi, dist2, s2));
         s3.setEquation(initial(x, y, phi, dist3, s3));
@@ -32,9 +32,9 @@ public class MSonicModule {
         double length3 = Math.pow((((141 - y - s.getSens_x() * Math.sin(phi) - s.getSens_y() * Math.cos(phi)) / (Math.cos(phi + s.getSens_j()))) - ideal), 2);
         double length4 = Math.pow((((0 - y - s.getSens_x() * Math.sin(phi) - s.getSens_y() * Math.cos(phi)) / (Math.cos(phi + s.getSens_j()))) - ideal), 2);
         double finalLength = Math.min(Math.min(length1, length2), Math.min(length3, length4));
-        if (finalLength > 50) {
-            return 0;
-        }
+//        if (finalLength > 144) {
+//            return 0;
+//        }
         if (finalLength == length1) {
             return 1;
         } else if (finalLength == length2) {
@@ -60,7 +60,7 @@ public class MSonicModule {
                     new ObjectiveFunction(combine),
                     GoalType.MINIMIZE,
                     new InitialGuess(new double[]{x, y, phi}),
-                    new NelderMeadSimplex(new double[]{1, 1, 1}));
+                    new NelderMeadSimplex(new double[]{0.1, 0.1, 0.1}));
             return optimum.getPoint();
         } catch(TooManyEvaluationsException e){
             return new double[3];

@@ -36,6 +36,7 @@ public abstract class BaseRobot {
     public final CVTasksModule cvTasksModule;
     public final PositionTrackingModule poseModule;
     public final PIDPositionEstimation pidPositionEstimation;
+    public final Actions actions;
 
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
@@ -59,8 +60,9 @@ public abstract class BaseRobot {
         clawModule = new ClawModule();
         mSonicModule = new MSonicModule();
         cvTasksModule = new CVTasksModule(hwCollection);
-        poseModule = new PositionTrackingModule(new Vector3());
+        poseModule = new PositionTrackingModule(new Vector3(75 * 0.0254,(141-26) *0.0254,0));
         pidPositionEstimation = new PIDPositionEstimation(this, new Vector3());
+        actions = new Actions(this);
 
 
         this.prioritizeOdometry = prioritizeOdometry;
@@ -103,11 +105,14 @@ public abstract class BaseRobot {
 
     private void criticalUpdate() {
         diagnosticModule.update(this, hwCollection);
-        taskModule.update(this, hwCollection);
-        pathFollowModule.update(this);
-        headingLockModule.update(this);
-        navModule.update(this, hwCollection);
         poseModule.update(this);
+        actions.update();
+        pidPositionEstimation.update();
+//        taskModule.update(this, hwCollection);
+//        pathFollowModule.update(this);
+//        headingLockModule.update(this);
+//        navModule.update(this, hwCollection);
+
     }
 
     private void nonCriticalUpdate1() {

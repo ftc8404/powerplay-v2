@@ -3,6 +3,7 @@ package org.quixilver8404.powerplay.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
 import org.quixilver8404.powerplay.util.ImageOutput;
@@ -10,6 +11,7 @@ import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
 
+import java.util.Arrays;
 import java.util.Random;
 
 @TeleOp(name = "Main Tele-Op", group = "Main")
@@ -132,7 +134,10 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 flipFrontReleased = true;
             }
-
+            if (gamepad1.a){
+                robot.actions.pickUpPreload();
+                System.out.println("A pressed");
+            }
             //==========================DRIVER TWO==================================================================
             if (gamepad2.left_bumper) {
                 robot.clawModule.setClose();
@@ -168,9 +173,9 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // ==================== TELEMETRY ====================
-            if (Math.random() * 100 < 0.0001) {
+            if (Math.random() * 100 < 1) {
                 telemetry.addData(ImageOutput.bryant,"");
-            } else if (Math.random() * 100 < 0.0002) {
+            } else if (Math.random() * 100 < 2) {
                 telemetry.addData(ImageOutput.isaac,"");
             } else {
                 telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
@@ -187,12 +192,12 @@ public class MainTeleOp extends LinearOpMode {
 //            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic pos", Arrays.toString(robot.mSonicModule.tripleThreat(
-//                    robot.navModule.getPose().x.getValue(Distance.Unit.INCHES),
-//                    robot.navModule.getPose().y.getValue(Distance.Unit.INCHES),
-//                    robot.navModule.getHeading().getStandard(Angle.Unit.RADIANS),
-////                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-////                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
-////                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
+//                    robot.poseModule.getPosX() * 39.37,
+//                    robot.poseModule.getPosY() * 39.37,
+//                    robot.poseModule.getPosTheta() * 39.37,
+//                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
             }
             telemetry.update();
         }

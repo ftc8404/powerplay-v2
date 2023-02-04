@@ -31,17 +31,15 @@ public class drivePIDTest extends LinearOpMode {
             return;
         }
 
-        robot.pidPositionEstimation.goToPoint();
+
 
         while (opModeIsActive()) {
             telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
             telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
             telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
             telemetry.addData("Position", robot.poseModule.getPos());
-            telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
-            telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
-            telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
             telemetry.update();
+            robot.pidPositionEstimation.goTheta();
         }
         robot.stopHardwareLoop();
         robot.stopDriveMotors();

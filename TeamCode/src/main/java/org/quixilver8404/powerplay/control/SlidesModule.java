@@ -7,7 +7,7 @@ public class SlidesModule {
 
     public enum SlidePositionPreset {
         GROUND(0),
-        ABOVE_DRIVE(12.0), // TODO tune
+        ABOVE_DRIVE(6.0), // TODO tune
         JUNC_1(5.0), // TODO tune
         JUNC_2(15.0), // TODO tune
         JUNC_3(25.0), // TODO tune

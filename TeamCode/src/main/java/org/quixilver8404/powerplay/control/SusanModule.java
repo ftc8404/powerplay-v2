@@ -93,6 +93,11 @@ public class SusanModule {
         susanControlState = SusanControlState.GO_TO_CUSTOM;
     }
 
+    public synchronized void goToPreloadedCone() {
+        this.targetPosDeg = -2100 / COUNTS_PER_DEG;
+        susanControlState = SusanControlState.GO_TO_CUSTOM;
+    }
+
     public synchronized void setManualPower(double power) {
         this.targetPower = power;
         if (power != 0){
