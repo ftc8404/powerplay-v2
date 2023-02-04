@@ -54,7 +54,12 @@ public class CVTasksModule extends OpenCvPipeline {
             //showing which part of imgage cv is looking at by bordering it with red
             input.put(topCornerY - 1, i - 1, border);
             input.put(topCornerY + height + 1, i + 1, border);
-
+            input.put(topCornerY - 2, i - 2, border);
+            input.put(topCornerY + height + 2, i + 2, border);
+            input.put(topCornerY - 3, i - 3, border);
+            input.put(topCornerY + height + 3, i + 3, border);
+            input.put(topCornerY - 4, i - 4, border);
+            input.put(topCornerY + height + 4, i + 4, border);
             //looping through pixels to see what color each one is
             for (int j = topCornerY; j < topCornerY + height; j++){
                 currentPixel = input.get(j, i);
