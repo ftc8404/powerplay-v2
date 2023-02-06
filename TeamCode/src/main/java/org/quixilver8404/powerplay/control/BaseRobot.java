@@ -3,6 +3,7 @@ package org.quixilver8404.powerplay.control;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.quixilver8404.powerplay.util.MovingAverageFilter;
 import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
 
@@ -37,6 +38,7 @@ public abstract class BaseRobot {
     public final PositionTrackingModule poseModule;
     public final PIDPositionEstimation pidPositionEstimation;
     public final Actions actions;
+    public final MovingAverageFilter movingAverageFilter;
 
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
@@ -58,11 +60,12 @@ public abstract class BaseRobot {
         slidesModule = new SlidesModule();
         susanModule = new SusanModule();
         clawModule = new ClawModule();
-        mSonicModule = new MSonicModule();
         cvTasksModule = new CVTasksModule(hwCollection);
-        poseModule = new PositionTrackingModule(new Vector3(75 * 0.0254,(141-26) *0.0254,0));
+        poseModule = new PositionTrackingModule(new Vector3());//new Vector3(75 * 0.0254,(141-26) *0.0254,0));
         pidPositionEstimation = new PIDPositionEstimation(this, new Vector3());
         actions = new Actions(this);
+        mSonicModule = new MSonicModule(this);
+        movingAverageFilter = new MovingAverageFilter(this);
 
 
         this.prioritizeOdometry = prioritizeOdometry;

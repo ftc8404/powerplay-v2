@@ -58,6 +58,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("status", "running");
         telemetry.update();
+        robot.hwCollection.controlIMU.resetIMU();
 
 //        robot.headingLockModule.enablePID(robot);
 
@@ -171,11 +172,15 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 robot.slidesModule.setTargetPower(-gamepad2.left_stick_y);
             }
-
+            // ==================== MOVING AVERAGE ====================
+            robot.movingAverageFilter.addOdoX();
+            robot.movingAverageFilter.addOdoY();
+            robot.movingAverageFilter.addOdoTheta();
+            robot.movingAverageFilter.addControlIMUTheta();
             // ==================== TELEMETRY ====================
-            if (Math.random() * 100 < 1) {
+            if (Math.random() * 100 < 0.1) {
                 telemetry.addData(ImageOutput.bryant,"");
-            } else if (Math.random() * 100 < 2) {
+            } else if (Math.random() * 100 < 0.2) {
                 telemetry.addData(ImageOutput.isaac,"");
             } else {
                 telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
@@ -185,9 +190,15 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
                 telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
                 telemetry.addData("Position", robot.poseModule.getPos());
-                telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
-                telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
-                telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
+                telemetry.addData("x", robot.movingAverageFilter.getAverageX());
+                telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
+                telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
+                telemetry.addData("IMU Yaw", robot.hwCollection.controlIMU.getYawDeg());
+                telemetry.addData("IMU Pitch", robot.hwCollection.controlIMU.getPitchDeg());
+                telemetry.addData("IMU Roll", robot.hwCollection.controlIMU.getRollDeg());
+//                telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
+//                telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
+//                telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
 //            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
