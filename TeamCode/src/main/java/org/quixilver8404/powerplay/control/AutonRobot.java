@@ -2,12 +2,17 @@ package org.quixilver8404.powerplay.control;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
 
 public class AutonRobot extends BaseRobot {
 
     public AutonRobot(LinearOpMode opMode) {
-        super(Pose2D.ZERO, true, opMode);
+        super(new Vector3(), true, opMode);
+
+    }
+    public AutonRobot(Vector3 startPose, LinearOpMode opMode) {
+        super(startPose, true, opMode);
 
     }
 

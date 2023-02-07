@@ -36,7 +36,7 @@ public class PositionTrackingModule {
      * @param pos - vector position
      */
     public PositionTrackingModule(final Vector3 pos) {
-        this.pos = new Vector3();
+        this.pos = pos;
         startpos = pos;
         vel = new Vector3();
         poseState = PositionTrackingState.ODOMETRY;
@@ -100,6 +100,10 @@ public class PositionTrackingModule {
 
     public synchronized double getPosTheta() {
         return pos.theta();
+    }
+
+    public synchronized void setStartPos(Vector3 position) {
+        startpos = position;
     }
 
     public synchronized Vector3 getVel() {

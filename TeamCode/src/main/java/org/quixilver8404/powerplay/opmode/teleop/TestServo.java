@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
+import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
@@ -14,11 +15,7 @@ public class TestServo extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        final TeleOpRobot robot = new TeleOpRobot(new Pose2D(
-                new Distance(12.5, Distance.Unit.INCHES),
-                new Distance(12.5, Distance.Unit.INCHES),
-                new Angle(0, Angle.Unit.DEGREES)
-        ), this);
+        final TeleOpRobot robot = new TeleOpRobot(new Vector3(), this);
 
         // starts the robot hardware update loop
         robot.headingLockModule.disablePID();

@@ -2,11 +2,12 @@ package org.quixilver8404.powerplay.control;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
 
 public class TeleOpRobot extends BaseRobot {
 
-    public TeleOpRobot(Pose2D startPose,LinearOpMode opMode) {
+    public TeleOpRobot(Vector3 startPose, LinearOpMode opMode) {
         super(startPose, true, opMode);
     }
 

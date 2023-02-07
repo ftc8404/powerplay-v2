@@ -14,7 +14,7 @@ import org.quixilver8404.powerplay.hardware.motor.EncoderMotor;
 import org.quixilver8404.powerplay.hardware.motor.EncoderlessMotor;
 import org.quixilver8404.powerplay.hardware.sensor.DeltaEncoder;
 import org.quixilver8404.powerplay.hardware.sensor.BNO055IMU;
-import org.quixilver8404.powerplay.hardware.sensor.IMU;
+//import org.quixilver8404.powerplay.hardware.sensor.IMU;
 import org.quixilver8404.powerplay.hardware.servo.PositionServo;
 import org.quixilver8404.powerplay.hardware.sensor.MaxbotixMB1242;
 import org.quixilver8404.powerplay.util.Tunable;
@@ -82,7 +82,7 @@ public class HardwareCollection {
     public final MaxbotixMB1242 ultraSonic2;
     public final MaxbotixMB1242 ultraSonic3;
 
-    public final IMU controlIMU;
+//    public final IMU controlIMU;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -122,7 +122,7 @@ public class HardwareCollection {
         ultraSonic2 = hwMap.get(MaxbotixMB1242.class, "ultraSonic2");
         ultraSonic3 = hwMap.get(MaxbotixMB1242.class, "ultraSonic3");
 
-        controlIMU =  new IMU("controlIMU", hwMap);
+//        controlIMU =  new IMU("controlIMU", hwMap);
 
         final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");

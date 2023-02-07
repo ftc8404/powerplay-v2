@@ -43,7 +43,7 @@ public abstract class BaseRobot {
     protected long updateCount = -1; // will be incremented to 0 at the start of the first update
     protected final boolean prioritizeOdometry;
 
-    BaseRobot(Pose2D startPose, boolean prioritizeOdometry, LinearOpMode opMode) {
+    BaseRobot(Vector3 startPose, boolean prioritizeOdometry, LinearOpMode opMode) {
         this.opMode = opMode;
         telemetry = opMode.telemetry;
 
@@ -54,17 +54,17 @@ public abstract class BaseRobot {
         diagnosticModule = new DiagnosticModule();
         taskModule = new TaskModule();
         pathFollowModule = new PathFollowModule();
-        headingLockModule = new HeadingLockModule(startPose.heading);
-        navModule = new NavModule(startPose, hwCollection);
+        headingLockModule = new HeadingLockModule(Pose2D.ZERO.heading);
+        navModule = new NavModule(Pose2D.ZERO, hwCollection);
         driveModule = new DriveModule();
         slidesModule = new SlidesModule();
         susanModule = new SusanModule();
         clawModule = new ClawModule();
         cvTasksModule = new CVTasksModule(hwCollection);
-        poseModule = new PositionTrackingModule(new Vector3());//new Vector3(75 * 0.0254,(141-26) *0.0254,0));
+        poseModule = new PositionTrackingModule(startPose);
         pidPositionEstimation = new PIDPositionEstimation(this, new Vector3());
         actions = new Actions(this);
-        mSonicModule = new MSonicModule(this);
+        mSonicModule = new MSonicModule();
         movingAverageFilter = new MovingAverageFilter(this);
 
 

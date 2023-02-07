@@ -1,5 +1,6 @@
 package org.quixilver8404.powerplay.util;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.quixilver8404.powerplay.control.BaseRobot;
 
 import java.sql.Array;
@@ -58,21 +59,39 @@ public class MovingAverageFilter {
     }
     public void addUltraX() {
         xlist = new ArrayList<>();
-        xlist.add(robot.mSonicModule.getPosX());
+        xlist.add(robot.mSonicModule.tripleThreat(
+                robot.movingAverageFilter.getAverageX() * 39.37,
+                robot.movingAverageFilter.getAverageY() * 39.37,
+                robot.movingAverageFilter.getAverageTheta(),
+                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[0]*0.0254);
     }
     public void addUltraY() {
         ylist = new ArrayList<>();
-        ylist.add(robot.mSonicModule.getPosY());
+        ylist.add(robot.mSonicModule.tripleThreat(
+                robot.movingAverageFilter.getAverageX() * 39.37,
+                robot.movingAverageFilter.getAverageY() * 39.37,
+                robot.movingAverageFilter.getAverageTheta(),
+                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[1]*0.0254);
     }
     public void addUltraTheta() {
         thetalist = new ArrayList<>();
-        thetalist.add(robot.mSonicModule.getPosTheta());
+        thetalist.add(robot.mSonicModule.tripleThreat(
+                robot.movingAverageFilter.getAverageX() * 39.37,
+                robot.movingAverageFilter.getAverageY() * 39.37,
+                robot.movingAverageFilter.getAverageTheta(),
+                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[2]*0.0254);
     }
-    public void addControlIMUTheta() {
-        thetalist.add(robot.hwCollection.controlIMU.getYaw());
-        if (thetalist.size() > window){
-            thetalist.remove(0);
-        }
-    }
+//    public void addControlIMUTheta() {
+//        thetalist.add(robot.hwCollection.controlIMU.getYaw());
+//        if (thetalist.size() > window){
+//            thetalist.remove(0);
+//        }
+//    }
 
 }
