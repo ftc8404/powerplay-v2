@@ -12,7 +12,7 @@ public class PIDPositionEstimation {
 
     int timeoutMillis = 0;
 
-    PIDController pidx = new PIDController(4,0.3,2,300);
+    PIDController pidx = new PIDController(1.5,0.00035,1.5,300);
     PIDController pidy = new PIDController(4,0.3,2,300);
     PIDController pidtheta = new PIDController(1.2, 0, 1,300);
 
@@ -30,10 +30,14 @@ public class PIDPositionEstimation {
 
     public synchronized void update(){
         if (moveXY) {
-            robotx = pidx.loop(robot.poseModule.getPosX() - point.x(), robot.hwCollection.clock.getRunningTimeMillis());
-            roboty = pidy.loop(robot.poseModule.getPosY() - point.y(), robot.hwCollection.clock.getRunningTimeMillis());
+            double offsetx = robot.poseModule.getPosX() - point.x();
+            double offsety = robot.poseModule.getPosY() - point.y();
+
+            robotx = pidx.loop(offsetx, robot.hwCollection.clock.getRunningTimeMillis());
+            roboty = 0; //pidy.loop(offsety, robot.hwCollection.clock.getRunningTimeMillis());
+            System.out.println(robotx);
             robot.driveModule.setExtrinsicTargetPower(robotx, roboty);
-            if (robotx < 0.01 && roboty < 0.01) {
+            if (Math.abs(offsetx) < 0.001 && Math.abs(offsety) < 0.001) {
                 robot.driveModule.setExtrinsicTargetPower(0, 0);
                 pidtheta.reset();
                 moveXY = false;

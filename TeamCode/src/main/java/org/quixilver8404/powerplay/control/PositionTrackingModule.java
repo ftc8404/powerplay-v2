@@ -9,9 +9,9 @@ import java.util.ArrayList;
 public class PositionTrackingModule {
 
     public static final double ODOMETRY_ENCODER_M_PER_TICK = 0.035*Math.PI/8192;
-    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((17.5/2 - 8.6) * 0.0254, (-15/2d + 5.2) * 0.0254, Math.PI);
+    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((17.5/2 - 8.6) * 0.0254, (-15/2d + 5) * 0.0254, Math.PI);
     public static final Vector3 ODOMETRY_2_POSITION = new Vector3((17.5/2 - 8.5) * 0.0254,(15/2d - 4.5) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-17.5/2 + 2.5) * 0.0254, (-15/2d + 7.1) * 0.0254,-Math.PI/2);
+    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-17.5/2 + 2.5) * 0.0254, (-15/2d + 7.1) * 0.0254,Math.PI/2);
     public static final Vector3[] ODOMETRY_WHEEL_SETUP = new Vector3[]{ODOMETRY_1_POSITION, ODOMETRY_2_POSITION, ODOMETRY_3_POSITION};
 
     public enum PositionTrackingState {

@@ -40,7 +40,7 @@ public class LeftButGood extends LinearOpMode {
             telemetry.addData("right ultrasonic sensor", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
-        robot.poseModule.setStartPos(new Vector3(17.5/2 * 0.0254,(141-robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH)) *0.0254,-90));
+        robot.poseModule.setStartPos(new Vector3(17.5/2 * 0.0254,(141-robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH)) * 0.0254,0));
 
         // robot claw starts closed
         robot.clawModule.setClose();
@@ -49,8 +49,26 @@ public class LeftButGood extends LinearOpMode {
             robot.stopHardwareLoop();
             return;
         }
-        robot.pidPositionEstimation.setPoint(new Vector3((17.5/2 + 12) * 0.0254,(141-robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH)) *0.0254,-90));
+        robot.pidPositionEstimation.setPoint(new Vector3((17.5/2 + 12) * 0.0254,(141-robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH)) * 0.0254,0));
         robot.pidPositionEstimation.goXY();
-        robot.actions.pickUpPreload();
+//        robot.actions.pickUpPreload();
+        while (opModeIsActive()) {
+            telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
+            telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
+            telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
+            telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
+            telemetry.addData("x", robot.movingAverageFilter.getAverageX());
+            telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
+            telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
+            telemetry.addData("power settings", robot.hwCollection.driveMotorFL.getPower() + ", "
+                    + robot.hwCollection.driveMotorFR.getPower() + ", "
+                    + robot.hwCollection.driveMotorBL.getPower() + ", "
+                    + robot.hwCollection.driveMotorBR.getPower());
+            telemetry.update();
+            System.out.println(robot.hwCollection.driveMotorFL.getPower() + ", "
+                    + robot.hwCollection.driveMotorFR.getPower() + ", "
+                    + robot.hwCollection.driveMotorBL.getPower() + ", "
+                    + robot.hwCollection.driveMotorBR.getPower());
+        }
     }
 }

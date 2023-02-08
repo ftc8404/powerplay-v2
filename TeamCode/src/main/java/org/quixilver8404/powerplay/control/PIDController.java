@@ -94,23 +94,19 @@ public class PIDController {
      * @param offset        the offset, current value - target value.
      * @param curTimeMillis the time in milliseconds.
      */
+    double lastOutput;
     public double loop(double offset, long curTimeMillis) {
         double error = -offset;
         int dT = (int) (curTimeMillis - prevTimeMillis);
-        if (dT > timeoutMillis) {
-            reset();
-        }
         double dError = 0;
-        if (prevTimeMillis > 0) {
-            integral += error * dT;
-            dError = (error - prevError) / dT;
+        if (dT > timeoutMillis) {
+            integral += error;
+            dError = (error - prevError);
+            lastOutput = (pidConstants.kP * error) + (pidConstants.kI * integral) + (pidConstants.kD * dError);
+            prevTimeMillis = curTimeMillis;
+            prevError = error;
         }
-        double output = (pidConstants.kP * error) + (pidConstants.kI * integral) + (pidConstants.kD * dError);
-
-        prevError = error;
-        prevTimeMillis = curTimeMillis;
-
-        return output;
+        return lastOutput;
     }
 
     /**
