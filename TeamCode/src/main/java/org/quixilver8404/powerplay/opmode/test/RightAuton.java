@@ -74,11 +74,11 @@ public class RightAuton extends LinearOpMode {
                     baseRobot.susanModule.goToCustomDeg(-90);
                     return false;
                 } else if (runningTimeMillis < 7550) {
-                    baseRobot.headingLockModule.setTargetHeading(new Angle(-90, Angle.Unit.DEGREES));
-//                    baseRobot.hwCollection.driveMotorFL.setPower(-1 * voltage);
-//                    baseRobot.hwCollection.driveMotorFR.setPower(1 * voltage);
-//                    baseRobot.hwCollection.driveMotorBL.setPower(-1 * voltage);
-//                    baseRobot.hwCollection.driveMotorBR.setPower(1 * voltage);
+//                    baseRobot.headingLockModule.setTargetHeading(new Angle(-90, Angle.Unit.DEGREES));
+                    baseRobot.hwCollection.driveMotorFL.setPower(-0.75 * voltage);
+                    baseRobot.hwCollection.driveMotorFR.setPower(0.75 * voltage);
+                    baseRobot.hwCollection.driveMotorBL.setPower(-0.75 * voltage);
+                    baseRobot.hwCollection.driveMotorBR.setPower(0.75 * voltage);
                     return false;
                 } else if (runningTimeMillis < 8180) {
                     baseRobot.hwCollection.driveMotorFL.setPower(-0.75 * voltage);

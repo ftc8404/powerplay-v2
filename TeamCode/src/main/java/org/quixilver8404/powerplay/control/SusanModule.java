@@ -20,7 +20,7 @@ public class SusanModule {
     public static final double COUNTS_PER_DEG = 5544 / 360.0;
 
     @Tunable
-    public static final double KP = 0.05; // TODO tune these
+    public static final double KP = 0.052; // TODO tune these
     @Tunable
     public static final double KI = 0; // TODO tune these
     @Tunable
@@ -31,14 +31,17 @@ public class SusanModule {
 
     private final PIDController pidController;
 
+    private BaseRobot robot;
+
     private double curPosDeg;
     private double targetPower;
     private double targetPosDeg;
 
-    public SusanModule() {
+    public SusanModule(BaseRobot robot) {
         susanControlState = SusanControlState.MANUAL;
         curPosDeg = 0;
         pidController = new PIDController(KP, KI, KD, 0);
+        this.robot = robot;
     }
 
     public synchronized void update(final SlidesModule slideModule, HardwareCollection hwCollection) {
@@ -55,6 +58,7 @@ public class SusanModule {
                     ? 0 : targetPosDeg;
 
             desiredPow = pidController.loop(curPosDeg - desiredPos, hwCollection.clock.getDeltaTimeMillis());
+            System.out.println("desiredPow: " + desiredPow);
         }
 
         if ((slideModule.areSlidesLowered() && susanControlState != SusanControlState.GO_TO_FRONT)
@@ -94,7 +98,7 @@ public class SusanModule {
     }
 
     public synchronized void goToPreloadedCone() {
-        this.targetPosDeg = -2100 / COUNTS_PER_DEG;
+        this.targetPosDeg = -2000 / COUNTS_PER_DEG;
         susanControlState = SusanControlState.GO_TO_CUSTOM;
     }
 
@@ -103,5 +107,11 @@ public class SusanModule {
         if (power != 0){
             susanControlState = SusanControlState.MANUAL;
         }
+    }
+    public synchronized boolean isMoving(){
+        return robot.hwCollection.susanMotor1.getPower() <= 0.01;
+    }
+    public synchronized double getCurPosDeg() {
+        return curPosDeg;
     }
 }

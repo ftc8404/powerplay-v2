@@ -58,7 +58,7 @@ public abstract class BaseRobot {
         navModule = new NavModule(Pose2D.ZERO, hwCollection);
         driveModule = new DriveModule();
         slidesModule = new SlidesModule();
-        susanModule = new SusanModule();
+        susanModule = new SusanModule(this);
         clawModule = new ClawModule();
         cvTasksModule = new CVTasksModule(hwCollection);
         poseModule = new PositionTrackingModule(startPose);
@@ -109,9 +109,10 @@ public abstract class BaseRobot {
     private void criticalUpdate() {
         diagnosticModule.update(this, hwCollection);
         poseModule.update(this);
+        movingAverageFilter.update();
         actions.update();
         pidPositionEstimation.update();
-//        taskModule.update(this, hwCollection);
+        taskModule.update(this, hwCollection);
 //        pathFollowModule.update(this);
 //        headingLockModule.update(this);
 //        navModule.update(this, hwCollection);

@@ -41,8 +41,6 @@ public class DriveModule {
             intrinsicPowerY = targetPowerX * Math.sin(-curHeadingRad) + targetPowerY * Math.cos(-curHeadingRad);
         }
 
-        // VERY VERY VERY CRUDE IMPLEMENTATION OF A MECANUM CONTROL
-        // FOR PRELIMINARY TESTING ONLY!!!!!
         double powerFL = intrinsicPowerX - intrinsicPowerY - targetRotatePower;
         double powerFR = intrinsicPowerX + intrinsicPowerY + targetRotatePower;
         double powerBL = intrinsicPowerX + intrinsicPowerY - targetRotatePower;

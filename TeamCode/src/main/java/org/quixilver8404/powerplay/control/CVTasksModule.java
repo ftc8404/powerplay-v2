@@ -9,7 +9,7 @@ public class CVTasksModule extends OpenCvPipeline {
     //variables
     double[] currentPixel;
 
-    int topCornerX = 520;
+    int topCornerX = 510;
     int topCornerY = 215;
     int length = 50;
     int height = 90;

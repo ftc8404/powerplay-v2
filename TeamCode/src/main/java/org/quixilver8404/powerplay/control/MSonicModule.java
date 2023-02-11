@@ -12,9 +12,9 @@ import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 
 public class MSonicModule {
     public static double[] tripleThreat(double x, double y, double phi, double dist1, double dist2, double dist3) {
-        Sensor s1 = new Sensor(-7.5 + 2, 17.5/2-2.7, -Math.PI/2);
-        Sensor s2 = new Sensor(17.5/2 - 2.6, 7.5 - 2, Math.PI / 2);
-        Sensor s3 = new Sensor(17.5/2 + 0.6, 7.5 - 0.5, 0);
+        Sensor s1 = new Sensor(17.5/2-2.7, -7.5 + 2, -Math.PI/2);
+        Sensor s2 = new Sensor(17.5/2 - 2.6, 7.5 - 2, Math.PI/2);
+        Sensor s3 = new Sensor(17.5/2 + 0.6, 7.5 - 0.5, Math.PI);
         s1.setEquation(initial(x, y, phi, dist1, s1));
         s2.setEquation(initial(x, y, phi, dist2, s2));
         s3.setEquation(initial(x, y, phi, dist3, s3));

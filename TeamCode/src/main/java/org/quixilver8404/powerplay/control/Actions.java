@@ -1,5 +1,6 @@
 package org.quixilver8404.powerplay.control;
 
+import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.quixilver8404.powerplay.util.Tunable;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 
@@ -18,7 +19,22 @@ public class Actions {
     public static final double LIFT_RAISE_HEIGHT_INCHES = 7.5;
     static double height = 4.5;
     boolean pickUpPreload = false;
-    int stage = 0;
+    boolean dumpSignal = false;
+    boolean dropCone = false;
+
+    int preloadStage = 0;
+    double clawStartTimeMillis;
+
+    double parkMillis;
+
+    int signalStage = 0;
+
+    int dropStage = 0;
+
+    int variant = 0;
+
+    boolean park;
+
 
     static BaseRobot robot;
 
@@ -27,52 +43,150 @@ public class Actions {
     }
 
     public synchronized void update() {
-        if (pickUpPreload) {
+        if (dumpSignal) {
+            if (signalStage == 1) {
+                System.out.println("is pont double" + ((robot.movingAverageFilter.getAverageX() * 39.37)));
+                System.out.println("is pont" + ((robot.movingAverageFilter.getAverageX() * 39.37) > (16.5 + 17.5 / 2)));
+                if ((robot.movingAverageFilter.getAverageX() * 39.37) > (1 + 17.5 / 2)) {
+                    System.out.println(" AT point Stage1");
+                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
+                    signalStage++;
+                }
+            } else if (signalStage == 2) {
+                robot.clawModule.setClose();
+                if (robot.clawModule.getClawState().equals("Close") && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                    System.out.println("1 sec stage 2");
+                    signalStage++;
+                }
+            } else if (signalStage == 3) {
+                robot.susanModule.goToCustomDeg(-180);
+                robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_2);
+                if (robot.susanModule.isMoving() && robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 10) {
+                    robot.clawModule.setOpen();
+                    signalStage++;
+                }
+            } else {
+                dumpSignal = false;
+                signalStage = 0;
+            }
+        } else if (pickUpPreload) {
             System.out.println("Pick up");
-            if (stage == 1) {
+            if (preloadStage == 1) {
                 System.out.println("Stage1");
                 robot.clawModule.setClose();
-                robot.slidesModule.setTargetPosition(new Distance(10, Distance.Unit.INCHES));
-                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 9) {
-                    stage++;
+                robot.slidesModule.setTargetPosition(new Distance(14, Distance.Unit.INCHES));
+                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 12) {
+                    preloadStage++;
                 }
-            } else if (stage == 2) {
+            } else if (preloadStage == 2) {
                 System.out.println("Stage2");
                 robot.clawModule.setOpen();
+                System.out.println("turret encoder: " + robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
                 robot.susanModule.goToPreloadedCone();
-                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1900) {
-                    stage++;
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() > -2100 && robot.susanModule.isMoving()) {
+                    preloadStage++;
                 }
-            } else if (stage == 3) {
+            } else if (preloadStage == 3) {
                 System.out.println("Stage3");
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.ABOVE_DRIVE);
                 if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) < SlidesModule.SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES) {
-                    stage++;
+                    preloadStage++;
+                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
                 }
-            } else if (stage == 4) {
+            } else if (preloadStage == 4) {
                 System.out.println("Stage4");
                 robot.clawModule.setClose();
-                if (robot.clawModule.getClawState().equals("Close")) {
-                    stage++;
+                if (robot.clawModule.getClawState().equals("Close") && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                    preloadStage++;
                 }
-            } else if (stage == 5) {
+            } else if (preloadStage == 5) {
                 System.out.println("Stage5");
-                robot.slidesModule.setTargetPosition(new Distance(20, Distance.Unit.INCHES));
-                if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) == 19) {
-                    stage++;
+                robot.slidesModule.setTargetPosition(new Distance(34, Distance.Unit.INCHES));
+                robot.susanModule.goToCustomDeg(47.5);
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 42.5) {
+                    preloadStage++;
                 }
             } else {
                 System.out.println("Final Stage");
                 pickUpPreload = false;
-                stage = 0;
+                preloadStage = 0;
+            }
+        } else if (dropCone){
+            if (dropStage == 1){
+                clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
+                dropStage++;
+            } else if (dropStage == 2){
+                robot.clawModule.setOpen();
+                if (robot.clawModule.getClawState().equals("Open") && clawStartTimeMillis + 1300 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                    dropStage++;
+                }
+            } else if (dropStage == 3) {
+                System.out.println("Stage5");
+                robot.susanModule.goToFront();
+                robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3) {
+                    dropStage++;
+                }
+            } else {
+                dropCone = false;
+                dropStage = 0;
+            }
+        } else if (park){
+            robot.pidPositionEstimation.stop();
+            parkMillis = robot.hwCollection.clock.getRunningTimeMillis();
+            if (variant == 1){
+                robot.hwCollection.driveMotorFL.setPower(0.4);
+                robot.hwCollection.driveMotorFR.setPower(0.4);
+                robot.hwCollection.driveMotorBL.setPower(0.4);
+                robot.hwCollection.driveMotorBR.setPower(0.4);
+            } else if (variant == 2) {
+                robot.hwCollection.driveMotorFL.setPower(0.18);
+                robot.hwCollection.driveMotorFR.setPower(0.18);
+                robot.hwCollection.driveMotorBL.setPower(0.18);
+                robot.hwCollection.driveMotorBR.setPower(0.18);
+            } else {
+                robot.hwCollection.driveMotorFL.setPower(-0.18);
+                robot.hwCollection.driveMotorFR.setPower(-0.18);
+                robot.hwCollection.driveMotorBL.setPower(-0.18);
+                robot.hwCollection.driveMotorBR.setPower(-0.18);
+            }
+            if (parkMillis + 4500 < robot.hwCollection.clock.getRunningTimeMillis()){
+                robot.hwCollection.driveMotorFL.setPower(0);
+                robot.hwCollection.driveMotorFR.setPower(0);
+                robot.hwCollection.driveMotorBL.setPower(0);
+                robot.hwCollection.driveMotorBR.setPower(0);
+                park = false;
             }
         }
-
     }
 
     public synchronized void pickUpPreload() {
+        System.out.println("preload HIIIIIIi");
         pickUpPreload = true;
-        stage = 1;
+        preloadStage = 1;
+    }
+
+    public synchronized void dumpSignalCone() {
+        System.out.println("dump hoiiiii");
+        dumpSignal = true;
+        signalStage = 1;
+    }
+
+    public synchronized void dropCone() {
+        dropCone = true;
+        dropStage = 1;
+    }
+
+    public synchronized boolean pickUp(){
+        return pickUpPreload;
+    }
+    public synchronized boolean drop(){
+        return dropCone;
+    }
+
+    public synchronized void park(int variant){
+        this.variant = variant;
+        park = true;
     }
 
     /*
