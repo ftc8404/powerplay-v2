@@ -18,11 +18,12 @@ import org.quixilver8404.powerplay.util.measurement.Distance;
 
 import java.util.Arrays;
 
-@Autonomous(group = "Good")
-public class LeftButGood extends LinearOpMode {
+//@Autonomous(group = "Good")
+public class RepeatedMotion extends LinearOpMode {
     int variant = 0;
     double yPos;
     AutonRobot robot;
+    int counter = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -43,56 +44,36 @@ public class LeftButGood extends LinearOpMode {
 
             telemetry.update();
         }
-        robot.clawModule.setOpen();
-        robot.poseModule.setStartPos(new Vector3(17.5/2 * 0.0254,(100) * 0.0254,0));
+        robot.poseModule.setStartPos(new Vector3(0 * 0.0254,(100) * 0.0254,0));
 
         if (isStopRequested()) {
             robot.stopHardwareLoop();
             return;
         }
-        robot.pidPositionEstimation.setPoint(new Vector3(60*0.0254,100 * 0.0254,0));
-        robot.pidPositionEstimation.goX();
-        while (!robot.pidPositionEstimation.getMove() && opModeIsActive()){
-            telemetry();
-        }
-//        robot.pidPositionEstimation.goY();
-        robot.pidPositionEstimation.setPoint(new Vector3(60*0.0254,100 * 0.0254,Math.PI/2));
-        robot.pidPositionEstimation.goTheta();
-        while (!robot.pidPositionEstimation.getMove() && opModeIsActive()){
-            telemetry();
-        }
-        robot.actions.pickUpPreload();
-        robot.pidPositionEstimation.setPoint(new Vector3(60*0.0254,115 * 0.0254,Math.PI/2));
-        robot.pidPositionEstimation.goHybrid();
-        while (!robot.pidPositionEstimation.getMove() && opModeIsActive()){
+        while (counter <= 20) {
+            robot.pidPositionEstimation.setPoint(new Vector3(20 * 0.0254, 100 * 0.0254, 0));
+            robot.pidPositionEstimation.goX();
+            robot.pidPositionEstimation.goY();
             robot.pidPositionEstimation.goTheta();
-            telemetry();
+            while (!robot.pidPositionEstimation.getMove() && opModeIsActive()) {
+                telemetry();
+            }
+            robot.pidPositionEstimation.setPoint(new Vector3(0 * 0.0254,(100) * 0.0254,0));
+            robot.pidPositionEstimation.goX();
+            robot.pidPositionEstimation.goY();
+            robot.pidPositionEstimation.goTheta();
+            while (!robot.pidPositionEstimation.getMove() && opModeIsActive()) {
+                telemetry();
+            }
+            counter++;
         }
-//        final double newPosX = robot.movingAverageFilter.getAverageX();
-//        final double newPosY = robot.movingAverageFilter.getAverageY();
-//        while (!robot.actions.pickUp() && opModeIsActive()) {
-//            telemetry();
-//        }
-//        System.out.println("newPosX: " + newPosX + "  newPosY: " + newPosY);
-////        robot.movingAverageFilter.resetFilter();
-//        robot.poseModule.setStartPos(new Vector3(17.5/2 * 0.0254,(141-yPos) * 0.0254,-Math.PI/2));
-//        robot.pidPositionEstimation.setPoint(new Vector3(newPosX + (26) * 0.0254,newPosY + (5 * 0.0254),0));
-//        System.out.println("Point but Left: " + robot.pidPositionEstimation.getPoint());
-//        robot.pidPositionEstimation.goHybrid();
-//        while (!robot.pidPositionEstimation.getMove() && opModeIsActive()){
-//            telemetry();
-//        }
-//        robot.actions.dropCone();
-//        while (!robot.actions.drop() && opModeIsActive()) {
-//            telemetry();
-//        }
-//        robot.actions.park(variant);
         while (opModeIsActive()) {
             telemetry();
         }
     }
 
     public void telemetry() {
+        telemetry.addData("counter", counter);
         telemetry.addData("pos", robot.poseModule.getPos().toString());
         telemetry.addData("curPosDeg", robot.susanModule.getCurPosDeg());
         telemetry.addData("susan power", robot.hwCollection.susanMotor1.getPower());

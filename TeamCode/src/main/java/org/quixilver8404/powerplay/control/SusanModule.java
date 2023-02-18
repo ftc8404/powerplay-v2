@@ -1,5 +1,7 @@
 package org.quixilver8404.powerplay.control;
 
+import android.util.Log;
+
 import org.quixilver8404.powerplay.util.Tunable;
 
 public class SusanModule {
@@ -57,7 +59,7 @@ public class SusanModule {
             double desiredPos = susanControlState == SusanControlState.GO_TO_FRONT
                     ? 0 : targetPosDeg;
 
-            desiredPow = pidController.loop(curPosDeg - desiredPos, hwCollection.clock.getDeltaTimeMillis());
+            desiredPow = pidController.loop(curPosDeg - desiredPos, hwCollection.clock.getRunningTimeMillis());
             System.out.println("desiredPow: " + desiredPow);
         }
 
@@ -72,6 +74,7 @@ public class SusanModule {
             pidController.resetIntegral();
         }
 
+        Log.d("TurretModule", "power: " + desiredPow + "  delta_t: " + hwCollection.clock.getDeltaTimeMillis() + "  error: " + (curPosDeg - (susanControlState == SusanControlState.GO_TO_FRONT ? 0 : targetPosDeg)));
         hwCollection.susanMotor1.setPower(desiredPow);
         hwCollection.susanMotor2.setPower(desiredPow);
     }
@@ -109,7 +112,7 @@ public class SusanModule {
         }
     }
     public synchronized boolean isMoving(){
-        return robot.hwCollection.susanMotor1.getPower() <= 0.01;
+        return robot.hwCollection.susanMotor1.getPower() <= 0.005;
     }
     public synchronized double getCurPosDeg() {
         return curPosDeg;

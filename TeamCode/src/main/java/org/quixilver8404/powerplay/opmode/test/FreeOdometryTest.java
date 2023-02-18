@@ -8,7 +8,7 @@ import org.quixilver8404.powerplay.control.HardwareCollection;
 import org.quixilver8404.powerplay.hardware.motor.EncoderlessMotor;
 import org.quixilver8404.powerplay.hardware.sensor.Encoder;
 
-@TeleOp(group = "Test")
+//@TeleOp(group = "Test")
 public class FreeOdometryTest extends LinearOpMode {
 
     @Override

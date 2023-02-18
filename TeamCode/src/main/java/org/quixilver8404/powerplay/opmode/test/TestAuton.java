@@ -16,7 +16,7 @@ import org.quixilver8404.powerplay.util.measurement.Distance;
 
 import java.io.IOException;
 
-@Autonomous(group = "Test")
+//@Autonomous(group = "Test")
 public class TestAuton extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,7 +36,7 @@ public class TestAuton extends LinearOpMode {
         robot.headingLockModule.disablePID();
         robot.startHardwareLoop();
 
-        robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
+//        robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
 
         int variant;
 

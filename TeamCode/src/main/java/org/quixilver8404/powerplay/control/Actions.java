@@ -83,7 +83,7 @@ public class Actions {
                 robot.clawModule.setOpen();
                 System.out.println("turret encoder: " + robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
                 robot.susanModule.goToPreloadedCone();
-                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() > -2100 && robot.susanModule.isMoving()) {
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1900 && robot.susanModule.isMoving()) {
                     preloadStage++;
                 }
             } else if (preloadStage == 3) {
@@ -98,16 +98,18 @@ public class Actions {
                 robot.clawModule.setClose();
                 if (robot.clawModule.getClawState().equals("Close") && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
                     preloadStage++;
+                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
                 }
             } else if (preloadStage == 5) {
                 System.out.println("Stage5");
                 robot.slidesModule.setTargetPosition(new Distance(34, Distance.Unit.INCHES));
-                robot.susanModule.goToCustomDeg(47.5);
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 42.5) {
+                robot.susanModule.goToCustomDeg(90);
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 85 && robot.pidPositionEstimation.getMove() && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
                     preloadStage++;
                 }
             } else {
                 System.out.println("Final Stage");
+                robot.clawModule.setOpen();
                 pickUpPreload = false;
                 preloadStage = 0;
             }

@@ -24,8 +24,8 @@ public class MovingAverageFilter {
         addOdoY();
         addOdoTheta();
 
-        addUltraX();
-        addUltraY();
+//        addUltraX();
+//        addUltraY();
     }
 
     public synchronized void addOdoX() {

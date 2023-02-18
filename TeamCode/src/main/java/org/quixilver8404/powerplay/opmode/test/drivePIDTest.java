@@ -8,7 +8,7 @@ import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 
-@Autonomous(name = "drive PID test", group = "Test")
+//@Autonomous(name = "drive PID test", group = "Test")
 public class drivePIDTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

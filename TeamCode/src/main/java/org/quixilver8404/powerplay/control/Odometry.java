@@ -16,6 +16,10 @@ public class Odometry {
     protected Vector3 vel;
     protected Vector3 d_pos_raw;
     protected Vector3 d_pos;
+
+    static final double dist_calibration1 = 1.02/(5/4.8)/(10/9.81)/(10/9.91)/(10/9.97)/(90/83d)/(90/86d);
+    static final double dist_calibration2 = 1;
+    static final double dist_calibration3 = 1;
 //    protected OdometryEMA ema;
 //
 //    protected double ODO_RB;
@@ -37,21 +41,21 @@ public class Odometry {
 
     protected double[][] makeA(final double alpha) {
         final double[][] A = new double[][]{
-                {Math.cos(alpha + setup[0].theta()), Math.sin(alpha + setup[0].theta()), Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - Math.atan2(setup[0].y(), setup[0].x()))},
-                {Math.cos(alpha + setup[1].theta()), Math.sin(alpha + setup[1].theta()), Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - Math.atan2(setup[1].y(), setup[1].x()))},
-                {Math.cos(alpha + setup[2].theta()), Math.sin(alpha + setup[2].theta()), Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - Math.atan2(setup[2].y(), setup[2].x()))}
+                {Math.cos(alpha + setup[0].theta()), Math.sin(alpha + setup[0].theta()), dist_calibration1*Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - Math.atan2(setup[0].y(), setup[0].x()))},
+                {Math.cos(alpha + setup[1].theta()), Math.sin(alpha + setup[1].theta()), dist_calibration2*Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - Math.atan2(setup[1].y(), setup[1].x()))},
+                {Math.cos(alpha + setup[2].theta()), Math.sin(alpha + setup[2].theta()), dist_calibration3*Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - Math.atan2(setup[2].y(), setup[2].x()))}
         };
         return A;
     }
 
-    protected double[][] makeA2(final double prevAlpha, final double dAlpha) {
-        final double[][] A = new double[][] {
-                {(2*Math.cos(setup[0].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[0].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - Math.atan2(setup[0].y(), setup[0].x()))},
-                {(2*Math.cos(setup[1].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[1].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - Math.atan2(setup[1].y(), setup[1].x()))},
-                {(2*Math.cos(setup[2].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[2].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - Math.atan2(setup[2].y(), setup[2].x()))}
-        };
-        return A;
-    }
+//    protected double[][] makeA2(final double prevAlpha, final double dAlpha) {
+//        final double[][] A = new double[][] {
+//                {(2*Math.cos(setup[0].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[0].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - Math.atan2(setup[0].y(), setup[0].x()))},
+//                {(2*Math.cos(setup[1].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[1].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - Math.atan2(setup[1].y(), setup[1].x()))},
+//                {(2*Math.cos(setup[2].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2))/dAlpha, (2*Math.sin(setup[2].theta()+prevAlpha+(dAlpha/2))*Math.sin(dAlpha/2)/dAlpha), Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - Math.atan2(setup[2].y(), setup[2].x()))}
+//        };
+//        return A;
+//    }
 
     protected double[] solve(final RealMatrix matrixA, final double[] b) {
         final ArrayRealVector vectorb = new ArrayRealVector(b);
@@ -93,29 +97,29 @@ public class Odometry {
         final double[][] A = makeA(alpha);
         final RealMatrix matrixA = MatrixUtils.createRealMatrix(A);
         final double[] x = solve(matrixA, deltaCount);
-        final double dAlpha = x[2];
+//        final double dAlpha = x[2];
 
-        final double[][] A2;
+//        final double[][] A2;
 //        if (Math.abs(dAlpha) < 1e-10d ) { //TODO: Figure out if this is actually necessary. I sincerely doubt it
-            A2 = makeA(alpha + dAlpha/2);
+//            A2 = makeA(alpha + dAlpha/2);
 //        } else {
 //            A2 = makeA2(alpha, dAlpha);
 //        }
-        final RealMatrix matrixA2 = MatrixUtils.createRealMatrix(A2);
-        final double[] x2 = solve(matrixA2, deltaCount);
+//        final RealMatrix matrixA2 = MatrixUtils.createRealMatrix(A2);
+//        final double[] x2 = solve(matrixA2, deltaCount);
 
 //        System.out.println("x2: " + Arrays.toString(x2));
 
-//        pos = Vector3.AddVector(pos, new Vector3(x2[0], x2[1], x2[2]));
-        pos = new Vector3(x[0], x[1], x[2]);
+        pos = Vector3.AddVector(pos, new Vector3(x[0], x[1], x[2]));
+//        pos = new Vector3(x[0], x[1], x[2]);
 
-        d_pos.setX(x2[0]/* *ema.getMhat().x()*/);
-        d_pos.setY(x2[1]/* *ema.getMhat().y()*/);
-        d_pos.setTheta(x2[2]/* *ema.getMhat().theta()*/);
+        d_pos.setX(x[0]/* *ema.getMhat().x()*/);
+        d_pos.setY(x[1]/* *ema.getMhat().y()*/);
+        d_pos.setTheta(x[2]/* *ema.getMhat().theta()*/);
 
-        d_pos_raw.setX(x2[0]);
-        d_pos_raw.setY(x2[1]);
-        d_pos_raw.setTheta(x2[2]);
+        d_pos_raw.setX(x[0]);
+        d_pos_raw.setY(x[1]);
+        d_pos_raw.setTheta(x[2]);
 
         System.out.println("Delta pos: " + d_pos);
 

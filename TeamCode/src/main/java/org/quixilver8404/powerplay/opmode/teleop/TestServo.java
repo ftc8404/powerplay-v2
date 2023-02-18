@@ -10,7 +10,7 @@ import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 import org.quixilver8404.powerplay.util.measurement.Pose2D;
 
-@TeleOp
+//@TeleOp
 public class TestServo extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

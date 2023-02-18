@@ -9,9 +9,10 @@ import java.util.ArrayList;
 public class PositionTrackingModule {
 
     public static final double ODOMETRY_ENCODER_M_PER_TICK = 0.035*Math.PI/8192;
-    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((17.5/2 - 8.6) * 0.0254, (-15/2d + 5) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((17.5/2 - 8.5) * 0.0254,(15/2d - 4.5) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-17.5/2 + 2.5) * 0.0254, (-15/2d + 7.1) * 0.0254,Math.PI/2);
+
+    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((0.531) * 0.0254, (-2.7705-0.3125) * 0.0254, Math.PI);
+    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((0.3435) * 0.0254,(2.4795+0.25) * 0.0254, Math.PI);
+    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-4.6565) * 0.0254, (-0.708) * 0.0254,-Math.PI/2);
     public static final Vector3[] ODOMETRY_WHEEL_SETUP = new Vector3[]{ODOMETRY_1_POSITION, ODOMETRY_2_POSITION, ODOMETRY_3_POSITION};
 
     public enum PositionTrackingState {
@@ -54,12 +55,12 @@ public class PositionTrackingModule {
         final double odo3;
         switch (poseState) {
             case ODOMETRY:
-                odo1 = robot.hwCollection.driveEncoderLeft.getEncoderPosition() * ODOMETRY_ENCODER_M_PER_TICK;
-                odo2 = robot.hwCollection.driveEncoderRight.getEncoderPosition() * ODOMETRY_ENCODER_M_PER_TICK;
-                odo3 = robot.hwCollection.driveEncoderCenter.getEncoderPosition() * ODOMETRY_ENCODER_M_PER_TICK;
+                odo1 = robot.hwCollection.driveEncoderLeft.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
+                odo2 = robot.hwCollection.driveEncoderRight.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
+                odo3 = robot.hwCollection.driveEncoderCenter.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
                 odometry.update(new double[]{odo1, odo2, odo3}, robot.hwCollection.clock.getDeltaTimeMillis()/1000d, pos.theta());
-//                pos = pos.addVector(odometry.getDeltaPos());
-                pos = startpos.addVector(odometry.getPosition());
+                pos = pos.addVector(odometry.getDeltaPos());
+//                pos = startpos.addVector(odometry.getPosition());
                 vel = odometry.getVelocity();
                 break;
             case OFF:
@@ -103,6 +104,7 @@ public class PositionTrackingModule {
     }
 
     public synchronized void setStartPos(Vector3 position) {
+        this.pos = position;
         startpos = position;
     }
 

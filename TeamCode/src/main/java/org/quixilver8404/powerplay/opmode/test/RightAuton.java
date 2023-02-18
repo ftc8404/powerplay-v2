@@ -12,7 +12,7 @@ import org.quixilver8404.powerplay.control.TaskModule;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 
-@Autonomous(group = "Test")
+//@Autonomous(group = "Test")
 public class RightAuton extends LinearOpMode {
     int variant = 0;
 
@@ -26,7 +26,7 @@ public class RightAuton extends LinearOpMode {
         robot.startHardwareLoop();
         robot.headingLockModule.enablePID(robot);
 
-        robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
+//        robot.hwCollection.camera.setPipeline(robot.cvTasksModule);
 
 
         while (opModeInInit()) {

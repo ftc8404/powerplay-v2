@@ -54,6 +54,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("status", "ready!");
         telemetry.update();
+        robot.clawModule.setClose();
 
         waitForStart();
 
@@ -136,20 +137,22 @@ public class MainTeleOp extends LinearOpMode {
             } else {
                 flipFrontReleased = true;
             }
-//            if (gamepad1.a){
-//                robot.actions.pickUpPreload();
-//                System.out.println("A pressed");
-//            }
+            if (gamepad1.a){
+                System.out.println(robot.poseModule.getPos());
+            }
             //==========================DRIVER TWO==================================================================
-            if (gamepad2.left_bumper) {
-                robot.clawModule.setClose();
+//            telemetry.addData("clawstate", robot.clawModule.getClawState());
+            if (gamepad2.a) {
+//                telemetry.addData("A is pressed", "");
+//                robot.clawModule.setClose();
             }
             if (gamepad2.right_bumper) {
-                robot.clawModule.setOpen();
             }
             if (gamepad2.b) {
+//                telemetry.addData("B is pressed", "");
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
                 robot.susanModule.goToCustomDeg(90);
+//                robot.clawModule.setOpen();
             }
             if (gamepad2.x) {
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_4);
@@ -214,6 +217,9 @@ public class MainTeleOp extends LinearOpMode {
 //                    robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
 //                    robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
 //                    robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))));
+//            telemetry.addData("Ultrasonic 1", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("Ultrasonic 2", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("Ultrasonic 3", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
             }
             telemetry.update();
         }
