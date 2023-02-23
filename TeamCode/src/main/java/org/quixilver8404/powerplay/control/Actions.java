@@ -1,8 +1,10 @@
 package org.quixilver8404.powerplay.control;
 
-import org.apache.commons.math3.stat.descriptive.moment.Variance;
 import org.quixilver8404.powerplay.util.Tunable;
 import org.quixilver8404.powerplay.util.measurement.Distance;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Actions {
 
@@ -22,6 +24,12 @@ public class Actions {
     boolean dumpSignal = false;
     boolean dropCone = false;
 
+    boolean coneStackPickup = false;
+
+    boolean front = false;
+
+    boolean open = false;
+
     int preloadStage = 0;
     double clawStartTimeMillis;
 
@@ -31,7 +39,15 @@ public class Actions {
 
     int dropStage = 0;
 
+    int frontStage = 0;
+
     int variant = 0;
+
+    double liftHeight;
+
+    int consPickStage = 0;
+
+    int openStage = 0;
 
     boolean park;
 
@@ -73,17 +89,15 @@ public class Actions {
             System.out.println("Pick up");
             if (preloadStage == 1) {
                 System.out.println("Stage1");
-                robot.clawModule.setClose();
                 robot.slidesModule.setTargetPosition(new Distance(14, Distance.Unit.INCHES));
                 if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 12) {
                     preloadStage++;
                 }
             } else if (preloadStage == 2) {
                 System.out.println("Stage2");
-                robot.clawModule.setOpen();
                 System.out.println("turret encoder: " + robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
                 robot.susanModule.goToPreloadedCone();
-                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1900 && robot.susanModule.isMoving()) {
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1988 && robot.susanModule.isMoving()) {
                     preloadStage++;
                 }
             } else if (preloadStage == 3) {
@@ -96,20 +110,25 @@ public class Actions {
             } else if (preloadStage == 4) {
                 System.out.println("Stage4");
                 robot.clawModule.setClose();
-                if (robot.clawModule.getClawState().equals("Close") && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                if (robot.clawModule.getClawState().equals("Close")  && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
                     preloadStage++;
-                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
                 }
             } else if (preloadStage == 5) {
                 System.out.println("Stage5");
-                robot.slidesModule.setTargetPosition(new Distance(34, Distance.Unit.INCHES));
+                robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
                 robot.susanModule.goToCustomDeg(90);
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 85 && robot.pidPositionEstimation.getMove() && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 87 && robot.pidPositionEstimation.isNotMoving()) {
+                    preloadStage++;
+                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
+                }
+            } else if (preloadStage == 6) {
+                System.out.println("Stage6");
+                robot.clawModule.setOpen();
+                if (robot.clawModule.getClawState().equals("Open")  && clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
                     preloadStage++;
                 }
             } else {
                 System.out.println("Final Stage");
-                robot.clawModule.setOpen();
                 pickUpPreload = false;
                 preloadStage = 0;
             }
@@ -159,6 +178,57 @@ public class Actions {
                 robot.hwCollection.driveMotorBR.setPower(0);
                 park = false;
             }
+        } else if (coneStackPickup){
+            if (consPickStage == 1){
+                robot.susanModule.goToFront();
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 45) {
+                    consPickStage++;
+                }
+            } else if (consPickStage == 2){
+                robot.slidesModule.setTargetPosition(new Distance(liftHeight, Distance.Unit.INCHES));
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
+                    consPickStage++;
+                    clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
+                }
+            } else if (consPickStage == 3){
+                robot.clawModule.setClose();
+                if (clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                    consPickStage++;
+                }
+            } else {
+                robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
+                robot.susanModule.goToCustomDeg(90);
+                coneStackPickup = false;
+                consPickStage = 0;
+            }
+        } else if (open) {
+            if (openStage == 1) {
+                robot.clawModule.setOpen();
+                clawStartTimeMillis = robot.hwCollection.clock.getRunningTimeMillis();
+                openStage++;
+            } else if (openStage == 2) {
+                if (clawStartTimeMillis + 1000 < robot.hwCollection.clock.getRunningTimeMillis()) {
+                    openStage++;
+                }
+            } else {
+                open = false;
+                openStage = 0;
+            }
+        } else if (front){
+            if (frontStage == 1){
+                robot.susanModule.goToFront();
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 45) {
+                    frontStage++;
+                }
+            } else if (frontStage == 2){
+                robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
+                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
+                    frontStage++;
+                }
+            } else {
+                front = false;
+                frontStage = 0;
+            }
         }
     }
 
@@ -166,6 +236,34 @@ public class Actions {
         System.out.println("preload HIIIIIIi");
         pickUpPreload = true;
         preloadStage = 1;
+    }
+    public synchronized void coneStackPickup(double height) {
+        System.out.println("preload Byeee");
+        coneStackPickup = true;
+        this.liftHeight = height;
+        consPickStage = 1;
+    }
+
+    public synchronized void open() {
+        open = true;
+        openStage = 1;
+    }
+
+    public synchronized void front() {
+        front = true;
+        frontStage = 1;
+    }
+
+    public synchronized boolean isPickingUp(){
+        return pickUpPreload;
+    }
+
+    public synchronized boolean isConeStackPickup(){
+        return coneStackPickup;
+    }
+
+    public synchronized boolean isOpen(){
+        return open;
     }
 
     public synchronized void dumpSignalCone() {

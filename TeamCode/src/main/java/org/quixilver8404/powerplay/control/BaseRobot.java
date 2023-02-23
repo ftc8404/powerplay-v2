@@ -64,7 +64,7 @@ public abstract class BaseRobot {
         poseModule = new PositionTrackingModule(startPose);
         pidPositionEstimation = new PIDPositionEstimation(this, new Vector3());
         actions = new Actions(this);
-        mSonicModule = new MSonicModule();
+        mSonicModule = new MSonicModule(this);
         movingAverageFilter = new MovingAverageFilter(this);
 
 
@@ -113,6 +113,7 @@ public abstract class BaseRobot {
         actions.update();
         pidPositionEstimation.update();
         taskModule.update(this, hwCollection);
+        mSonicModule.update();
 //        pathFollowModule.update(this);
 //        headingLockModule.update(this);
 //        navModule.update(this, hwCollection);

@@ -101,7 +101,7 @@ public class SusanModule {
     }
 
     public synchronized void goToPreloadedCone() {
-        this.targetPosDeg = -2000 / COUNTS_PER_DEG;
+        this.targetPosDeg = -2088 / COUNTS_PER_DEG;
         susanControlState = SusanControlState.GO_TO_CUSTOM;
     }
 

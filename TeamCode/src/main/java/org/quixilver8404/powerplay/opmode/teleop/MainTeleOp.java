@@ -101,14 +101,10 @@ public class MainTeleOp extends LinearOpMode {
 
             angle = Angle.toStandard(angle + Math.PI / 2, Angle.Unit.RADIANS);
 
-            // moving the joystick right should give a negative rotation (clockwise)
-            double rotatePower = -gamepad1.right_stick_x;
+            double rotatePower = gamepad1.right_stick_x;
             rotatePower = Math.signum(rotatePower) * Math.sqrt(Math.abs(rotatePower));
 
             rotatePower = Math.pow(rotatePower, ROTATE_POWER_EXPONENT);
-
-            // set the rotation power to scale based on the right trigger
-            // scales between the maxLowMagnitude to 1 based on the left trigger
 
             if (gamepad1.right_bumper) {
                 rotatePower *= SLOW_ROTATE_POWER;
@@ -146,7 +142,11 @@ public class MainTeleOp extends LinearOpMode {
 //                telemetry.addData("A is pressed", "");
 //                robot.clawModule.setClose();
             }
+            if (gamepad2.left_bumper) {
+                robot.clawModule.setClose();
+            }
             if (gamepad2.right_bumper) {
+                robot.clawModule.setOpen();
             }
             if (gamepad2.b) {
 //                telemetry.addData("B is pressed", "");
@@ -206,9 +206,9 @@ public class MainTeleOp extends LinearOpMode {
 //                telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
 //                telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
 //                telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
-//            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
-//            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
-//            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
+            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
+            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
+            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic pos", robot.mSonicModule.getPos());
 //            telemetry.addData("ultrasonic pos", Arrays.toString(robot.mSonicModule.tripleThreat(
 //                    robot.movingAverageFilter.getAverageX() * 39.37,

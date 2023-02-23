@@ -1,4 +1,4 @@
-package org.quixilver8404.powerplay.opmode.test;
+package org.quixilver8404.powerplay.opmode.auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;

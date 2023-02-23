@@ -144,4 +144,8 @@ public class Vector3 {
     public Vector3 abs() {
         return new Vector3(Math.abs(x), Math.abs(y), Math.abs(theta));
     }
+
+    public boolean isEqual(Vector3 v){
+        return Math.abs(x - v.x()) < 0.001 && Math.abs(y - v.y()) < 0.001 && Math.abs(theta - v.theta()) < 0.001;
+    }
 }

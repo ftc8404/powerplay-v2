@@ -17,9 +17,12 @@ public class Odometry {
     protected Vector3 d_pos_raw;
     protected Vector3 d_pos;
 
-    static final double dist_calibration1 = 1.02/(5/4.8)/(10/9.81)/(10/9.91)/(10/9.97)/(90/83d)/(90/86d);
-    static final double dist_calibration2 = 1;
-    static final double dist_calibration3 = 1;
+    static final double dist_calibrationRad1 = 1 * (3637/3600d) * (3620/3600d) * (3607/3600d) * (60/90d);
+    static final double dist_calibrationRad2 = 1;
+    static final double dist_calibrationRad3 = 1;
+    static final double dist_calibrationTan1 = 1;
+    static final double dist_calibrationTan2 = 1;
+    static final double dist_calibrationTan3 = 1;
 //    protected OdometryEMA ema;
 //
 //    protected double ODO_RB;
@@ -41,9 +44,9 @@ public class Odometry {
 
     protected double[][] makeA(final double alpha) {
         final double[][] A = new double[][]{
-                {Math.cos(alpha + setup[0].theta()), Math.sin(alpha + setup[0].theta()), dist_calibration1*Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - Math.atan2(setup[0].y(), setup[0].x()))},
-                {Math.cos(alpha + setup[1].theta()), Math.sin(alpha + setup[1].theta()), dist_calibration2*Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - Math.atan2(setup[1].y(), setup[1].x()))},
-                {Math.cos(alpha + setup[2].theta()), Math.sin(alpha + setup[2].theta()), dist_calibration3*Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - Math.atan2(setup[2].y(), setup[2].x()))}
+                {Math.cos(alpha + setup[0].theta()), Math.sin(alpha + setup[0].theta()), dist_calibrationRad1* Math.hypot(setup[0].x(), setup[0].y()) * Math.sin(setup[0].theta() - dist_calibrationTan1*(Math.atan2(setup[0].y(), setup[0].x())))},
+                {Math.cos(alpha + setup[1].theta()), Math.sin(alpha + setup[1].theta()), dist_calibrationRad2* Math.hypot(setup[1].x(), setup[1].y()) * Math.sin(setup[1].theta() - dist_calibrationTan2*(Math.atan2(setup[1].y(), setup[1].x())))},
+                {Math.cos(alpha + setup[2].theta()), Math.sin(alpha + setup[2].theta()), dist_calibrationRad3* Math.hypot(setup[2].x(), setup[2].y()) * Math.sin(setup[2].theta() - dist_calibrationTan3*(Math.atan2(setup[2].y(), setup[2].x())))}
         };
         return A;
     }
@@ -63,8 +66,7 @@ public class Odometry {
         final DecompositionSolver decompositionSolver = luDecomposition.getSolver();
         if (decompositionSolver.isNonSingular()) {
             final RealVector solved = decompositionSolver.solve(vectorb);
-            final double[] solvedArray = solved.toArray();
-            return solvedArray;
+            return solved.toArray();
         } else {
             return new double[]{0,0,0};
         }

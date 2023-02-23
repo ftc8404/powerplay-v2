@@ -17,7 +17,7 @@ public class BNO055IMU extends HardwareDevice {
     /**
      * Encapsulates a reading of an angle in 3d space
      */
-    public class IMUGyroReading {
+    public static class IMUGyroReading {
         public final Angle pitch;
         public final Angle roll;
         public final Angle heading;

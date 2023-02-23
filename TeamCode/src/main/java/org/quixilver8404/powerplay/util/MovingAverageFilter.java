@@ -67,55 +67,55 @@ public class MovingAverageFilter {
         }
         return (sum/thetalist.size());
     }
-    public synchronized void addUltraX() {
-        double ultraX = MSonicModule.tripleThreat(
-                robot.movingAverageFilter.getAverageX() * 39.37,
-                robot.movingAverageFilter.getAverageY() * 39.37,
-                robot.movingAverageFilter.getAverageTheta(),
-                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[0]*0.0254;
-        if (ultraX > 0) {
-            for (int i = 0; i < 1; i++) {
-                xlist.add(ultraX);
-                if (xlist.size() > window) {
-                    xlist.remove(0);
-                }
-            }
-        }
-    }
-    public synchronized void addUltraY() {
-        double ultraY = MSonicModule.tripleThreat(
-                robot.movingAverageFilter.getAverageX() * 39.37,
-                robot.movingAverageFilter.getAverageY() * 39.37,
-                robot.movingAverageFilter.getAverageTheta(),
-                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[1]*0.0254;
-        if (ultraY > 0) {
-            for (int i = 0; i < 1; i++) {
-                ylist.add(ultraY);
-                if (ylist.size() > window) {
-                    ylist.remove(0);
-                }
-            }
-        }
-    }
-    public void addUltraTheta() {
-        double ultraTheta = MSonicModule.tripleThreat(
-                robot.movingAverageFilter.getAverageX() * 39.37,
-                robot.movingAverageFilter.getAverageY() * 39.37,
-                robot.movingAverageFilter.getAverageTheta(),
-                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
-                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[2];
-        for (int i = 0; i < 1; i++) {
-            thetalist.add(ultraTheta);
-            if (thetalist.size() > window) {
-                thetalist.remove(0);
-            }
-        }
-    }
+//    public synchronized void addUltraX() {
+//        double ultraX = MSonicModule.tripleThreat(
+//                robot.movingAverageFilter.getAverageX() * 39.37,
+//                robot.movingAverageFilter.getAverageY() * 39.37,
+//                robot.movingAverageFilter.getAverageTheta(),
+//                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[0]*0.0254;
+//        if (ultraX > 0) {
+//            for (int i = 0; i < 1; i++) {
+//                xlist.add(ultraX);
+//                if (xlist.size() > window) {
+//                    xlist.remove(0);
+//                }
+//            }
+//        }
+//    }
+//    public synchronized void addUltraY() {
+//        double ultraY = MSonicModule.tripleThreat(
+//                robot.movingAverageFilter.getAverageX() * 39.37,
+//                robot.movingAverageFilter.getAverageY() * 39.37,
+//                robot.movingAverageFilter.getAverageTheta(),
+//                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[1]*0.0254;
+//        if (ultraY > 0) {
+//            for (int i = 0; i < 1; i++) {
+//                ylist.add(ultraY);
+//                if (ylist.size() > window) {
+//                    ylist.remove(0);
+//                }
+//            }
+//        }
+//    }
+//    public void addUltraTheta() {
+//        double ultraTheta = MSonicModule.tripleThreat(
+//                robot.movingAverageFilter.getAverageX() * 39.37,
+//                robot.movingAverageFilter.getAverageY() * 39.37,
+//                robot.movingAverageFilter.getAverageTheta(),
+//                robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH),
+//                robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH))[2];
+//        for (int i = 0; i < 1; i++) {
+//            thetalist.add(ultraTheta);
+//            if (thetalist.size() > window) {
+//                thetalist.remove(0);
+//            }
+//        }
+//    }
     public void resetFilter(){
         xlist = new ArrayList<>();
         ylist = new ArrayList<>();

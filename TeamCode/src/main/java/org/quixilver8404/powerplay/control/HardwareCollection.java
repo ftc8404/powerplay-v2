@@ -1,6 +1,7 @@
 package org.quixilver8404.powerplay.control;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -76,13 +77,18 @@ public class HardwareCollection {
     public final PositionServo gearServo;
     public static final Servo.Direction GEAR_SERVO_DIRECTION = Servo.Direction.FORWARD;
 
-//    public final OpenCvCamera camera;
+    public final OpenCvCamera camera;
 
-    public final MaxbotixMB1242 ultraSonic1;
-    public final MaxbotixMB1242 ultraSonic2;
-    public final MaxbotixMB1242 ultraSonic3;
+    public final MaxbotixMB1242 ultraLeft;
+    public final MaxbotixMB1242 ultraRight;
+    public final MaxbotixMB1242 ultraFront;
 
-//    public final IMU controlIMU;
+    public final Rev2mDistanceSensor dLeft;
+    public final Rev2mDistanceSensor dRight;
+    public final Rev2mDistanceSensor dBack;
+    public final Rev2mDistanceSensor dFront;
+
+    public final BNO055IMU imu;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -118,29 +124,35 @@ public class HardwareCollection {
         slidesMotor2 = new EncoderlessMotor("slidesMotor2", SLIDES_MOTOR_2_DIRECTION, hwMap);
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
-        ultraSonic1 = hwMap.get(MaxbotixMB1242.class, "ultraSonic1");
-        ultraSonic2 = hwMap.get(MaxbotixMB1242.class, "ultraSonic2");
-        ultraSonic3 = hwMap.get(MaxbotixMB1242.class, "ultraSonic3");
 
-//        controlIMU =  new IMU("controlIMU", hwMap);
+        ultraLeft = hwMap.get(MaxbotixMB1242.class, "ultraLeft");
+        ultraRight = hwMap.get(MaxbotixMB1242.class, "ultraRight");
+        ultraFront = hwMap.get(MaxbotixMB1242.class, "ultraFront");
+
+        dFront = hwMap.get(Rev2mDistanceSensor.class, "dFront");
+        dLeft = hwMap.get(Rev2mDistanceSensor.class, "dLeft");
+        dRight = hwMap.get(Rev2mDistanceSensor.class, "dRight");
+        dBack = hwMap.get(Rev2mDistanceSensor.class, "dBack");
+
+        imu =  new BNO055IMU("imu", null, null, 0, 0, 0,hwMap);
 
         final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
-//        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
-//        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened() {
-//                System.out.println("OPENED-CAMERA");
-//                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-//                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
-//                System.out.println("STARTED-STREAMING");
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//
-//            }
-//        });
+        camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                System.out.println("OPENED-CAMERA");
+                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                camera.startStreaming(800, 448, OpenCvCameraRotation.UPRIGHT);
+                System.out.println("STARTED-STREAMING");
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
     }
 
     /**

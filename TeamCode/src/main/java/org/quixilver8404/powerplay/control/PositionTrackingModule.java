@@ -2,7 +2,10 @@ package org.quixilver8404.powerplay.control;
 
 import android.util.Pair;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import org.quixilver8404.powerplay.util.Vector3;
+import org.quixilver8404.powerplay.util.measurement.Angle;
 
 import java.util.ArrayList;
 
@@ -12,7 +15,7 @@ public class PositionTrackingModule {
 
     public static final Vector3 ODOMETRY_1_POSITION = new Vector3((0.531) * 0.0254, (-2.7705-0.3125) * 0.0254, Math.PI);
     public static final Vector3 ODOMETRY_2_POSITION = new Vector3((0.3435) * 0.0254,(2.4795+0.25) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-4.6565) * 0.0254, (-0.708) * 0.0254,-Math.PI/2);
+    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-5.97) * 0.0254, (0.167) * 0.0254,-Math.PI/2);
     public static final Vector3[] ODOMETRY_WHEEL_SETUP = new Vector3[]{ODOMETRY_1_POSITION, ODOMETRY_2_POSITION, ODOMETRY_3_POSITION};
 
     public enum PositionTrackingState {
@@ -60,6 +63,7 @@ public class PositionTrackingModule {
                 odo3 = robot.hwCollection.driveEncoderCenter.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
                 odometry.update(new double[]{odo1, odo2, odo3}, robot.hwCollection.clock.getDeltaTimeMillis()/1000d, pos.theta());
                 pos = pos.addVector(odometry.getDeltaPos());
+                pos.setTheta((pos.theta()+robot.hwCollection.imu.getGyroHeading().getStandard(Angle.Unit.RADIANS))/2);
 //                pos = startpos.addVector(odometry.getPosition());
                 vel = odometry.getVelocity();
                 break;
@@ -106,6 +110,10 @@ public class PositionTrackingModule {
     public synchronized void setStartPos(Vector3 position) {
         this.pos = position;
         startpos = position;
+    }
+
+    public synchronized void setPos(Vector3 position) {
+        this.pos = position;
     }
 
     public synchronized Vector3 getVel() {

@@ -41,10 +41,10 @@ public class DriveModule {
             intrinsicPowerY = targetPowerX * Math.sin(-curHeadingRad) + targetPowerY * Math.cos(-curHeadingRad);
         }
 
-        double powerFL = intrinsicPowerX - intrinsicPowerY - targetRotatePower;
-        double powerFR = intrinsicPowerX + intrinsicPowerY + targetRotatePower;
-        double powerBL = intrinsicPowerX + intrinsicPowerY - targetRotatePower;
-        double powerBR = intrinsicPowerX - intrinsicPowerY + targetRotatePower;
+        double powerFL = intrinsicPowerX - intrinsicPowerY + targetRotatePower;
+        double powerFR = intrinsicPowerX + intrinsicPowerY - targetRotatePower;
+        double powerBL = intrinsicPowerX + intrinsicPowerY + targetRotatePower;
+        double powerBR = intrinsicPowerX - intrinsicPowerY - targetRotatePower;
 
         double maxPower = Math.max(Math.abs(powerFL), Math.abs(powerFR));
         maxPower = Math.max(maxPower, Math.abs(powerBL));
