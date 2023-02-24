@@ -4,6 +4,8 @@ import android.util.Pair;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 
@@ -56,6 +58,7 @@ public class PositionTrackingModule {
         final double odo1;
         final double odo2;
         final double odo3;
+        YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
         switch (poseState) {
             case ODOMETRY:
                 odo1 = robot.hwCollection.driveEncoderLeft.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
@@ -63,7 +66,7 @@ public class PositionTrackingModule {
                 odo3 = robot.hwCollection.driveEncoderCenter.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
                 odometry.update(new double[]{odo1, odo2, odo3}, robot.hwCollection.clock.getDeltaTimeMillis()/1000d, pos.theta());
                 pos = pos.addVector(odometry.getDeltaPos());
-                pos.setTheta((pos.theta()+robot.hwCollection.imu.getGyroHeading().getStandard(Angle.Unit.RADIANS))/2);
+                pos.setTheta((pos.theta()+orientation.getYaw(AngleUnit.RADIANS))/2);
 //                pos = startpos.addVector(odometry.getPosition());
                 vel = odometry.getVelocity();
                 break;

@@ -36,7 +36,7 @@ public class MaxbotixMB1242 extends I2cDeviceSynchDevice<I2cDeviceSynch> {
 
     public double getDistance(DistanceUnit unit) {
         long currentTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
-        if( currentTime > readInitiatedTime + 90) {
+        if( currentTime > readInitiatedTime + 150) {
             byte[] take_reading = new byte[1];
             take_reading[0] = 0x51;
             this.deviceClient.write(0x70, take_reading);

@@ -3,7 +3,9 @@ package org.quixilver8404.powerplay.opmode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
 import org.quixilver8404.powerplay.util.ImageOutput;
@@ -60,11 +62,13 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("status", "running");
         telemetry.update();
-//        robot.hwCollection.controlIMU.resetIMU();
+        robot.hwCollection.imu.resetYaw();
 
 //        robot.headingLockModule.enablePID(robot);
 
         while (opModeIsActive()) {
+            YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
+
             //==========================DRIVER ONE==================================================================
 
             //add telemetry stuffs here
@@ -136,6 +140,18 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.a){
                 System.out.println(robot.poseModule.getPos());
             }
+            if (gamepad1.dpad_up){
+                gamepad1.rumble(1.0,0,700);
+            }
+            if (gamepad1.dpad_down){
+                gamepad2.rumble(1.0,0,700);
+            }
+            if (gamepad1.dpad_left){
+                gamepad1.rumble(0,1.0,700);
+            }
+            if (gamepad1.dpad_right){
+                gamepad2.rumble(0,1.0,700);
+            }
             //==========================DRIVER TWO==================================================================
 //            telemetry.addData("clawstate", robot.clawModule.getClawState());
             if (gamepad2.a) {
@@ -144,6 +160,7 @@ public class MainTeleOp extends LinearOpMode {
             }
             if (gamepad2.left_bumper) {
                 robot.clawModule.setClose();
+                gamepad2.rumble(1.0,0,700);
             }
             if (gamepad2.right_bumper) {
                 robot.clawModule.setOpen();
@@ -162,6 +179,8 @@ public class MainTeleOp extends LinearOpMode {
                 robot.susanModule.goToFront();
 
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
+            }  else if (gamepad2.left_trigger > 0){
+                robot.susanModule.setReset(robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
             } else {
                 robot.susanModule.setManualPower(gamepad2.right_stick_x);
             }
@@ -200,15 +219,25 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("x", robot.movingAverageFilter.getAverageX());
                 telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
                 telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
+                telemetry.addData("Yaw", orientation.getYaw(AngleUnit.DEGREES));
+                telemetry.addData("Pitch", orientation.getPitch(AngleUnit.DEGREES));
+                telemetry.addData("Roll", orientation.getRoll(AngleUnit.DEGREES));
+                telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
+                telemetry.addData("ultraRight dist", robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH));
+                telemetry.addData("ultraLeft dist", robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH));
+                telemetry.addData("dFront dist", robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
+                telemetry.addData("dLeft dist", robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH));
+                telemetry.addData("dRight dist", robot.hwCollection.dRight.getDistance(DistanceUnit.INCH));
+                telemetry.addData("dBack dist", robot.hwCollection.dBack.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("IMU Yaw", robot.hwCollection.controlIMU.getYawDeg());
 //                telemetry.addData("IMU Pitch", robot.hwCollection.controlIMU.getPitchDeg());
 //                telemetry.addData("IMU Roll", robot.hwCollection.controlIMU.getRollDeg());
 //                telemetry.addData("x", "%f in", robot.navModule.getPose().x.getValue(Distance.Unit.INCHES));
 //                telemetry.addData("y", "%f in", robot.navModule.getPose().y.getValue(Distance.Unit.INCHES));
 //                telemetry.addData("heading", "%f deg", robot.navModule.getHeading().getStandard(Angle.Unit.DEGREES));
-            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
-            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
-            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
+//            telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));
 //            telemetry.addData("ultrasonic pos", robot.mSonicModule.getPos());
 //            telemetry.addData("ultrasonic pos", Arrays.toString(robot.mSonicModule.tripleThreat(
 //                    robot.movingAverageFilter.getAverageX() * 39.37,

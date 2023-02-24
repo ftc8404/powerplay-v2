@@ -44,8 +44,8 @@ public class TestAuton extends LinearOpMode {
             variant = robot.cvTasksModule.getVariant();
             telemetry.addData("Auton Var", variant);
             telemetry.addData("status", "ready!");
-            telemetry.addData("left ultrasonic sensor", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.MM));
-            telemetry.addData("right ultrasonic sensor", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.MM));
+//            telemetry.addData("left ultrasonic sensor", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.MM));
+//            telemetry.addData("right ultrasonic sensor", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
 

@@ -41,28 +41,28 @@ public class MSonicModule {
     }
 
     public void update(){
-        Vector3 v = new Vector3();
-        if (senConfig == 1) {
-            v = leftBefore(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
-                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH), robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.dBack.getDistance(DistanceUnit.INCH), 0);
-        } else if (senConfig == 2) {
-            v = leftAfter(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
-                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH), robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH), robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
-        } else if (senConfig == 3) {
-            v = rightBefore(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
-                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH), robot.hwCollection.dRight.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.dBack.getDistance(DistanceUnit.INCH), 0);
-        } else if (senConfig == 4) {
-            v = rightAfter(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
-                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH), robot.hwCollection.dRight.getDistance(DistanceUnit.INCH),
-                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH), robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
-        } if (!v.isEqual(new Vector3()) && !v.isEqual(prevPos)){
-            robot.poseModule.setPos(v);
-            prevPos = v;
-
-        }
+//        Vector3 v = new Vector3();
+//        if (senConfig == 1) {
+//            v = leftBefore(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
+//                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH), robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.dBack.getDistance(DistanceUnit.INCH), 0);
+//        } else if (senConfig == 2) {
+//            v = leftAfter(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
+//                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH), robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH), robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
+//        } else if (senConfig == 3) {
+//            v = rightBefore(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
+//                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH), robot.hwCollection.dRight.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.dBack.getDistance(DistanceUnit.INCH), 0);
+//        } else if (senConfig == 4) {
+//            v = rightAfter(robot.poseModule.getPosX(), robot.poseModule.getPosY(), robot.poseModule.getPosTheta(),
+//                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH), robot.hwCollection.dRight.getDistance(DistanceUnit.INCH),
+//                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH), robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
+//        } if (!v.isEqual(new Vector3()) && !v.isEqual(prevPos)){
+//            robot.poseModule.setPos(v);
+//            prevPos = v;
+//
+//        }
 
     }
     public Vector3 leftBefore(double x, double y, double phi, final double ideal1, final double ideal2, final double ideal3, final double ideal4) {

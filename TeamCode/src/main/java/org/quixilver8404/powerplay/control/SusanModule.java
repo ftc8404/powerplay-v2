@@ -38,6 +38,7 @@ public class SusanModule {
     private double curPosDeg;
     private double targetPower;
     private double targetPosDeg;
+    private double reset = 0;
 
     public SusanModule(BaseRobot robot) {
         susanControlState = SusanControlState.MANUAL;
@@ -48,6 +49,7 @@ public class SusanModule {
 
     public synchronized void update(final SlidesModule slideModule, HardwareCollection hwCollection) {
         double counts = hwCollection.susanMotor1.getEncoder().getEncoderPosition();
+        counts -= reset;
         curPosDeg = counts / COUNTS_PER_DEG;
 
         double desiredPow;
@@ -110,6 +112,9 @@ public class SusanModule {
         if (power != 0){
             susanControlState = SusanControlState.MANUAL;
         }
+    }
+    public synchronized void setReset(double ticks){
+        reset = ticks;
     }
     public synchronized boolean isMoving(){
         return robot.hwCollection.susanMotor1.getPower() <= 0.005;

@@ -2,11 +2,15 @@ package org.quixilver8404.powerplay.control;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+//import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -18,6 +22,7 @@ import org.quixilver8404.powerplay.hardware.sensor.BNO055IMU;
 //import org.quixilver8404.powerplay.hardware.sensor.IMU;
 import org.quixilver8404.powerplay.hardware.servo.PositionServo;
 import org.quixilver8404.powerplay.hardware.sensor.MaxbotixMB1242;
+import org.quixilver8404.powerplay.hardware.sensor.DistanceSensor;
 import org.quixilver8404.powerplay.util.Tunable;
 
 /**
@@ -88,7 +93,7 @@ public class HardwareCollection {
     public final Rev2mDistanceSensor dBack;
     public final Rev2mDistanceSensor dFront;
 
-    public final BNO055IMU imu;
+    public final IMU imu;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -134,7 +139,12 @@ public class HardwareCollection {
         dRight = hwMap.get(Rev2mDistanceSensor.class, "dRight");
         dBack = hwMap.get(Rev2mDistanceSensor.class, "dBack");
 
-        imu =  new BNO055IMU("imu", null, null, 0, 0, 0,hwMap);
+        imu =  hwMap.get(IMU.class, "imu");
+        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(logo,usb);
+        imu.initialize(new IMU.Parameters(orientation));
+
 
         final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
