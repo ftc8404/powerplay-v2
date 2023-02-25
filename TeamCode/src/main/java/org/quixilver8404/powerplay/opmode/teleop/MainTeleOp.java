@@ -63,6 +63,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("status", "running");
         telemetry.update();
         robot.hwCollection.imu.resetYaw();
+        robot.mSonicModule.setConfig(1);
 
 //        robot.headingLockModule.enablePID(robot);
 

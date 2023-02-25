@@ -66,7 +66,7 @@ public class PositionTrackingModule {
                 odo3 = robot.hwCollection.driveEncoderCenter.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
                 odometry.update(new double[]{odo1, odo2, odo3}, robot.hwCollection.clock.getDeltaTimeMillis()/1000d, pos.theta());
                 pos = pos.addVector(odometry.getDeltaPos());
-                pos.setTheta((pos.theta()+orientation.getYaw(AngleUnit.RADIANS))/2);
+                pos.setTheta((pos.theta()/*+orientation.getYaw(AngleUnit.RADIANS))/2*/));
 //                pos = startpos.addVector(odometry.getPosition());
                 vel = odometry.getVelocity();
                 break;
