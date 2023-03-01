@@ -65,13 +65,15 @@ public class PIDPositionEstimation {
             }
         }
         if (moveTheta){
-            double offsetTheta = robot.movingAverageFilter.getAverageTheta() - point.theta();
+            double offsetTheta = -robot.movingAverageFilter.getAverageTheta() - point.theta();
 
             robotTheta = pidtheta.loop(offsetTheta, robot.hwCollection.clock.getRunningTimeMillis());
             if (Math.abs(robotTheta) < 0.12) {
                 robotTheta = Math.signum(robotTheta) * 0.12;
             }
             targettheta = robotTheta;
+            System.out.println("targetTheta " + targettheta);
+            System.out.println("offsetTheta " + offsetTheta);
             if (Math.abs(offsetTheta) < 0.015) {
                 targettheta = 0;
                 pidtheta.reset();
@@ -103,7 +105,7 @@ public class PIDPositionEstimation {
             if (Math.abs(robotx) < 0.2){
                 robotx = Math.signum(robotx)*0.2;
             }
-            targetx = robotx;
+            targetx = -robotx;
             if (Math.abs(offsetX) < 0.03) {
                 targetx = 0;
                 pidhybridx.reset();

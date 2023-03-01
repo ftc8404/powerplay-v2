@@ -45,6 +45,8 @@ public class Actions {
 
     double liftHeight;
 
+    double prevClawCoder;
+
     int consPickStage = 0;
 
     int openStage = 0;
@@ -60,9 +62,12 @@ public class Actions {
     }
 
     public synchronized void update() {
-        boolean holdingCone = Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 100
-                && robot.clawModule.getClawState().equals("Close");
-        boolean openCone = robot.clawModule.getClawState().equals("Open") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - ClawModule.ClawState.OPEN.clawCoder) < 10;
+        boolean holdingCone = Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 200
+                && robot.clawModule.getClawState().equals("Close") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - prevClawCoder) == 0;
+        prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
+        System.out.println("holding cone " + holdingCone);
+        System.out.println("cone diff " + (robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)));
+        boolean openCone = robot.clawModule.getClawState().equals("Open") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - ClawModule.ClawState.OPEN.clawCoder) < 50;
         if (dumpSignal) {
             if (signalStage == 1) {
                 System.out.println("is pont double" + ((robot.movingAverageFilter.getAverageX() * 39.37)));
@@ -101,13 +106,13 @@ public class Actions {
                 System.out.println("Stage2");
                 System.out.println("turret encoder: " + robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
                 robot.susanModule.goToPreloadedCone();
-                robot.clawModule.setClawCoderOpen();
-                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1988 && robot.susanModule.isMoving()) {
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1988 && robot.susanModule.isMoving() && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition()) > 300) {
                     preloadStage++;
                 }
             } else if (preloadStage == 3) {
                 System.out.println("Stage3");
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.ABOVE_DRIVE);
+                robot.clawModule.setClawCoderOpen();
                 if (robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) < SlidesModule.SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES) {
                     preloadStage++;
                 }

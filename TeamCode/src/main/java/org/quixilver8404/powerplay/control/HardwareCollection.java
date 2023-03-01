@@ -3,11 +3,11 @@ package org.quixilver8404.powerplay.control;
 import android.annotation.SuppressLint;
 
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+//import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
+//import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -92,7 +92,7 @@ public class HardwareCollection {
     public final MaxbotixMB1242 ultraRight2;
     public final MaxbotixMB1242 ultraFront2;
 
-    public final IMU imu;
+//    public final IMU imu;
 
     /**
      * May block slightly as all hardware is initialized, servos may snap to their
@@ -139,12 +139,12 @@ public class HardwareCollection {
         ultraRight2 = hwMap.get(MaxbotixMB1242.class, "ultraRight2");
         ultraFront2 = hwMap.get(MaxbotixMB1242.class, "ultraFront2");
 
-        imu =  hwMap.get(IMU.class, "imu");
-
-        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(logo,usb);
-        imu.initialize(new IMU.Parameters(orientation));
+//        imu =  hwMap.get(IMU.class, "imu");
+//
+//        RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+//        RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+//        RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(logo,usb);
+//        imu.initialize(new IMU.Parameters(orientation));
 
 
         @SuppressLint("DiscouragedApi") final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());

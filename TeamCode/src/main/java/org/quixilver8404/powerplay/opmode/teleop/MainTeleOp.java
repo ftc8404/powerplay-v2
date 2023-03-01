@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+//import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.quixilver8404.powerplay.control.ClawModule;
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
@@ -66,7 +66,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.addData("status", "running");
         telemetry.update();
-        robot.hwCollection.imu.resetYaw();
+//        robot.hwCollection.imu.resetYaw();
         robot.mSonicModule.setConfig(4);
         robot.clawModule.setClawCoderClose();
         prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
@@ -74,7 +74,7 @@ public class MainTeleOp extends LinearOpMode {
 //        robot.headingLockModule.enablePID(robot);
 
         while (opModeIsActive()) {
-            YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
+//            YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
 
             // =================================================================================================================================================
             // =================================================================================================================================================
@@ -239,9 +239,9 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("x", robot.movingAverageFilter.getAverageX());
                 telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
                 telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
-                telemetry.addData("Yaw", orientation.getYaw(AngleUnit.DEGREES));
-                telemetry.addData("Pitch", orientation.getPitch(AngleUnit.DEGREES));
-                telemetry.addData("Roll", orientation.getRoll(AngleUnit.DEGREES));
+//                telemetry.addData("Yaw", orientation.getYaw(AngleUnit.DEGREES));
+//                telemetry.addData("Pitch", orientation.getPitch(AngleUnit.DEGREES));
+//                telemetry.addData("Roll", orientation.getRoll(AngleUnit.DEGREES));
                 telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
                 telemetry.addData("ultraRight dist", robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH));
                 telemetry.addData("ultraLeft dist", robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH));

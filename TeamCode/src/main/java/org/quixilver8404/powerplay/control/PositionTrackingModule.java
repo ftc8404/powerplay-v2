@@ -5,7 +5,7 @@ import android.util.Pair;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+//import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.quixilver8404.powerplay.util.Vector3;
 import org.quixilver8404.powerplay.util.measurement.Angle;
 
@@ -15,8 +15,8 @@ public class PositionTrackingModule {
 
     public static final double ODOMETRY_ENCODER_M_PER_TICK = 0.035*Math.PI/8192;
 
-    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((-0.63) * 0.0254, (-4.5735) * 0.0254, Math.PI - 5*Math.PI/180);
-    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((-0.63) * 0.0254,(2.989) * 0.0254, Math.PI);
+    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((-0.63) * 0.0254, (2.989) * 0.0254, Math.PI - 5*Math.PI/180);
+    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((-0.63) * 0.0254,(-4.5735) * 0.0254, Math.PI);
     public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-6.1925) * 0.0254, (-0.1985) * 0.0254,Math.PI/2 * 1.01);
     public static final Vector3[] ODOMETRY_WHEEL_SETUP = new Vector3[]{ODOMETRY_1_POSITION, ODOMETRY_2_POSITION, ODOMETRY_3_POSITION};
 
@@ -58,7 +58,7 @@ public class PositionTrackingModule {
         final double odo1;
         final double odo2;
         final double odo3;
-        YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
+//        YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
         switch (poseState) {
             case ODOMETRY:
                 odo1 = robot.hwCollection.driveEncoderLeft.getDeltaPosition() * ODOMETRY_ENCODER_M_PER_TICK;
