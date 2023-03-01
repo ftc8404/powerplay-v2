@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.quixilver8404.powerplay.control.ClawModule;
 import org.quixilver8404.powerplay.control.SlidesModule;
 import org.quixilver8404.powerplay.control.TeleOpRobot;
 import org.quixilver8404.powerplay.util.ImageOutput;
@@ -38,6 +39,9 @@ public class MainTeleOp extends LinearOpMode {
     public static final double DPAD_DRIVE_POWER_STRAFE = 0.5;
     public static final double DPAD_DRIVE_POWER_ROTATE = 0.3;
 
+    public static double prevClawCoder;
+    public static int counter = 0;
+
     public static boolean frontFlipped = true;
     public static boolean flipFrontReleased = true;
     static boolean firstIteration = true;
@@ -47,7 +51,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("status", "initializing hardware...");
         telemetry.update();
 
-        final TeleOpRobot robot = new TeleOpRobot(new Vector3(),this);
+        final TeleOpRobot robot = new TeleOpRobot(new Vector3(0*0.0254,0*0.0254,0),this);
         robot.slidesModule.teleOpMode();
 
         // starts the robot hardware update loop
@@ -63,22 +67,27 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addData("status", "running");
         telemetry.update();
         robot.hwCollection.imu.resetYaw();
-        robot.mSonicModule.setConfig(1);
+        robot.mSonicModule.setConfig(4);
+        robot.clawModule.setClawCoderClose();
+        prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
 
 //        robot.headingLockModule.enablePID(robot);
 
         while (opModeIsActive()) {
             YawPitchRollAngles orientation = robot.hwCollection.imu.getRobotYawPitchRollAngles();
 
-            //==========================DRIVER ONE==================================================================
+            // =================================================================================================================================================
+            // =================================================================================================================================================
+            // =================================================================================================================================================
+
 
             //add telemetry stuffs here
             double x = gamepad1.left_stick_x;
             // For some reason, the controllers or sdk or whatever flips up with down ¯\_(ツ)_/¯
             double y = -gamepad1.left_stick_y;
 
-            telemetry.addData("x", x);
-            telemetry.addData("y", y);
+//            telemetry.addData("x", x);
+//            telemetry.addData("y", y);
 
             double powerModifier = gamepad1.left_trigger;
             double rotateModifier = -gamepad1.right_trigger;
@@ -122,12 +131,12 @@ public class MainTeleOp extends LinearOpMode {
             robot.driveModule.setIntrinsicTargetPower(magnitude, new Angle(angle, Angle.Unit.RADIANS));
             robot.driveModule.setTargetRotatePower(rotatePower);
 
-            telemetry.addData("Intrinsic target vector", "" + magnitude + ", " + angle);
-            telemetry.addData("Rotate target power", "" + rotatePower);
-            telemetry.addData("FR", robot.hwCollection.driveMotorFR.getPower());
-            telemetry.addData("FL", robot.hwCollection.driveMotorFL.getPower());
-            telemetry.addData("BL", robot.hwCollection.driveMotorBL.getPower());
-            telemetry.addData("BR", robot.hwCollection.driveMotorBR.getPower());
+//            telemetry.addData("Intrinsic target vector", "" + magnitude + ", " + angle);
+//            telemetry.addData("Rotate target power", "" + rotatePower);
+//            telemetry.addData("FR", robot.hwCollection.driveMotorFR.getPower());
+//            telemetry.addData("FL", robot.hwCollection.driveMotorFL.getPower());
+//            telemetry.addData("BL", robot.hwCollection.driveMotorBL.getPower());
+//            telemetry.addData("BR", robot.hwCollection.driveMotorBR.getPower());
 
             // handle flipping front
             if (gamepad1.y) {
@@ -153,7 +162,18 @@ public class MainTeleOp extends LinearOpMode {
             if (gamepad1.dpad_right){
                 gamepad2.rumble(0,1.0,700);
             }
+
             //==========================DRIVER TWO==================================================================
+
+            if (Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 100
+                    && robot.clawModule.getClawState().equals("Close") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - prevClawCoder) == 0
+                    && counter == 0){
+                gamepad2.rumble(1.0,0,700);
+                counter = 1;
+            } else if(robot.clawModule.getClawState().equals("Open")){
+                counter = 0;
+            }
+            prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
 //            telemetry.addData("clawstate", robot.clawModule.getClawState());
             if (gamepad2.a) {
 //                telemetry.addData("A is pressed", "");
@@ -161,7 +181,6 @@ public class MainTeleOp extends LinearOpMode {
             }
             if (gamepad2.left_bumper) {
                 robot.clawModule.setClose();
-                gamepad2.rumble(1.0,0,700);
             }
             if (gamepad2.right_bumper) {
                 robot.clawModule.setOpen();
@@ -226,10 +245,14 @@ public class MainTeleOp extends LinearOpMode {
                 telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
                 telemetry.addData("ultraRight dist", robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH));
                 telemetry.addData("ultraLeft dist", robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH));
-                telemetry.addData("dFront dist", robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
-                telemetry.addData("dLeft dist", robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH));
-                telemetry.addData("dRight dist", robot.hwCollection.dRight.getDistance(DistanceUnit.INCH));
-                telemetry.addData("dBack dist", robot.hwCollection.dBack.getDistance(DistanceUnit.INCH));
+                telemetry.addData("ultraFront2 dist", robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH));
+                telemetry.addData("ultraRight2 dist", robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH));
+                telemetry.addData("ultraLeft2 dist", robot.hwCollection.ultraLeft2.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("dFront dist", robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("dLeft dist", robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("dRight dist", robot.hwCollection.dRight.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("dBack dist", robot.hwCollection.dBack.getDistance(DistanceUnit.INCH));
+                telemetry.addData("claw encoder", robot.hwCollection.clawCoder.getEncoderPosition());
 //                telemetry.addData("IMU Yaw", robot.hwCollection.controlIMU.getYawDeg());
 //                telemetry.addData("IMU Pitch", robot.hwCollection.controlIMU.getPitchDeg());
 //                telemetry.addData("IMU Roll", robot.hwCollection.controlIMU.getRollDeg());

@@ -15,9 +15,9 @@ public class PositionTrackingModule {
 
     public static final double ODOMETRY_ENCODER_M_PER_TICK = 0.035*Math.PI/8192;
 
-    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((0.531) * 0.0254, (-2.7705-0.3125) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((0.3435) * 0.0254,(2.4795+0.25) * 0.0254, Math.PI);
-    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-5.97) * 0.0254, (0.167) * 0.0254,-Math.PI/2);
+    public static final Vector3 ODOMETRY_1_POSITION = new Vector3((-0.63) * 0.0254, (-4.5735) * 0.0254, Math.PI - 5*Math.PI/180);
+    public static final Vector3 ODOMETRY_2_POSITION = new Vector3((-0.63) * 0.0254,(2.989) * 0.0254, Math.PI);
+    public static final Vector3 ODOMETRY_3_POSITION = new Vector3((-6.1925) * 0.0254, (-0.1985) * 0.0254,Math.PI/2 * 1.01);
     public static final Vector3[] ODOMETRY_WHEEL_SETUP = new Vector3[]{ODOMETRY_1_POSITION, ODOMETRY_2_POSITION, ODOMETRY_3_POSITION};
 
     public enum PositionTrackingState {
@@ -38,7 +38,7 @@ public class PositionTrackingModule {
     public final ArrayList<Pair<Vector3, Double>> odoPositions = new ArrayList<>(1000);
 
     /**
-     * Intitailizes position based on the input
+     * Initializes position based on the input
      * @param pos - vector position
      */
     public PositionTrackingModule(final Vector3 pos) {

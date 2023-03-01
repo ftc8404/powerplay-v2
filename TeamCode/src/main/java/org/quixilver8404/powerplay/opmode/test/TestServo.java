@@ -1,4 +1,4 @@
-package org.quixilver8404.powerplay.opmode.teleop;
+package org.quixilver8404.powerplay.opmode.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

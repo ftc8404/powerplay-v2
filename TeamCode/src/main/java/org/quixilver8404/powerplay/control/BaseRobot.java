@@ -59,7 +59,7 @@ public abstract class BaseRobot {
         driveModule = new DriveModule();
         slidesModule = new SlidesModule();
         susanModule = new SusanModule(this);
-        clawModule = new ClawModule();
+        clawModule = new ClawModule(this);
         cvTasksModule = new CVTasksModule(hwCollection);
         poseModule = new PositionTrackingModule(startPose);
         pidPositionEstimation = new PIDPositionEstimation(this, new Vector3());

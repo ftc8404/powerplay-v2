@@ -17,9 +17,9 @@ public class Odometry {
     protected Vector3 d_pos_raw;
     protected Vector3 d_pos;
 
-    static final double dist_calibrationRad1 = 1 * (3637/3600d) * (3620/3600d) * (3607/3600d) * (60/90d);
-    static final double dist_calibrationRad2 = 1;
-    static final double dist_calibrationRad3 = 1;
+    static final double dist_calibrationRad1 = 1 * (3287/3600d);
+    static final double dist_calibrationRad2 = 1 * (3287/3600d);
+    static final double dist_calibrationRad3 = 1 * (3287/3600d);
     static final double dist_calibrationTan1 = 1;
     static final double dist_calibrationTan2 = 1;
     static final double dist_calibrationTan3 = 1;

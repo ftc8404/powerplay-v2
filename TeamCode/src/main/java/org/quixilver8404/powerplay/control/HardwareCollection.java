@@ -1,7 +1,8 @@
 package org.quixilver8404.powerplay.control;
 
+import android.annotation.SuppressLint;
+
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 //import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -10,7 +11,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -18,11 +18,9 @@ import org.quixilver8404.powerplay.hardware.misc.Clock;
 import org.quixilver8404.powerplay.hardware.motor.EncoderMotor;
 import org.quixilver8404.powerplay.hardware.motor.EncoderlessMotor;
 import org.quixilver8404.powerplay.hardware.sensor.DeltaEncoder;
-import org.quixilver8404.powerplay.hardware.sensor.BNO055IMU;
 //import org.quixilver8404.powerplay.hardware.sensor.IMU;
 import org.quixilver8404.powerplay.hardware.servo.PositionServo;
 import org.quixilver8404.powerplay.hardware.sensor.MaxbotixMB1242;
-import org.quixilver8404.powerplay.hardware.sensor.DistanceSensor;
 import org.quixilver8404.powerplay.util.Tunable;
 
 /**
@@ -58,6 +56,8 @@ public class HardwareCollection {
     public final DeltaEncoder driveEncoderRight;
     public final DeltaEncoder driveEncoderCenter;
 
+    public final DeltaEncoder clawCoder;
+
     // drive encoder tunables
     @Tunable
     public static final DcMotorSimple.Direction DRIVE_ENCODER_LEFT_DIRECTION = DcMotorSimple.Direction.REVERSE;
@@ -88,10 +88,9 @@ public class HardwareCollection {
     public final MaxbotixMB1242 ultraRight;
     public final MaxbotixMB1242 ultraFront;
 
-    public final Rev2mDistanceSensor dLeft;
-    public final Rev2mDistanceSensor dRight;
-    public final Rev2mDistanceSensor dBack;
-    public final Rev2mDistanceSensor dFront;
+    public final MaxbotixMB1242 ultraLeft2;
+    public final MaxbotixMB1242 ultraRight2;
+    public final MaxbotixMB1242 ultraFront2;
 
     public final IMU imu;
 
@@ -118,9 +117,11 @@ public class HardwareCollection {
         driveMotorBR = new EncoderlessMotor("driveMotorBR", DRIVE_MOTOR_BR_DIRECTION, hwMap);
 
         // odometry encoders
-        driveEncoderLeft = new DeltaEncoder(driveMotorBR, DRIVE_ENCODER_LEFT_DIRECTION);
+        driveEncoderLeft = new DeltaEncoder(driveMotorFL, DRIVE_ENCODER_LEFT_DIRECTION);
         driveEncoderRight = new DeltaEncoder(driveMotorBL, DRIVE_ENCODER_RIGHT_DIRECTION);
-        driveEncoderCenter = new DeltaEncoder(driveMotorFL, DRIVE_ENCODER_CENTER_DIRECTION);
+        driveEncoderCenter = new DeltaEncoder(driveMotorBR, DRIVE_ENCODER_CENTER_DIRECTION);
+
+        clawCoder = new DeltaEncoder(driveMotorFR);
 
         susanMotor1 = new EncoderMotor("susanMotor1", SUSAN_MOTOR_1_DIRECTION, hwMap);
         susanMotor2 = new EncoderlessMotor("susanMotor2", SUSAN_MOTOR_2_DIRECTION, hwMap);
@@ -130,23 +131,23 @@ public class HardwareCollection {
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
 
-        ultraLeft = hwMap.get(MaxbotixMB1242.class, "ultraLeft");
-        ultraRight = hwMap.get(MaxbotixMB1242.class, "ultraRight");
-        ultraFront = hwMap.get(MaxbotixMB1242.class, "ultraFront");
+        ultraLeft   = hwMap.get(MaxbotixMB1242.class, "ultraLeft"  );
+        ultraRight  = hwMap.get(MaxbotixMB1242.class, "ultraRight" );
+        ultraFront  = hwMap.get(MaxbotixMB1242.class, "ultraFront" );
 
-        dFront = hwMap.get(Rev2mDistanceSensor.class, "dFront");
-        dLeft = hwMap.get(Rev2mDistanceSensor.class, "dLeft");
-        dRight = hwMap.get(Rev2mDistanceSensor.class, "dRight");
-        dBack = hwMap.get(Rev2mDistanceSensor.class, "dBack");
+        ultraLeft2 = hwMap.get(MaxbotixMB1242.class, "ultraLeft2"  );
+        ultraRight2 = hwMap.get(MaxbotixMB1242.class, "ultraRight2");
+        ultraFront2 = hwMap.get(MaxbotixMB1242.class, "ultraFront2");
 
         imu =  hwMap.get(IMU.class, "imu");
+
         RevHubOrientationOnRobot.LogoFacingDirection logo = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usb = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
         RevHubOrientationOnRobot orientation = new RevHubOrientationOnRobot(logo,usb);
         imu.initialize(new IMU.Parameters(orientation));
 
 
-        final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        @SuppressLint("DiscouragedApi") final int cameraMonitorViewId = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
         final WebcamName webcamName = hwMap.get(WebcamName.class, "webcam");
         camera = OpenCvCameraFactory.getInstance().createWebcam(webcamName, cameraMonitorViewId);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
