@@ -116,8 +116,8 @@ public class SusanModule {
     public synchronized void setReset(double ticks){
         reset = ticks;
     }
-    public synchronized boolean isMoving(){
-        return robot.hwCollection.susanMotor1.getPower() <= 0.005;
+    public synchronized boolean isNotMoving(){
+        return robot.hwCollection.susanMotor1.getPower() <= 0.04;
     }
     public synchronized double getCurPosDeg() {
         return curPosDeg;

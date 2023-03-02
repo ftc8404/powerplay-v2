@@ -39,7 +39,7 @@ public class SlidesModule {
     @Tunable
     public static final int MAX_POWER_DOWN_IN_DEAD_ZONE_MILLIS = 3000;
     @Tunable
-    public static final double MAX_HEIGHT_INCHES = 33; // TODO tune
+    public static final double MAX_HEIGHT_INCHES = 33.5; // TODO tune
     // the zone where the lift should not actively hold itself up or go down at a power
     @Tunable
     public static final double BOTTOM_DEAD_ZONE_INCHES = 1.0;

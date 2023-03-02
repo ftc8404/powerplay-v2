@@ -17,6 +17,8 @@ public class PIDPositionEstimation {
     PIDController pidx       = new PIDController(1.2,0.00001,2,-300);
     PIDController pidy       = new PIDController(1.2,0.00001,2,-300);
     PIDController pidtheta   = new PIDController(1.2,0.00005,2,-300);
+    PIDController pidsmalltheta   = new PIDController(1.2,0.004,2,-300);
+
 
 
 
@@ -30,6 +32,7 @@ public class PIDPositionEstimation {
     boolean moveTheta;
     boolean moveHybridx;
     boolean moveHybridy;
+    boolean moveSmallTheta;
 
     public PIDPositionEstimation(BaseRobot robot, Vector3 point) {
         this.robot = robot;
@@ -68,16 +71,31 @@ public class PIDPositionEstimation {
             double offsetTheta = -robot.movingAverageFilter.getAverageTheta() - point.theta();
 
             robotTheta = pidtheta.loop(offsetTheta, robot.hwCollection.clock.getRunningTimeMillis());
-            if (Math.abs(robotTheta) < 0.12) {
-                robotTheta = Math.signum(robotTheta) * 0.12;
+            if (Math.abs(robotTheta) < 0.16) {
+                robotTheta = Math.signum(robotTheta) * 0.16;
             }
             targettheta = robotTheta;
             System.out.println("targetTheta " + targettheta);
             System.out.println("offsetTheta " + offsetTheta);
-            if (Math.abs(offsetTheta) < 0.015) {
+            if (Math.abs(offsetTheta) < 0.016) {
                 targettheta = 0;
                 pidtheta.reset();
                 moveTheta = false;
+                robot.driveModule.setTargetRotatePower(0);
+            }
+        }
+        if (moveSmallTheta){
+            double offsetTheta = -robot.movingAverageFilter.getAverageTheta() - point.theta();
+
+            robotTheta = pidsmalltheta.loop(offsetTheta, robot.hwCollection.clock.getRunningTimeMillis());
+            if (Math.abs(robotTheta) < 0.16) {
+                robotTheta = Math.signum(robotTheta) * 0.16;
+            }
+            targettheta = robotTheta;
+            if (Math.abs(offsetTheta) <= 0.015) {
+                targettheta = 0;
+                pidsmalltheta.reset();
+                moveSmallTheta = false;
                 robot.driveModule.setTargetRotatePower(0);
             }
         }
@@ -128,7 +146,7 @@ public class PIDPositionEstimation {
                 robot.driveModule.setIntrinsicTargetPower(0, 0);
             }
         }
-        if (moveX || moveY || moveTheta || moveHybridx || moveHybridy) {
+        if (moveX || moveY || moveTheta || moveHybridx || moveHybridy || moveSmallTheta) {
             robot.driveModule.setTargetRotatePower(targettheta);
             robot.driveModule.setIntrinsicTargetPower(targetx, targety);
         }
@@ -154,6 +172,8 @@ public class PIDPositionEstimation {
         moveTheta = true;
     }
 
+    public synchronized void goSmallTheta(){moveSmallTheta = true;}
+
     public synchronized void go() {
         moveTheta = true;
         moveX = true;
@@ -161,7 +181,7 @@ public class PIDPositionEstimation {
     }
 
     public synchronized boolean isNotMoving(){
-        return !(moveTheta || moveX || moveY || moveHybridx || moveHybridy);
+        return !(moveTheta || moveX || moveY || moveHybridx || moveHybridy || moveSmallTheta);
     }
 
     public synchronized Vector3 getPoint(){

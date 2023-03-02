@@ -3,9 +3,6 @@ package org.quixilver8404.powerplay.control;
 import org.quixilver8404.powerplay.util.Tunable;
 import org.quixilver8404.powerplay.util.measurement.Distance;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Actions {
 
     // sets default velocities for intake or outtake powers
@@ -62,12 +59,12 @@ public class Actions {
     }
 
     public synchronized void update() {
-        boolean holdingCone = Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 250
+        boolean holdingCone = !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.OPEN.clawCoder)) < 230) && !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.CLOSE.clawCoder)) < 200)
                 && robot.clawModule.getClawState().equals("Close") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - prevClawCoder) == 0;
         prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
         System.out.println("holding cone " + holdingCone);
         System.out.println("cone diff " + (robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)));
-        boolean openCone = robot.clawModule.getClawState().equals("Open") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - ClawModule.ClawState.OPEN.clawCoder) < 50;
+        boolean openCone = robot.clawModule.getClawState().equals("Open") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - ClawModule.ClawState.OPEN.clawCoder) < 230;
         if (dumpSignal) {
             if (signalStage == 1) {
                 System.out.println("is pont double" + ((robot.movingAverageFilter.getAverageX() * 39.37)));
@@ -86,7 +83,7 @@ public class Actions {
             } else if (signalStage == 3) {
                 robot.susanModule.goToCustomDeg(-180);
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.JUNC_2);
-                if (robot.susanModule.isMoving() && robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 10) {
+                if (robot.susanModule.isNotMoving() && robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES) > 10) {
                     robot.clawModule.setOpen();
                     signalStage++;
                 }
@@ -106,7 +103,7 @@ public class Actions {
                 System.out.println("Stage2");
                 System.out.println("turret encoder: " + robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
                 robot.susanModule.goToPreloadedCone();
-                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1988 && robot.susanModule.isMoving() && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition()) > 300) {
+                if (robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition() < -1988 && robot.susanModule.isNotMoving() && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition()) > 300) {
                     preloadStage++;
                 }
             } else if (preloadStage == 3) {
@@ -128,7 +125,7 @@ public class Actions {
                 System.out.println("Stage5");
                 robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
                 robot.susanModule.goToCustomDeg(90);
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 87 && robot.pidPositionEstimation.isNotMoving()) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() > 83 && robot.pidPositionEstimation.isNotMoving()) {
                     preloadStage++;
                 }
             } else if (preloadStage == 7) {
@@ -152,7 +149,7 @@ public class Actions {
                 System.out.println("Stage5");
                 robot.susanModule.goToFront();
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3) {
                     dropStage++;
                 }
             } else {
@@ -188,12 +185,12 @@ public class Actions {
         } else if (coneStackPickup){
             if (consPickStage == 1){
                 robot.susanModule.goToFront();
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 45) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 45) {
                     consPickStage++;
                 }
             } else if (consPickStage == 2){
                 robot.slidesModule.setTargetPosition(new Distance(liftHeight, Distance.Unit.INCHES));
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
                     consPickStage++;
                 }
             } else if (consPickStage == 3){
@@ -220,12 +217,12 @@ public class Actions {
         } else if (front){
             if (frontStage == 1){
                 robot.susanModule.goToFront();
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 45) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 45) {
                     frontStage++;
                 }
             } else if (frontStage == 2){
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
-                if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
+                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
                     frontStage++;
                 }
             } else {
