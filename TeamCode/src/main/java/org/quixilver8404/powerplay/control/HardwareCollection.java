@@ -84,13 +84,13 @@ public class HardwareCollection {
 
     public final OpenCvCamera camera;
 
-    public final MaxbotixMB1242 ultraLeft;
-    public final MaxbotixMB1242 ultraRight;
-    public final MaxbotixMB1242 ultraFront;
-
-    public final MaxbotixMB1242 ultraLeft2;
-    public final MaxbotixMB1242 ultraRight2;
-    public final MaxbotixMB1242 ultraFront2;
+//    public final MaxbotixMB1242 ultraLeft;
+//    public final MaxbotixMB1242 ultraRight;
+//    public final MaxbotixMB1242 ultraFront;
+//
+//    public final MaxbotixMB1242 ultraLeft2;
+//    public final MaxbotixMB1242 ultraRight2;
+//    public final MaxbotixMB1242 ultraFront2;
 
 //    public final IMU imu;
 
@@ -131,13 +131,13 @@ public class HardwareCollection {
 
         gearServo = new PositionServo("gearServo", GEAR_SERVO_DIRECTION, hwMap);
 
-        ultraLeft   = hwMap.get(MaxbotixMB1242.class, "ultraLeft"  );
-        ultraRight  = hwMap.get(MaxbotixMB1242.class, "ultraRight" );
-        ultraFront  = hwMap.get(MaxbotixMB1242.class, "ultraFront" );
-
-        ultraLeft2 = hwMap.get(MaxbotixMB1242.class, "ultraLeft2"  );
-        ultraRight2 = hwMap.get(MaxbotixMB1242.class, "ultraRight2");
-        ultraFront2 = hwMap.get(MaxbotixMB1242.class, "ultraFront2");
+//        ultraLeft   = hwMap.get(MaxbotixMB1242.class, "ultraLeft"  );
+//        ultraRight  = hwMap.get(MaxbotixMB1242.class, "ultraRight" );
+//        ultraFront  = hwMap.get(MaxbotixMB1242.class, "ultraFront" );
+//
+//        ultraLeft2 = hwMap.get(MaxbotixMB1242.class, "ultraLeft2"  );
+//        ultraRight2 = hwMap.get(MaxbotixMB1242.class, "ultraRight2");
+//        ultraFront2 = hwMap.get(MaxbotixMB1242.class, "ultraFront2");
 
 //        imu =  hwMap.get(IMU.class, "imu");
 //

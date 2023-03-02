@@ -56,8 +56,10 @@ public class ClawModule {
     public synchronized String getClawState() {
         if (clawState == ClawState.OPEN) {
             return "Open";
-        } else {
+        } else if (clawState == ClawState.CLOSE){
             return "Close";
+        } else {
+            return "Moving";
         }
     }
     public synchronized void setClawCoderClose(){

@@ -11,10 +11,10 @@ import org.quixilver8404.powerplay.util.Vector3;
 public class LeftButGood extends LinearOpMode {
     int variant = 0;
 
-    double posX = 58.5;
-    double DRXstaxY = 100+19;
-    double poleY = 100-16;
-    double DRXstaxX = 58;
+    double posX = 59;
+    double DRXstaxY = 100+22;
+    double poleY = 100-15;
+    double DRXstaxX = 59;
 
     double yPos;
     AutonRobot robot;
@@ -198,6 +198,7 @@ public class LeftButGood extends LinearOpMode {
         telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
         telemetry.addData("claw encoder", robot.hwCollection.clawCoder.getEncoderPosition());
         telemetry.addData("claw close pos", ClawModule.ClawState.OPEN.clawCoder);
+        telemetry.addData("claw state", robot.clawModule.getClawState());
 
 //        telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
 //        telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));

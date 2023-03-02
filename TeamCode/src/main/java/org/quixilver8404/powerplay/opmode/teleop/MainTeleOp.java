@@ -242,12 +242,12 @@ public class MainTeleOp extends LinearOpMode {
 //                telemetry.addData("Yaw", orientation.getYaw(AngleUnit.DEGREES));
 //                telemetry.addData("Pitch", orientation.getPitch(AngleUnit.DEGREES));
 //                telemetry.addData("Roll", orientation.getRoll(AngleUnit.DEGREES));
-                telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
-                telemetry.addData("ultraRight dist", robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH));
-                telemetry.addData("ultraLeft dist", robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH));
-                telemetry.addData("ultraFront2 dist", robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH));
-                telemetry.addData("ultraRight2 dist", robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH));
-                telemetry.addData("ultraLeft2 dist", robot.hwCollection.ultraLeft2.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraRight dist", robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraLeft dist", robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraFront2 dist", robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraRight2 dist", robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH));
+//                telemetry.addData("ultraLeft2 dist", robot.hwCollection.ultraLeft2.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("dFront dist", robot.hwCollection.dFront.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("dLeft dist", robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("dRight dist", robot.hwCollection.dRight.getDistance(DistanceUnit.INCH));

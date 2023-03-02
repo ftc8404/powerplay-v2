@@ -62,7 +62,7 @@ public class Actions {
     }
 
     public synchronized void update() {
-        boolean holdingCone = Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 200
+        boolean holdingCone = Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.CONE_ENCODER_DIFF + ClawModule.ClawState.OPEN.clawCoder)) < 250
                 && robot.clawModule.getClawState().equals("Close") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - prevClawCoder) == 0;
         prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
         System.out.println("holding cone " + holdingCone);
@@ -117,19 +117,21 @@ public class Actions {
                     preloadStage++;
                 }
             } else if (preloadStage == 4) {
-                System.out.println("Stage4");
                 robot.clawModule.setClose();
+                preloadStage++;
+            } else if (preloadStage == 5) {
+                System.out.println("Stage4");
                 if (holdingCone) {
                     preloadStage++;
                 }
-            } else if (preloadStage == 5) {
+            } else if (preloadStage == 6) {
                 System.out.println("Stage5");
                 robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
                 robot.susanModule.goToCustomDeg(90);
                 if (robot.susanModule.isMoving() && robot.susanModule.getCurPosDeg() > 87 && robot.pidPositionEstimation.isNotMoving()) {
                     preloadStage++;
                 }
-            } else if (preloadStage == 6) {
+            } else if (preloadStage == 7) {
                 System.out.println("Stage6");
                 robot.clawModule.setOpen();
                 if (openCone) {
