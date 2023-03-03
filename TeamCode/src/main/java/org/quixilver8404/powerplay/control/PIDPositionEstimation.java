@@ -124,7 +124,7 @@ public class PIDPositionEstimation {
                 robotx = Math.signum(robotx)*0.2;
             }
             targetx = -robotx;
-            if (Math.abs(offsetX) < 0.03) {
+            if (Math.abs(offsetX) < 0.025) {
                 targetx = 0;
                 pidhybridx.reset();
                 moveHybridx = false;
@@ -135,11 +135,11 @@ public class PIDPositionEstimation {
             double offsetY = point.x() - robot.movingAverageFilter.getAverageX();
 
             roboty = pidhybridy.loop(offsetY, robot.hwCollection.clock.getRunningTimeMillis());
-            if (Math.abs(roboty) < 0.2){
-                roboty = Math.signum(roboty)*0.2;
+            if (Math.abs(roboty) < 0.18){
+                roboty = Math.signum(roboty)*0.18;
             }
             targety = roboty;
-            if (Math.abs(offsetY) < 0.03) {
+            if (Math.abs(offsetY) < 0.025) {
                 targety = 0;
                 pidhybridy.reset();
                 moveHybridy = false;
