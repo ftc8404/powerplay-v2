@@ -230,17 +230,17 @@ public class MainTeleOp extends LinearOpMode {
             } else if (Math.random() * 100 < 0.2) {
                 telemetry.addData(ImageOutput.isaac,"");
             } else {
-                telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
-                telemetry.addData("susan position", robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
-                telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
-                telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
-                telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
-                telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
-                telemetry.addData("Position", robot.poseModule.getPos());
-                telemetry.addData("x", robot.movingAverageFilter.getAverageX());
-                telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
-                telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
-                telemetry.addData("Yaw heading", orientation.getYaw(AngleUnit.DEGREES));
+//                telemetry.addData("lift height", "%f in", robot.slidesModule.getCurPosition().getValue(Distance.Unit.INCHES));
+//                telemetry.addData("susan position", robot.hwCollection.susanMotor1.getEncoder().getEncoderPosition());
+//                telemetry.addData("loop frequency", "%dHz", robot.diagnosticModule.getLoopFrequencyHz());
+//                telemetry.addData("left encoder", robot.hwCollection.driveEncoderLeft.getEncoderPosition());
+//                telemetry.addData("right encoder", robot.hwCollection.driveEncoderRight.getEncoderPosition());
+//                telemetry.addData("center encoder", robot.hwCollection.driveEncoderCenter.getEncoderPosition());
+//                telemetry.addData("Position", robot.poseModule.getPos());
+//                telemetry.addData("x", robot.movingAverageFilter.getAverageX());
+//                telemetry.addData("y",  robot.movingAverageFilter.getAverageY());
+//                telemetry.addData("heading", robot.movingAverageFilter.getAverageTheta());
+//                telemetry.addData("Yaw heading", orientation.getYaw(AngleUnit.DEGREES));
 //                telemetry.addData("Pitch", orientation.getPitch(AngleUnit.DEGREES));
 //                telemetry.addData("Roll", orientation.getRoll(AngleUnit.DEGREES));
 //                telemetry.addData("ultraFront dist", robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH));
@@ -253,7 +253,7 @@ public class MainTeleOp extends LinearOpMode {
 //                telemetry.addData("dLeft dist", robot.hwCollection.dLeft.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("dRight dist", robot.hwCollection.dRight.getDistance(DistanceUnit.INCH));
 //                telemetry.addData("dBack dist", robot.hwCollection.dBack.getDistance(DistanceUnit.INCH));
-                telemetry.addData("claw encoder", robot.hwCollection.clawCoder.getEncoderPosition());
+//                telemetry.addData("claw encoder", robot.hwCollection.clawCoder.getEncoderPosition());
 //                telemetry.addData("IMU Yaw", robot.hwCollection.controlIMU.getYawDeg());
 //                telemetry.addData("IMU Pitch", robot.hwCollection.controlIMU.getPitchDeg());
 //                telemetry.addData("IMU Roll", robot.hwCollection.controlIMU.getRollDeg());

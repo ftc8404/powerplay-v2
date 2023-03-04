@@ -20,10 +20,6 @@ public class PIDPositionEstimation {
     PIDController pidsmalltheta   = new PIDController(1.2,0.004,2,-300);
 
 
-
-
-
-
     PIDController pidhybridx = new PIDController(1.2,0.00001,2,-300);
     PIDController pidhybridy = new PIDController(1.2,0.00001,2,-300);
 
@@ -33,6 +29,8 @@ public class PIDPositionEstimation {
     boolean moveHybridx;
     boolean moveHybridy;
     boolean moveSmallTheta;
+
+    boolean isRight;
 
     public PIDPositionEstimation(BaseRobot robot, Vector3 point) {
         this.robot = robot;
@@ -71,13 +69,13 @@ public class PIDPositionEstimation {
             double offsetTheta = -robot.movingAverageFilter.getAverageTheta() - point.theta();
 
             robotTheta = pidtheta.loop(offsetTheta, robot.hwCollection.clock.getRunningTimeMillis());
-            if (Math.abs(robotTheta) < 0.16) {
-                robotTheta = Math.signum(robotTheta) * 0.16;
+            if (Math.abs(robotTheta) < 0.14) {
+                robotTheta = Math.signum(robotTheta) * 0.14;
             }
             targettheta = robotTheta;
             System.out.println("targetTheta " + targettheta);
             System.out.println("offsetTheta " + offsetTheta);
-            if (Math.abs(offsetTheta) < 0.016) {
+            if (Math.abs(offsetTheta) < 0.024) {
                 targettheta = 0;
                 pidtheta.reset();
                 moveTheta = false;
@@ -123,7 +121,11 @@ public class PIDPositionEstimation {
             if (Math.abs(robotx) < 0.2){
                 robotx = Math.signum(robotx)*0.2;
             }
-            targetx = -robotx;
+            if (isRight) {
+                targetx = robotx;
+            } else {
+                targetx = -robotx;
+            }
             if (Math.abs(offsetX) < 0.025) {
                 targetx = 0;
                 pidhybridx.reset();
@@ -135,11 +137,14 @@ public class PIDPositionEstimation {
             double offsetY = point.x() - robot.movingAverageFilter.getAverageX();
 
             roboty = pidhybridy.loop(offsetY, robot.hwCollection.clock.getRunningTimeMillis());
-            if (Math.abs(roboty) < 0.18){
-                roboty = Math.signum(roboty)*0.18;
+            if (Math.abs(roboty) < 0.2){
+                roboty = Math.signum(roboty)*0.2;
             }
-            targety = roboty;
-            if (Math.abs(offsetY) < 0.025) {
+            if (isRight) {
+                targety = -roboty;
+            } else {
+                targety = roboty;
+            }            if (Math.abs(offsetY) < 0.025) {
                 targety = 0;
                 pidhybridy.reset();
                 moveHybridy = false;
@@ -154,10 +159,20 @@ public class PIDPositionEstimation {
 
     public synchronized void goHybridX() {
         moveHybridx = true;
+        isRight = false;
+    }
+    public synchronized void goHybridX(boolean isRight) {
+        moveHybridx = true;
+        this.isRight = isRight;
     }
 
     public synchronized void goHybridY() {
         moveHybridy = true;
+    }
+
+    public synchronized void goHybridY(boolean isRight) {
+        moveHybridy = true;
+        this.isRight = isRight;
     }
 
     public synchronized void goX(){

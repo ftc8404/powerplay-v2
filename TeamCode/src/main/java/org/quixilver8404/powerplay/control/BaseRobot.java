@@ -57,7 +57,7 @@ public abstract class BaseRobot {
         headingLockModule = new HeadingLockModule(Pose2D.ZERO.heading);
         navModule = new NavModule(Pose2D.ZERO, hwCollection);
         driveModule = new DriveModule();
-        slidesModule = new SlidesModule();
+        slidesModule = new SlidesModule(this);
         susanModule = new SusanModule(this);
         clawModule = new ClawModule(this);
         cvTasksModule = new CVTasksModule(hwCollection);

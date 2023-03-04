@@ -20,7 +20,7 @@ import java.util.Collections;
 public class MSonicModule {
     BaseRobot robot;
 
-    double[] ultraFront = polar(7.131, -6.767, 0, 'e');  //config
+    double[] ultraFront = polar(7.031, -6.417, 0, 'e');  //config
     double[] ultraRight = polar(1.831, -7.567, 0, 's');  //config
     double[] ultraLeft = polar(1.831, 6.233, 0, 'n');  //config
     //front
@@ -45,56 +45,60 @@ public class MSonicModule {
     }
 
     public synchronized void update() {
-//        Vector3 v = new Vector3();
-//        if (senConfig == 1 && robot.poseModule.getPos() != null) {
-//            System.out.println("Before leftBefore");
-//            v = leftBefore(
-//                    robot.poseModule.getPosX() * 39.37,
-//                    robot.poseModule.getPosY() * 39.37,
-//                    robot.poseModule.getPosTheta(),
-//                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH),
-//                    0/* dleft */,
-//                    0/* dback */,
-//                    0
-//            );
-//            System.out.println("After leftBefore");
-//        } else if (senConfig == 2 && robot.poseModule.getPos() != null) {
-//            v = leftAfter(
-//                    robot.poseModule.getPosX() * 39.37,
-//                    robot.poseModule.getPosY() * 39.37,
-//                    robot.poseModule.getPosTheta(),
-//                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH),
-//                    0/* dleft */,
-//                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH),
-//                    0/* dfront */
-//            );
-//        } else if (senConfig == 3 && robot.poseModule.getPos() != null) {
-//            v = rightBefore(
-//                    robot.poseModule.getPosX() * 39.37,
-//                    robot.poseModule.getPosY() * 39.37,
-//                    robot.poseModule.getPosTheta(),
-//                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH),
-//                    0/* dright */,
-//                    0/* dback */,
-//                    0
-//            );
-//        } else if (senConfig == 4 && robot.poseModule.getPos() != null) {
-//            v = rightAfter(
-//                    robot.poseModule.getPosX() * 39.37,
-//                    robot.poseModule.getPosY() * 39.37,
-//                    robot.poseModule.getPosTheta(),
-//                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH),
-//                    robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH),
-//                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH),
-//                    robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH)
-//            );
-//        }
-//        if (!v.isEqual(new Vector3()) && !v.isEqual(prevPos)) {
-//            System.out.println("Setting leftBefore pos");
-////            robot.telemetry.addData("ultraPos", v);
-//            prevPos = v;
-//
-//        }
+        Vector3 v = new Vector3();
+        if (senConfig == 1 && robot.poseModule.getPos() != null) {
+            System.out.println("Before leftBefore");
+            v = leftBefore(
+                    robot.poseModule.getPosX() * 39.37,
+                    robot.poseModule.getPosY() * 39.37,
+                    robot.poseModule.getPosTheta(),
+                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraLeft2.getDistance(DistanceUnit.INCH),
+                    0/* dback */,
+                    0
+            );
+            System.out.println("After leftBefore");
+        } else if (senConfig == 2 && robot.poseModule.getPos() != null) {
+            v = leftAfter(
+                    robot.poseModule.getPosX() * 39.37,
+                    robot.poseModule.getPosY() * 39.37,
+                    robot.poseModule.getPosTheta(),
+                    robot.hwCollection.ultraLeft.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraLeft2.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH)
+            );
+        } else if (senConfig == 3 && robot.poseModule.getPos() != null) {
+            v = rightBefore(
+                    robot.poseModule.getPosX() * 39.37,
+                    robot.poseModule.getPosY() * 39.37,
+                    robot.poseModule.getPosTheta(),
+                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH),
+                    0/* dback */,
+                    0
+            );
+        } else if (senConfig == 4 && robot.poseModule.getPos() != null) {
+            v = rightAfter(
+                    robot.poseModule.getPosX() * 39.37,
+                    robot.poseModule.getPosY() * 39.37,
+                    robot.poseModule.getPosTheta(),
+                    robot.hwCollection.ultraRight.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraRight2.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraFront.getDistance(DistanceUnit.INCH),
+                    robot.hwCollection.ultraFront2.getDistance(DistanceUnit.INCH)
+            );
+        }
+        if (!v.isEqual(new Vector3()) && !v.isEqual(prevPos)) {
+            System.out.println("Setting leftBefore pos");
+//            robot.telemetry.addData("ultraPos", v);
+            prevPos = v;
+
+        }
+    }
+
+    public synchronized Vector3 getPos(){
+        return prevPos;
     }
 
     public synchronized void setConfig(int config) {

@@ -13,8 +13,8 @@ public class LeftButGood extends LinearOpMode {
 
     double posX = 59;
     double DRXstaxY = 100+22.5;
-    double poleY = 100-13;
-    double DRXstaxX = 58.9;
+    double poleY = 100-12.6;
+    double DRXstaxX = 58.1;
 
     double yPos;
     AutonRobot robot;
@@ -38,6 +38,7 @@ public class LeftButGood extends LinearOpMode {
 
             telemetry.update();
         }
+        robot.actions.startTime();
         robot.clawModule.setOpen();
         robot.poseModule.setStartPos(new Vector3(17.5/2 * 0.0254,(100) * 0.0254,0));
 
@@ -47,20 +48,21 @@ public class LeftButGood extends LinearOpMode {
         }
         robot.pidPositionEstimation.setPoint(new Vector3(posX*0.0254,100 * 0.0254,0));
         robot.pidPositionEstimation.goX();
-        robot.actions.pickUpPreload();
-        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
+        robot.actions.pickUpPreload(true);
+        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.shouldNotPark()){
             robot.pidPositionEstimation.goSmallTheta();
             telemetry();
         }
 //        robot.pidPositionEstimation.goY();
-        robot.pidPositionEstimation.setPoint(new Vector3(posX*0.0254,100 * 0.0254,-Math.PI/2));
+        robot.pidPositionEstimation.setPoint(new Vector3(posX*0.0254,100 * 0.0254,-Math.PI/2 - Math.PI/3));
         robot.pidPositionEstimation.goTheta();
-        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
+        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.shouldNotPark()){
             telemetry();
         }
+//        robot.mSonicModule.setConfig(2);
         robot.pidPositionEstimation.setPoint(new Vector3(posX*0.0254,poleY * 0.0254,-Math.PI/2));
         robot.pidPositionEstimation.goHybridX();
-        while (opModeIsActive() && robot.actions.isPickingUp()){
+        while (opModeIsActive() && robot.actions.isPickingUp() && robot.actions.shouldNotPark()){
 //            System.out.println("preload:" + robot.actions.isPickingUp());
 //            System.out.println("While loop: "+ (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.isPickingUp()));
             robot.pidPositionEstimation.goHybridY();
@@ -70,17 +72,39 @@ public class LeftButGood extends LinearOpMode {
         System.out.println("preload:" + robot.actions.isPickingUp());
         robot.pidPositionEstimation.setPoint(new Vector3(DRXstaxX*0.0254,DRXstaxY * 0.0254,-Math.PI/2+2*Math.PI/180));
         robot.pidPositionEstimation.goHybridX();
-        robot.actions.coneStackPickup(3.8);
+        robot.actions.coneStackPickup(3.8, true);
         System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        while (opModeIsActive() && robot.actions.isConeStackPickup()){
+        while (opModeIsActive() && robot.actions.isConeStackPickup() && robot.actions.shouldNotPark()){
             robot.pidPositionEstimation.goSmallTheta();
             robot.pidPositionEstimation.goHybridY();
             telemetry();
         }
         System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        robot.pidPositionEstimation.setPoint(new Vector3((posX-0.7)*0.0254,poleY * 0.0254,-Math.PI/2+2*Math.PI/180));
+        robot.pidPositionEstimation.setPoint(new Vector3((posX-0.7)*0.0254,(poleY+0.6) * 0.0254,-Math.PI/2+2*Math.PI/180));
         robot.pidPositionEstimation.goHybridX();
-        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
+        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.shouldNotPark()){
+            robot.pidPositionEstimation.goSmallTheta();
+            robot.pidPositionEstimation.goHybridY();
+            telemetry();
+        }
+        robot.actions.open();
+        while (robot.actions.isOpen() && opModeIsActive() && robot.actions.shouldNotPark()) {
+            telemetry();
+        }
+        System.out.println("preload:" + robot.actions.isPickingUp());
+        robot.pidPositionEstimation.setPoint(new Vector3((DRXstaxX+0.4)*0.0254,(DRXstaxY-0.1) * 0.0254,-Math.PI/2+8*Math.PI/180));
+        robot.pidPositionEstimation.goHybridX();
+        robot.actions.coneStackPickup(3, true);
+        System.out.println("cone stack:" + robot.actions.isConeStackPickup());
+        while (opModeIsActive() && robot.actions.isConeStackPickup() && robot.actions.shouldNotPark()){
+            robot.pidPositionEstimation.goSmallTheta();
+            robot.pidPositionEstimation.goHybridY();
+            telemetry();
+        }
+        System.out.println("cone stack:" + robot.actions.isConeStackPickup());
+        robot.pidPositionEstimation.setPoint(new Vector3((posX-3.2)*0.0254,(poleY) * 0.0254,-Math.PI/2+8*Math.PI/180));
+        robot.pidPositionEstimation.goHybridX();
+        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.shouldNotPark()){
             robot.pidPositionEstimation.goSmallTheta();
             robot.pidPositionEstimation.goHybridY();
             telemetry();
@@ -90,47 +114,25 @@ public class LeftButGood extends LinearOpMode {
             telemetry();
         }
         System.out.println("preload:" + robot.actions.isPickingUp());
-        robot.pidPositionEstimation.setPoint(new Vector3((DRXstaxX+0.1)*0.0254,(DRXstaxY-0.1) * 0.0254,-Math.PI/2+8*Math.PI/180));
+        robot.pidPositionEstimation.setPoint(new Vector3((DRXstaxX+0.4)*0.0254,(DRXstaxY+0.1) * 0.0254,-Math.PI/2+12*Math.PI/180));
         robot.pidPositionEstimation.goHybridX();
-        robot.actions.coneStackPickup(3);
+        robot.actions.coneStackPickup(1.7, true);
         System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        while (opModeIsActive() && robot.actions.isConeStackPickup()){
+        while (opModeIsActive() && robot.actions.isConeStackPickup() && robot.actions.shouldNotPark()){
             robot.pidPositionEstimation.goSmallTheta();
             robot.pidPositionEstimation.goHybridY();
             telemetry();
         }
         System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        robot.pidPositionEstimation.setPoint(new Vector3((posX-3.2)*0.0254,poleY * 0.0254,-Math.PI/2+8*Math.PI/180));
+        robot.pidPositionEstimation.setPoint(new Vector3((posX-6.9)*0.0254,(poleY)* 0.0254,-Math.PI/2+12*Math.PI/180));
         robot.pidPositionEstimation.goHybridX();
-        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
-            robot.pidPositionEstimation.goSmallTheta();
-            robot.pidPositionEstimation.goHybridY();
-            telemetry();
-        }
-        robot.actions.open();
-        while(robot.actions.isOpen() && opModeIsActive()) {
-            telemetry();
-        }
-        System.out.println("preload:" + robot.actions.isPickingUp());
-        robot.pidPositionEstimation.setPoint(new Vector3((DRXstaxX-0.1)*0.0254,(DRXstaxY-0.2) * 0.0254,-Math.PI/2+12*Math.PI/180));
-        robot.pidPositionEstimation.goHybridX();
-        robot.actions.coneStackPickup(1.7);
-        System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        while (opModeIsActive() && robot.actions.isConeStackPickup()){
-            robot.pidPositionEstimation.goSmallTheta();
-            robot.pidPositionEstimation.goHybridY();
-            telemetry();
-        }
-        System.out.println("cone stack:" + robot.actions.isConeStackPickup());
-        robot.pidPositionEstimation.setPoint(new Vector3((posX-6.9)*0.0254,poleY * 0.0254,-Math.PI/2+12*Math.PI/180));
-        robot.pidPositionEstimation.goHybridX();
-        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
+        while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive() && robot.actions.shouldNotPark()){
             robot.pidPositionEstimation.goSmallTheta();
             robot.pidPositionEstimation.goHybridY();
             telemetry();
         }
         robot.actions.open();
-        while(robot.actions.isOpen() && opModeIsActive()) {
+        while(robot.actions.isOpen() && opModeIsActive() && robot.actions.shouldNotPark()) {
             telemetry();
         }
         if (variant == 1) {
@@ -152,7 +154,7 @@ public class LeftButGood extends LinearOpMode {
                 telemetry();
             }
         } else if (variant == 3) {
-            robot.pidPositionEstimation.setPoint(new Vector3((posX-6.2)*0.0254,83 * 0.0254,-Math.PI/2+13*Math.PI/180));
+            robot.pidPositionEstimation.setPoint(new Vector3((posX-6.2)*0.0254,75 * 0.0254,-Math.PI/2+13*Math.PI/180));
             robot.pidPositionEstimation.goHybridX();
             robot.actions.front();
             while (!robot.pidPositionEstimation.isNotMoving() && opModeIsActive()){
@@ -199,7 +201,7 @@ public class LeftButGood extends LinearOpMode {
         telemetry.addData("claw encoder", robot.hwCollection.clawCoder.getEncoderPosition());
         telemetry.addData("claw close pos", ClawModule.ClawState.OPEN.clawCoder);
         telemetry.addData("claw state", robot.clawModule.getClawState());
-
+        telemetry.addData("ultraPos", robot.mSonicModule.getPos());
 //        telemetry.addData("ultrasonic1 dist", robot.hwCollection.ultraSonic1.getDistance(DistanceUnit.INCH));
 //        telemetry.addData("ultrasonic2 dist", robot.hwCollection.ultraSonic2.getDistance(DistanceUnit.INCH));
 //        telemetry.addData("ultrasonic3 dist", robot.hwCollection.ultraSonic3.getDistance(DistanceUnit.INCH));

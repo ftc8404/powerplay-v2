@@ -64,7 +64,7 @@ public class CVTasksModule extends OpenCvPipeline {
             for (int j = topCornerY; j < topCornerY + height; j++){
                 currentPixel = input.get(j, i);
                 if (currentPixel[0] > redThreshold && currentPixel[1] < currentPixel[0] * 0.8 && currentPixel[2] < currentPixel[0] * 0.8) { redCounter++; }
-                else if (currentPixel[0] < currentPixel[2] * 0.5 && currentPixel[1] < currentPixel[2] * 0.5 && currentPixel[2] > blueThreshold) { blueCounter++; }
+                else if (currentPixel[0] < currentPixel[2] * 0.8 && currentPixel[1] < currentPixel[2] * 0.8 && currentPixel[2] > blueThreshold) { blueCounter++; }
                 else if (currentPixel[0] < currentPixel[1] * 0.8 && currentPixel[1] > greenThreshold && currentPixel[2] < currentPixel[1] * 0.8) { greenCounter++; }
             }
         }

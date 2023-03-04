@@ -10,7 +10,7 @@ public class ClawModule {
     @Tunable
     private static final double CLOSE_GEAR = 0.8; // TODO tune
 
-    private static final double CLOSE_ENCODER_DIFF = 900;
+    private static final double CLOSE_ENCODER_DIFF = 1000;
     public static final double CONE_ENCODER_DIFF = 500;
 
 

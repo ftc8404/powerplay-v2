@@ -74,14 +74,16 @@ public class SlidesModule {
     public static final int PID_DELAY_MILLIS = 500; // the time before switching from power of zero to PID
 
     private int zeroPowerStartTimeMillis; // for tracking when to switch from power to PID
+    BaseRobot robot;
 
-    public SlidesModule() {
+    public SlidesModule(BaseRobot robot) {
         targetPower = 0;
         targetPosition = Distance.ZERO;
         curPosition = targetPosition;
         rawEncoderReading = 0;
         bottomEncoderReading = 0;
         zeroPowerStartTimeMillis = -1000000;
+        this.robot = robot;
     }
 
     public synchronized void update(SusanModule susanModule, HardwareCollection hwCollection) {
@@ -252,6 +254,9 @@ public class SlidesModule {
     public synchronized void teleOpMode() {
         curPosition = new Distance(2, Distance.Unit.INCHES);
         targetPosition = curPosition;
+    }
+    public synchronized boolean isUltra(){
+        return robot.hwCollection.slidesMotor1.getPower() == STALL_POWER && curPosition.getValue(Distance.Unit.INCHES) <= SlidePositionPreset.ABOVE_DRIVE.HEIGHT_INCHES;
     }
 }
 

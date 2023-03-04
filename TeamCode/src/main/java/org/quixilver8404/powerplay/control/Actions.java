@@ -23,6 +23,8 @@ public class Actions {
 
     boolean coneStackPickup = false;
 
+    boolean isLeft;
+
     boolean front = false;
 
     boolean open = false;
@@ -44,9 +46,11 @@ public class Actions {
 
     double prevClawCoder;
 
-    int consPickStage = 0;
+    int conePickStage = 0;
 
     int openStage = 0;
+
+    double startTime;
 
 
     boolean park;
@@ -59,7 +63,7 @@ public class Actions {
     }
 
     public synchronized void update() {
-        boolean holdingCone = !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.OPEN.clawCoder)) < 240) && !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.CLOSE.clawCoder)) < 200)
+        boolean holdingCone = !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.OPEN.clawCoder)) < 220) && !(Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - (ClawModule.ClawState.CLOSE.clawCoder)) < 200)
                 && robot.clawModule.getClawState().equals("Close") && Math.abs(robot.hwCollection.clawCoder.getEncoderPosition() - prevClawCoder) == 0;
         prevClawCoder = robot.hwCollection.clawCoder.getEncoderPosition();
         System.out.println("holding cone " + holdingCone);
@@ -91,7 +95,7 @@ public class Actions {
                 dumpSignal = false;
                 signalStage = 0;
             }
-        } else if (pickUpPreload) {
+        } else if (pickUpPreload && shouldNotPark()) {
             System.out.println("Pick up");
             if (preloadStage == 1) {
                 System.out.println("Stage1");
@@ -129,9 +133,19 @@ public class Actions {
             } else if (preloadStage == 7) {
                 System.out.println("Stage5");
                 robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
-                robot.susanModule.goToCustomDeg(90);
-                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() > 83 && robot.pidPositionEstimation.isNotMoving()) {
-                    preloadStage++;
+                if (isLeft) {
+                    robot.susanModule.goToCustomDeg(90);
+                } else {
+                    robot.susanModule.goToCustomDeg(-90);
+                }
+                if (isLeft) {
+                    if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() > 83 && robot.pidPositionEstimation.isNotMoving()) {
+                        preloadStage++;
+                    }
+                } else {
+                    if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() > -92 && robot.pidPositionEstimation.isNotMoving()) {
+                        preloadStage++;
+                    }
                 }
             } else if (preloadStage == 8) {
                 System.out.println("Stage6");
@@ -144,8 +158,8 @@ public class Actions {
                 pickUpPreload = false;
                 preloadStage = 0;
             }
-        } else if (dropCone){
-            if (dropStage == 1){
+        } else if (dropCone && shouldNotPark()) {
+            if (dropStage == 1) {
                 robot.clawModule.setOpen();
                 if (openCone) {
                     dropStage++;
@@ -154,8 +168,14 @@ public class Actions {
                 System.out.println("Stage5");
                 robot.susanModule.goToFront();
                 robot.slidesModule.setTargetPositionPreset(SlidesModule.SlidePositionPreset.GROUND);
-                if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3) {
-                    dropStage++;
+                if (isLeft) {
+                    if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3) {
+                        dropStage++;
+                    }
+                } else {
+                    if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() > -3) {
+                        dropStage++;
+                    }
                 }
             } else {
                 dropCone = false;
@@ -187,29 +207,33 @@ public class Actions {
                 robot.hwCollection.driveMotorBR.setPower(0);
                 park = false;
             }
-        } else if (coneStackPickup){
-            if (consPickStage == 1){
+        } else if (coneStackPickup && shouldNotPark()){
+            if (conePickStage == 1){
                 robot.susanModule.goToFront();
                 if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 45) {
-                    consPickStage++;
+                    conePickStage++;
                 }
-            } else if (consPickStage == 2){
+            } else if (conePickStage == 2){
                 robot.slidesModule.setTargetPosition(new Distance(liftHeight, Distance.Unit.INCHES));
                 if (robot.susanModule.isNotMoving() && robot.susanModule.getCurPosDeg() < 3 && robot.pidPositionEstimation.isNotMoving()) {
-                    consPickStage++;
+                    conePickStage++;
                 }
-            } else if (consPickStage == 3){
+            } else if (conePickStage == 3){
                 robot.clawModule.setClose();
                 if (holdingCone) {
-                    consPickStage++;
+                    conePickStage++;
                 }
             } else {
                 robot.slidesModule.setTargetPosition(new Distance(35, Distance.Unit.INCHES));
-                robot.susanModule.goToCustomDeg(90);
+                if (isLeft) {
+                    robot.susanModule.goToCustomDeg(90);
+                } else {
+                    robot.susanModule.goToCustomDeg(-90);
+                }
                 coneStackPickup = false;
-                consPickStage = 0;
+                conePickStage = 0;
             }
-        } else if (open) {
+        } else if (open && shouldNotPark()) {
             if (openStage == 1) {
                 robot.clawModule.setOpen();
                 if (openCone) {
@@ -237,16 +261,26 @@ public class Actions {
         }
     }
 
-    public synchronized void pickUpPreload() {
+    public synchronized boolean shouldNotPark() {
+        return !((robot.hwCollection.clock.getRunningTimeMillis() - startTime) > 26000);
+    }
+
+    public synchronized void startTime() {
+        startTime = robot.hwCollection.clock.getRunningTimeMillis();
+    }
+
+    public synchronized void pickUpPreload(boolean isLeft) {
         System.out.println("preload HIIIIIIi");
         pickUpPreload = true;
+        this.isLeft = isLeft;
         preloadStage = 1;
     }
-    public synchronized void coneStackPickup(double height) {
+    public synchronized void coneStackPickup(double height, boolean isLeft) {
         System.out.println("preload Byeee");
         coneStackPickup = true;
+        this.isLeft = isLeft;
         this.liftHeight = height;
-        consPickStage = 1;
+        conePickStage = 1;
     }
 
     public synchronized void open() {

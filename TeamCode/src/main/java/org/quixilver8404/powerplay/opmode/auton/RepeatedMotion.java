@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.quixilver8404.powerplay.control.AutonRobot;
 import org.quixilver8404.powerplay.util.Vector3;
 
-@Autonomous(group = "Good")
+//@Autonomous(group = "Good")
 public class RepeatedMotion extends LinearOpMode {
     int variant = 0;
     double yPos;
